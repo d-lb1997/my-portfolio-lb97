@@ -1,4 +1,4 @@
-// Collaborative-style active cursor (dot + ring + label)
+// Collaborative-style active cursor (arrow + label)
 (function(){
   const cursor = document.getElementById('custom-cursor');
   if(!cursor) return;
@@ -10,8 +10,7 @@
     return;
   }
 
-  const dot = cursor.querySelector('.cursor-dot');
-  const ring = cursor.querySelector('.cursor-ring');
+  const arrow = cursor.querySelector('.cursor-arrow');
   const label = cursor.querySelector('.cursor-label');
 
   let mouse = {x: window.innerWidth/2, y: window.innerHeight/2};
@@ -25,7 +24,7 @@
     mouse.x = e.clientX;
     mouse.y = e.clientY;
     cursor.classList.add('cursor-following');
-    // show label while moving slowly
+    // show label briefly when moving
     cursor.classList.add('cursor-show-label');
     clearTimeout(window._cursor_label_timeout);
     window._cursor_label_timeout = setTimeout(()=>{
@@ -51,12 +50,19 @@
     pos.x = lerp(pos.x, mouse.x, ease);
     pos.y = lerp(pos.y, mouse.y, ease);
 
-    // Dot is tight to pointer
-    dot.style.transform = `translate(${mouse.x}px, ${mouse.y}px)`;
-    // Ring lags a bit
-    ring.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
-    // Label sits below the ring
-    label.style.transform = `translate(${pos.x}px, ${pos.y + 36}px)`;
+    // Angle based on movement direction (use small delta)
+    const dx = mouse.x - pos.x;
+    const dy = mouse.y - pos.y;
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI + 90; // adjust to arrow orientation
+
+    // Position arrow (centered) and rotate
+    if(arrow){
+      arrow.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%,-50%) rotate(${angle}deg)`;
+    }
+    // Label sits below the arrow
+    if(label){
+      label.style.transform = `translate(${pos.x}px, ${pos.y + 36}px)`;
+    }
 
     requestAnimationFrame(animate);
   }
@@ -67,9 +73,8 @@
   // Respect reduced motion: simple show/hide
   const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
   if(mq.matches){
-    dot.style.display='none';
-    ring.style.display='none';
-    label.style.display='none';
+    if(arrow) arrow.style.display='none';
+    if(label) label.style.display='none';
     document.body.style.cursor='auto';
   }
 
