@@ -79,22 +79,24 @@ body{
 /* Custom cursor styles */
 #custom-cursor{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:normal}
 .cursor-arrow{
-  width:18px;
-  height:24px;
+  width:14px;
+  height:20px;
   position:absolute;
   left:0;
   top:0;
   transform-origin:center center;
   will-change:transform,opacity;
   background:#111;
-  clip-path: polygon(0% 0%, 70% 50%, 55% 63%, 65% 100%, 45% 100%, 35% 64%, 0% 50%);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%, 25% 50%);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition:transform .12s cubic-bezier(.2,.9,.2,1),opacity .12s ease;
+  pointer-events:none;
 }
-.cursor-label{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;will-change:transform,opacity}
+.cursor-label{display:none !important}
 
-.cursor-large .cursor-arrow{transform:translate(-50%,-50%) scale(1.45)}
-.cursor-active .cursor-arrow{transform:translate(-50%,-50%) scale(0.95);opacity:0.95}
-.cursor-show-label .cursor-label{opacity:1;transform:translateX(-50%) translateY(0)}
+.cursor-hover .cursor-arrow{transform:translate(-50%,-50%) scale(1.45)}
+.cursor-active .cursor-arrow{transform:translate(-50%,-50%) scale(0.92);opacity:0.95}
+.cursor-show-label .cursor-label{opacity:0;transform:translateX(-50%) translateY(0)}
 
 @media (hover: none) and (pointer: coarse){
   body{cursor:auto}
