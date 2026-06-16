@@ -67,6 +67,8 @@ export function computeFitZoom(
 
 export const HOME_FRAME_WIDTH = 1200;
 export const HOME_FRAME_HEIGHT = 520;
+export const ABOUT_FRAME_WIDTH = 1200;
+export const ABOUT_FRAME_HEIGHT = 780;
 export const CONTACT_FRAME_WIDTH = 1200;
 export const CONTACT_FRAME_HEIGHT = 580;
 export const WORK_FRAME_WIDTH = 1400;
@@ -102,10 +104,17 @@ export const PAGES: Record<PageId, PageConfig> = {
     contentX: 1200,
     contentY: 1000,
     initialZoom: 1,
-    focusX: 1700,
-    focusY: 1350,
-    immerseFocusX: 1700,
-    immerseFocusY: 1350,
+    focusX: 1200 + ABOUT_FRAME_WIDTH / 2,
+    focusY: 1000 + ABOUT_FRAME_HEIGHT / 2,
+    fitToViewport: {
+      width: ABOUT_FRAME_WIDTH,
+      height: ABOUT_FRAME_HEIGHT,
+      padding: 0.88,
+      mobilePadding: 0.92,
+      mobileBreakpoint: 1024,
+    },
+    immerseFocusX: 1200 + ABOUT_FRAME_WIDTH / 2,
+    immerseFocusY: 1000 + ABOUT_FRAME_HEIGHT / 2,
   },
   work: {
     id: "work",

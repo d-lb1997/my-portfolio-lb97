@@ -35,6 +35,15 @@ export const CONTACT_HERO_PHRASES = [
   "keep talking",
 ];
 
+export const ABOUT_HERO_PHRASES = [
+  "the human behind the pixels.",
+  "a designer, not a deck.",
+  "curious by default.",
+  "systems thinker. people first.",
+  "structure with soul.",
+  "the face behind the Figma file.",
+];
+
 const CYCLE_MS = 2800;
 const TRANSITION = { duration: 0.4, ease: "easeInOut" as const };
 
