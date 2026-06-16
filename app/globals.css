@@ -1,42 +1,21 @@
 @import "tailwindcss";
 
-@property --scene-glow-a {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: transparent;
-}
-
-@property --scene-glow-b {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: transparent;
-}
-
-@property --scene-glow-c {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: transparent;
-}
-
 @property --canvas-bg {
   syntax: "<color>";
   inherits: true;
-  initial-value: #f2f2f2;
+  initial-value: #ffffff;
 }
 
 @property --dot-color {
   syntax: "<color>";
   inherits: true;
-  initial-value: #cccccc;
+  initial-value: #d8d8d8;
 }
 
 :root {
   --scene-transition: 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  --canvas-bg: #eceaee;
-  --dot-color: #c8c4cc;
-  --scene-glow-a: rgba(124, 108, 240, 0.09);
-  --scene-glow-b: rgba(255, 60, 172, 0.06);
-  --scene-glow-c: rgba(45, 204, 112, 0.05);
+  --canvas-bg: #ffffff;
+  --dot-color: #d8d8d8;
   --text-primary: #0a0a0a;
   --text-secondary: #555555;
   --accent-pink: #ff3cac;
@@ -73,35 +52,23 @@
 }
 
 :root[data-page="work"] {
-  --canvas-bg: #e5eaf0;
-  --dot-color: #bcc4d0;
-  --scene-glow-a: rgba(56, 130, 180, 0.08);
-  --scene-glow-b: rgba(99, 102, 241, 0.06);
-  --scene-glow-c: rgba(45, 180, 200, 0.05);
+  --canvas-bg: #eef3fa;
+  --dot-color: #c2cede;
 }
 
 :root[data-page="about"] {
-  --canvas-bg: #ece8e3;
-  --dot-color: #cfc8bf;
-  --scene-glow-a: rgba(200, 120, 80, 0.08);
-  --scene-glow-b: rgba(124, 108, 240, 0.06);
-  --scene-glow-c: rgba(45, 204, 112, 0.05);
+  --canvas-bg: #f4eef8;
+  --dot-color: #cfc2d9;
 }
 
 :root[data-page="contact"] {
-  --canvas-bg: #e6ebe8;
-  --dot-color: #bcc8c0;
-  --scene-glow-a: rgba(45, 160, 110, 0.08);
-  --scene-glow-b: rgba(124, 108, 240, 0.06);
-  --scene-glow-c: rgba(56, 130, 170, 0.05);
+  --canvas-bg: #eefaf2;
+  --dot-color: #c2dcc8;
 }
 
 [data-theme="dark"] {
-  --canvas-bg: #141418;
-  --dot-color: #2a2a32;
-  --scene-glow-a: rgba(124, 108, 240, 0.14);
-  --scene-glow-b: rgba(255, 60, 172, 0.09);
-  --scene-glow-c: rgba(45, 204, 112, 0.07);
+  --canvas-bg: #000000;
+  --dot-color: #2e2e2e;
   --text-primary: #f2f2f2;
   --text-secondary: #a8a8a8;
   --surface-white: #1c1c1c;
@@ -135,27 +102,18 @@
 }
 
 [data-theme="dark"][data-page="work"] {
-  --canvas-bg: #12161e;
-  --dot-color: #262d38;
-  --scene-glow-a: rgba(56, 160, 190, 0.14);
-  --scene-glow-b: rgba(100, 120, 200, 0.1);
-  --scene-glow-c: rgba(45, 200, 215, 0.08);
+  --canvas-bg: #081528;
+  --dot-color: #1a2840;
 }
 
 [data-theme="dark"][data-page="about"] {
-  --canvas-bg: #161412;
-  --dot-color: #302a26;
-  --scene-glow-a: rgba(220, 130, 80, 0.13);
-  --scene-glow-b: rgba(124, 108, 240, 0.09);
-  --scene-glow-c: rgba(200, 160, 80, 0.07);
+  --canvas-bg: #180f28;
+  --dot-color: #2e2042;
 }
 
 [data-theme="dark"][data-page="contact"] {
-  --canvas-bg: #121816;
-  --dot-color: #242e28;
-  --scene-glow-a: rgba(45, 180, 120, 0.13);
-  --scene-glow-b: rgba(124, 108, 240, 0.09);
-  --scene-glow-c: rgba(56, 160, 170, 0.07);
+  --canvas-bg: #081f18;
+  --dot-color: #1a342c;
 }
 
 @theme inline {
@@ -183,10 +141,7 @@ body {
     background-color var(--scene-transition),
     color 0.25s ease,
     --canvas-bg var(--scene-transition),
-    --dot-color var(--scene-transition),
-    --scene-glow-a var(--scene-transition),
-    --scene-glow-b var(--scene-transition),
-    --scene-glow-c var(--scene-transition);
+    --dot-color var(--scene-transition);
 }
 
 body {
@@ -199,26 +154,6 @@ body {
   inset: 0;
   background: var(--canvas-bg);
   transition: background-color var(--scene-transition);
-}
-
-.canvas-scene-spectrum {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 78% 58% at 12% 8%, var(--scene-glow-a) 0%, transparent 58%),
-    radial-gradient(ellipse 72% 56% at 90% 82%, var(--scene-glow-b) 0%, transparent 62%),
-    radial-gradient(ellipse 54% 42% at 74% 16%, var(--scene-glow-c) 0%, transparent 68%);
-  animation: scene-spectrum-in var(--scene-transition) cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes scene-spectrum-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
 
 @media (hover: none) and (pointer: coarse) {
