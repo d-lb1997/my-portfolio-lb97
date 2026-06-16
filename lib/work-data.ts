@@ -7,18 +7,33 @@ export type WorkLayer = {
 };
 
 export type WorkProjectLogo =
-  | { kind: "lb97" }
-  | { kind: "placeholder"; label: string }
-  | { kind: "none" };
+  | { kind: "none" }
+  | {
+      kind: "brand";
+      lightSrc: string;
+      darkSrc: string;
+      alt: string;
+      width: number;
+      height: number;
+    };
 
 export type WorkProject = {
   id: string;
+  brand?: string;
   title: string;
   subtitle?: string;
   logo: WorkProjectLogo;
   isOverview?: boolean;
   layers: WorkLayer[];
 };
+
+export function getProjectNavTitle(project: WorkProject): string {
+  if (project.isOverview || !project.brand) {
+    return project.title;
+  }
+
+  return `${project.brand} - ${project.title}`;
+}
 
 export const WORK_OVERVIEW: WorkProject = {
   id: "overview",
@@ -36,9 +51,17 @@ export const WORK_OVERVIEW: WorkProject = {
 export const WORK_CLIENT_PROJECTS: WorkProject[] = [
   {
     id: "carl-zeiss",
-    title: "Carl ZEISS — Design Systems and AI",
+    brand: "Carl ZEISS",
+    title: "Design Systems and AI",
     subtitle: "Design Systems · AI",
-    logo: { kind: "placeholder", label: "ZEISS" },
+    logo: {
+      kind: "brand",
+      lightSrc: "/images/work/zeiss-light.png",
+      darkSrc: "/images/work/zeiss-dark.png",
+      alt: "Carl ZEISS",
+      width: 55,
+      height: 55,
+    },
     layers: [
       { id: "research", label: "Research", type: "section" },
       { id: "design-system", label: "Design System", type: "component" },
@@ -48,9 +71,17 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
   },
   {
     id: "mercedes-mbux",
-    title: "Mercedes Benz and MBUX",
+    brand: "Mercedes Benz",
+    title: "MBUX",
     subtitle: "Automotive UX",
-    logo: { kind: "placeholder", label: "MB" },
+    logo: {
+      kind: "brand",
+      lightSrc: "/images/work/mercedes-light.png",
+      darkSrc: "/images/work/mercedes-dark.png",
+      alt: "Mercedes-Benz",
+      width: 55,
+      height: 55,
+    },
     layers: [
       { id: "mbux-concept", label: "MBUX Concept", type: "frame" },
       { id: "ui-patterns", label: "UI Patterns", type: "component" },
@@ -60,9 +91,17 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
   },
   {
     id: "gtu-design-system",
-    title: "GUI GTÜ Design System",
+    brand: "GTÜ",
+    title: "GUI Design System",
     subtitle: "Design System",
-    logo: { kind: "placeholder", label: "GTÜ" },
+    logo: {
+      kind: "brand",
+      lightSrc: "/images/work/gtu-light.png",
+      darkSrc: "/images/work/gtu-dark.png",
+      alt: "GTÜ",
+      width: 126,
+      height: 55,
+    },
     layers: [
       { id: "brand-audit", label: "Brand Audit", type: "section" },
       { id: "components", label: "Component Library", type: "component" },

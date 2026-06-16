@@ -6,7 +6,7 @@ import { useVisitorCursor } from "@/lib/cursor-context";
 import { CursorNameLabel } from "./CursorArrow";
 
 export function VisitorCursor() {
-  const { color, name, ready } = useVisitorCursor();
+  const { color, displayName, ready } = useVisitorCursor();
   const { isPanning } = useCanvas();
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
     null,
@@ -45,7 +45,7 @@ export function VisitorCursor() {
     >
       <CursorNameLabel
         color={color}
-        name={name}
+        name={displayName}
         className="relative ml-[7px] mt-[22px]"
       />
     </div>

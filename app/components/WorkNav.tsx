@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useCanvas } from "@/lib/canvas-context";
+import { useVisitorCursor } from "@/lib/cursor-context";
 import { useTheme } from "@/lib/theme-context";
 import {
   WORK_OVERVIEW,
   WORK_PROJECTS,
   getClientProjects,
+  getProjectNavTitle,
   type WorkLayerType,
   type WorkProject,
   type WorkProjectLogo,
@@ -19,29 +22,18 @@ function NavLogo({ logo }: { logo: WorkProjectLogo }) {
     return null;
   }
 
-  if (logo.kind === "lb97") {
-    if (!ready) {
-      return <div className="work-nav-logo-mark h-[34px] w-[58px] shrink-0" />;
-    }
-
-    return (
-      <Image
-        src={theme === "dark" ? "/images/logo-dark.png" : "/images/logo.png"}
-        alt="lb97"
-        width={156}
-        height={73}
-        className="work-nav-logo-mark h-auto w-[58px] shrink-0"
-      />
-    );
+  if (!ready) {
+    return <div className="work-nav-brand-logo h-[34px] w-[58px] shrink-0" />;
   }
 
   return (
-    <div
-      className="work-nav-logo-placeholder shrink-0"
-      aria-label={`${logo.label} logo placeholder`}
-    >
-      <span>{logo.label}</span>
-    </div>
+    <Image
+      src={theme === "dark" ? logo.darkSrc : logo.lightSrc}
+      alt={logo.alt}
+      width={logo.width}
+      height={logo.height}
+      className="work-nav-brand-logo shrink-0 object-contain object-left"
+    />
   );
 }
 
@@ -137,9 +129,17 @@ function LayerIcon({ type }: { type: WorkLayerType }) {
 function SectionHeader({
   label,
   showActions = false,
+  onCollaborateHover,
+  onCollaborateLeave,
+  onCollaborateClick,
+  collaborateDisabled = false,
 }: {
   label: string;
   showActions?: boolean;
+  onCollaborateHover?: () => void;
+  onCollaborateLeave?: () => void;
+  onCollaborateClick?: () => void;
+  collaborateDisabled?: boolean;
 }) {
   return (
     <div className="work-nav-section-header">
@@ -164,7 +164,17 @@ function SectionHeader({
               />
             </svg>
           </button>
-          <button type="button" className="work-nav-icon-btn" aria-label="Add project">
+          <button
+            type="button"
+            className="work-nav-icon-btn"
+            aria-label="Let's collaborate"
+            disabled={collaborateDisabled}
+            onMouseEnter={onCollaborateHover}
+            onMouseLeave={onCollaborateLeave}
+            onFocus={onCollaborateHover}
+            onBlur={onCollaborateLeave}
+            onClick={onCollaborateClick}
+          >
             <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
               <path
                 d="M6 2.5V9.5M2.5 6H9.5"
@@ -195,13 +205,15 @@ function ProjectButton({
       onClick={onSelect}
       className={`work-nav-item ${isActive ? "work-nav-item-active" : ""}`}
     >
-      <span className="truncate">{project.title}</span>
+      <span className="truncate">{getProjectNavTitle(project)}</span>
     </button>
   );
 }
 
 export function WorkNav() {
   const clientProjects = getClientProjects();
+  const { setVisitorLabelOverride } = useVisitorCursor();
+  const { immerseNavigate, isNavigating } = useCanvas();
   const [selectedProjectId, setSelectedProjectId] = useState(WORK_OVERVIEW.id);
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(
     WORK_OVERVIEW.layers[0]?.id ?? null,
@@ -219,6 +231,19 @@ export function WorkNav() {
     setSelectedLayerId(project.layers[0]?.id ?? null);
   };
 
+  const showCollaborationLabel = () => {
+    setVisitorLabelOverride("Let's collaborate");
+  };
+
+  const clearCollaborationLabel = () => {
+    setVisitorLabelOverride(null);
+  };
+
+  const handleCollaborateClick = () => {
+    clearCollaborationLabel();
+    immerseNavigate("/contact");
+  };
+
   const showNavLogo = selectedProject.logo.kind !== "none";
 
   return (
@@ -230,7 +255,7 @@ export function WorkNav() {
           {showNavLogo && <NavLogo logo={selectedProject.logo} />}
           <div className="min-w-0">
             <p className="work-nav-title truncate text-[14px] font-medium leading-tight">
-              {selectedProject.title}
+              {getProjectNavTitle(selectedProject)}
             </p>
             {selectedProject.subtitle && (
               <p className="work-nav-subtitle truncate text-[12px] leading-tight">
@@ -258,7 +283,14 @@ export function WorkNav() {
 
       <div className="work-nav-body">
         <div className="work-nav-section">
-          <SectionHeader label="Projects" showActions />
+          <SectionHeader
+            label="Projects"
+            showActions
+            onCollaborateHover={showCollaborationLabel}
+            onCollaborateLeave={clearCollaborationLabel}
+            onCollaborateClick={handleCollaborateClick}
+            collaborateDisabled={isNavigating}
+          />
           <div className="work-nav-list">
             <ProjectButton
               project={WORK_OVERVIEW}
