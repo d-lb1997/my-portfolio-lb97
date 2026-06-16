@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type PointerEvent as ReactPointerEvent,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { DOT_GRID_SIZE } from "@/lib/canvas-dots";
 import { useTheme } from "@/lib/theme-context";
@@ -38,12 +32,14 @@ function gridKey(x: number, y: number) {
   return `${x},${y}`;
 }
 
-function getCanvasBgColor() {
-  return (
-    getComputedStyle(document.documentElement)
-      .getPropertyValue("--canvas-bg")
-      .trim() || "#ffffff"
-  );
+function getVisibility(zoom: number) {
+  if (zoom <= VISIBILITY_ZOOM) return 1;
+  if (zoom >= VISIBILITY_FADE) return 0;
+  return 1 - (zoom - VISIBILITY_ZOOM) / (VISIBILITY_FADE - VISIBILITY_ZOOM);
+}
+
+function getCanvasBgColor(theme: "light" | "dark") {
+  return theme === "dark" ? "#000000" : "#ffffff";
 }
 
 function buildPacManPath(
@@ -75,54 +71,81 @@ function PacManFigure({
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       aria-hidden="true"
-      className="drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
     >
       <g transform={`rotate(${rotation} ${PACMAN_RADIUS} ${PACMAN_RADIUS})`}>
         <path
-          d={buildPacManPath(PACMAN_RADIUS, PACMAN_RADIUS, PACMAN_RADIUS - 1, mouthSpread)}
+          d={buildPacManPath(
+            PACMAN_RADIUS,
+            PACMAN_RADIUS,
+            PACMAN_RADIUS - 1,
+            mouthSpread,
+          )}
           fill="#ffcc00"
         />
-        <circle cx={PACMAN_RADIUS + 3} cy={PACMAN_RADIUS - 4} r={1.35} fill="#1a1a1a" />
+        <circle
+          cx={PACMAN_RADIUS + 3}
+          cy={PACMAN_RADIUS - 4}
+          r={1.35}
+          fill="#1a1a1a"
+        />
       </g>
     </svg>
   );
 }
 
 export function CanvasPacMan({ dotBounds }: CanvasPacManProps) {
-  const { zoom, pan } = useCanvas();
+  const { zoom } = useCanvas();
   const { theme } = useTheme();
+
   const posRef = useRef(START_POSITION);
   const dirRef = useRef<Direction>(0);
-  const mouthOpenRef = useRef(true);
-  const mouthTimerRef = useRef(0);
   const eatenRef = useRef(new Set<string>());
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [frame, setFrame] = useState(0);
+  const pacmanRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dotBoundsRef = useRef(dotBounds);
+  const zoomRef = useRef(zoom);
+  const themeRef = useRef(theme);
+  const canvasMetricsRef = useRef({
+    width: 0,
+    height: 0,
+    left: Number.NaN,
+    top: Number.NaN,
+  });
 
-  const visibility =
-    zoom <= VISIBILITY_ZOOM
-      ? 1
-      : zoom >= VISIBILITY_FADE
-        ? 0
-        : 1 - (zoom - VISIBILITY_ZOOM) / (VISIBILITY_FADE - VISIBILITY_ZOOM);
+  const [mouthOpen, setMouthOpen] = useState(true);
+  const [facing, setFacing] = useState<Direction>(0);
 
-  const redrawEaten = useCallback(() => {
+  dotBoundsRef.current = dotBounds;
+  zoomRef.current = zoom;
+  themeRef.current = theme;
+
+  const paintEatenDots = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const { left, top, width, height } = dotBoundsRef.current;
+    const metrics = canvasMetricsRef.current;
     const dpr = window.devicePixelRatio || 1;
-    const { left, top, width, height } = dotBounds;
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    canvas.style.left = `${left}px`;
+    canvas.style.top = `${top}px`;
+
+    if (metrics.width !== width || metrics.height !== height) {
+      canvas.width = Math.max(1, width * dpr);
+      canvas.height = Math.max(1, height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      metrics.width = width;
+      metrics.height = height;
+    }
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = getCanvasBgColor();
+    ctx.fillStyle = getCanvasBgColor(themeRef.current);
 
     for (const key of eatenRef.current) {
       const [gx, gy] = key.split(",").map(Number);
@@ -130,130 +153,128 @@ export function CanvasPacMan({ dotBounds }: CanvasPacManProps) {
       if (gy < top - DOT_GRID_SIZE || gy > top + height + DOT_GRID_SIZE) continue;
 
       ctx.beginPath();
-      ctx.arc(gx - left, gy - top, 2.4, 0, Math.PI * 2);
+      ctx.arc(gx - left, gy - top, 3, 0, Math.PI * 2);
       ctx.fill();
     }
-  }, [dotBounds]);
+
+    metrics.left = left;
+    metrics.top = top;
+  };
 
   useEffect(() => {
-    redrawEaten();
-  }, [dotBounds, frame, theme]);
+    paintEatenDots();
+  }, [dotBounds.left, dotBounds.top, dotBounds.width, dotBounds.height, theme]);
 
   useEffect(() => {
-    if (visibility <= 0) return;
-
     let raf = 0;
     let lastTime = performance.now();
+    let mouthTimer = 0;
+    let lastFacing = dirRef.current;
 
     const tick = (time: number) => {
       const dt = Math.min((time - lastTime) / 1000, 0.05);
       lastTime = time;
 
-      mouthTimerRef.current += dt;
-      if (mouthTimerRef.current >= 0.11) {
-        mouthTimerRef.current = 0;
-        mouthOpenRef.current = !mouthOpenRef.current;
+      const visibility = getVisibility(zoomRef.current);
+      if (containerRef.current) {
+        containerRef.current.style.opacity = String(visibility);
       }
 
-      const pos = posRef.current;
-      const dir = dirRef.current;
-      const dx = dir === 0 ? 1 : dir === 2 ? -1 : 0;
-      const dy = dir === 1 ? 1 : dir === 3 ? -1 : 0;
+      if (visibility > 0) {
+        mouthTimer += dt;
+        if (mouthTimer >= 0.11) {
+          mouthTimer = 0;
+          setMouthOpen((open) => !open);
+        }
 
-      pos.x += dx * PACMAN_SPEED * dt;
-      pos.y += dy * PACMAN_SPEED * dt;
+        const pos = posRef.current;
+        const dir = dirRef.current;
+        const dx = dir === 0 ? 1 : dir === 2 ? -1 : 0;
+        const dy = dir === 1 ? 1 : dir === 3 ? -1 : 0;
 
-      const snappedX = snapToGrid(pos.x);
-      const snappedY = snapToGrid(pos.y);
+        pos.x += dx * PACMAN_SPEED * dt;
+        pos.y += dy * PACMAN_SPEED * dt;
 
-      if (
-        Math.abs(pos.x - snappedX) < 0.75 &&
-        Math.abs(pos.y - snappedY) < 0.75
-      ) {
-        pos.x = snappedX;
-        pos.y = snappedY;
-        eatenRef.current.add(gridKey(snappedX, snappedY));
+        const snappedX = snapToGrid(pos.x);
+        const snappedY = snapToGrid(pos.y);
 
-        if (eatenRef.current.size > 8000) {
-          const keep = new Set<string>();
-          for (const key of eatenRef.current) {
-            const [gx, gy] = key.split(",").map(Number);
-            if (
-              Math.abs(gx - snappedX) <= 960 &&
-              Math.abs(gy - snappedY) <= 960
-            ) {
-              keep.add(key);
-            }
+        if (
+          Math.abs(pos.x - snappedX) < 0.75 &&
+          Math.abs(pos.y - snappedY) < 0.75
+        ) {
+          pos.x = snappedX;
+          pos.y = snappedY;
+
+          const key = gridKey(snappedX, snappedY);
+          if (!eatenRef.current.has(key)) {
+            eatenRef.current.add(key);
+            paintEatenDots();
           }
-          eatenRef.current = keep;
+
+          if (eatenRef.current.size > 8000) {
+            const keep = new Set<string>();
+            for (const eatenKey of eatenRef.current) {
+              const [gx, gy] = eatenKey.split(",").map(Number);
+              if (
+                Math.abs(gx - snappedX) <= 960 &&
+                Math.abs(gy - snappedY) <= 960
+              ) {
+                keep.add(eatenKey);
+              }
+            }
+            eatenRef.current = keep;
+            paintEatenDots();
+          }
+
+          if (Math.random() < 0.28) {
+            const options = ([0, 1, 2, 3] as Direction[]).filter(
+              (option) => option !== ((dir + 2) % 4) as Direction,
+            );
+            dirRef.current =
+              options[Math.floor(Math.random() * options.length)] ?? dir;
+          }
         }
 
-        if (Math.random() < 0.28) {
-          const options = ([0, 1, 2, 3] as Direction[]).filter(
-            (option) => option !== ((dir + 2) % 4) as Direction,
-          );
-          dirRef.current =
-            options[Math.floor(Math.random() * options.length)] ?? dir;
+        if (pacmanRef.current) {
+          pacmanRef.current.style.left = `${pos.x - PACMAN_RADIUS}px`;
+          pacmanRef.current.style.top = `${pos.y - PACMAN_RADIUS}px`;
+        }
+
+        if (dirRef.current !== lastFacing) {
+          lastFacing = dirRef.current;
+          setFacing(dirRef.current);
         }
       }
 
-      setFrame((value) => value + 1);
       raf = requestAnimationFrame(tick);
     };
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [visibility]);
+  }, []);
 
-  const handleSteer = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-
-    const canvasX = (event.clientX - pan.x) / zoom;
-    const canvasY = (event.clientY - pan.y) / zoom;
-    const dx = canvasX - posRef.current.x;
-    const dy = canvasY - posRef.current.y;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-      dirRef.current = dx >= 0 ? 0 : 2;
-    } else {
-      dirRef.current = dy >= 0 ? 1 : 3;
-    }
-  };
-
-  if (visibility <= 0) return null;
-
-  const mouthSpread = mouthOpenRef.current ? 0.62 : 0.12;
-  const rotation = dirRef.current * 90;
+  const mouthSpread = mouthOpen ? 0.62 : 0.12;
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="pointer-events-none absolute z-[2]"
-        style={{
-          left: dotBounds.left,
-          top: dotBounds.top,
-          opacity: visibility,
-        }}
-        aria-hidden="true"
-      />
-      <button
-        type="button"
-        data-no-pan
-        className="absolute z-[3] rounded-full border-0 bg-transparent p-0 transition-opacity duration-300"
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 z-[2]"
+      style={{ opacity: 0 }}
+      aria-hidden="true"
+    >
+      <canvas ref={canvasRef} className="pointer-events-none absolute" />
+      <div
+        ref={pacmanRef}
+        className="absolute"
         style={{
           left: posRef.current.x - PACMAN_RADIUS,
           top: posRef.current.y - PACMAN_RADIUS,
           width: PACMAN_RADIUS * 2,
           height: PACMAN_RADIUS * 2,
-          opacity: visibility,
-          pointerEvents: visibility > 0.15 ? "auto" : "none",
         }}
-        onPointerDown={handleSteer}
-        aria-label="Pac-Man — click to steer"
       >
-        <PacManFigure mouthSpread={mouthSpread} rotation={rotation} />
-      </button>
-    </>
+        <PacManFigure mouthSpread={mouthSpread} rotation={facing * 90} />
+      </div>
+    </div>
   );
 }
