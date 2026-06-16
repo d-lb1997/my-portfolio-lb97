@@ -49,7 +49,7 @@ export function HeroText() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className="absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap text-[36px] font-medium italic leading-[1.1] tracking-[-0.05em] text-[#8A8A8A] md:text-[64px]"
+            className="absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap bg-gradient-to-r from-[#A6A6A6] to-[#3A3A3A] bg-clip-text text-[36px] font-medium italic leading-[1.1] tracking-[-0.05em] text-transparent md:text-[64px]"
           >
             {PHRASES[index]}
           </motion.span>
