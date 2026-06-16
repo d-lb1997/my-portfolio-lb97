@@ -451,6 +451,57 @@ body {
   color: var(--work-nav-text-muted);
 }
 
+.work-logo-marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 42rem;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+.work-logo-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: work-logo-marquee 36s linear infinite;
+}
+
+.work-logo-marquee-image {
+  display: block;
+  height: 3rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+@keyframes work-logo-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-logo-marquee-track {
+    animation: none;
+    transform: translateX(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

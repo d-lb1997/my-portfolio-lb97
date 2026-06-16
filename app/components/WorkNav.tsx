@@ -1,19 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { useVisitorCursor } from "@/lib/cursor-context";
 import { useTheme } from "@/lib/theme-context";
 import {
   WORK_OVERVIEW,
-  WORK_PROJECTS,
   getClientProjects,
   getProjectNavTitle,
   type WorkLayerType,
   type WorkProject,
   type WorkProjectLogo,
 } from "@/lib/work-data";
+import { useWorkPage } from "@/lib/work-page-context";
 
 function NavLogo({ logo }: { logo: WorkProjectLogo }) {
   const { theme, ready } = useTheme();
@@ -223,21 +223,16 @@ export function WorkNav() {
   const clientProjects = getClientProjects();
   const { setVisitorLabelOverride } = useVisitorCursor();
   const { immerseNavigate, isNavigating } = useCanvas();
-  const [selectedProjectId, setSelectedProjectId] = useState(WORK_OVERVIEW.id);
-  const [selectedLayerId, setSelectedLayerId] = useState<string | null>(
-    WORK_OVERVIEW.layers[0]?.id ?? null,
-  );
-
-  const selectedProject = useMemo(
-    () =>
-      WORK_PROJECTS.find((project) => project.id === selectedProjectId) ??
-      WORK_OVERVIEW,
-    [selectedProjectId],
-  );
+  const {
+    selectedProjectId,
+    selectedLayerId,
+    selectedProject,
+    selectProject,
+    selectLayer,
+  } = useWorkPage();
 
   const handleSelectProject = (project: WorkProject) => {
-    setSelectedProjectId(project.id);
-    setSelectedLayerId(project.layers[0]?.id ?? null);
+    selectProject(project);
   };
 
   const showCollaborationLabel = () => {
@@ -329,7 +324,7 @@ export function WorkNav() {
               <button
                 key={layer.id}
                 type="button"
-                onClick={() => setSelectedLayerId(layer.id)}
+                onClick={() => selectLayer(layer.id)}
                 className={`work-nav-layer ${
                   selectedLayerId === layer.id ? "work-nav-item-active" : ""
                 }`}
