@@ -1,5 +1,7 @@
 "use client";
 
+import { useTheme } from "@/lib/theme-context";
+
 function darkenHex(hex: string, amount = 0.2): string {
   const normalized = hex.replace("#", "");
   const num = parseInt(normalized, 16);
@@ -9,10 +11,14 @@ function darkenHex(hex: string, amount = 0.2): string {
   return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
 }
 
-const CURSOR_ARROW_PATH =
-  "M1.5 1.5L1.5 16.5L5 13L7 18.5L8.5 17L6.5 10.5L13 10.5L1.5 1.5Z";
+const CURSOR_ARROW_PATH_LIGHT =
+  "M1.5 1.5L1.5 14.5L5.25 11.75L7 16.5L8.5 15.25L6.75 9.75L12.75 9.75L1.5 1.5Z";
 
-const ARROW_VIEWBOX = "-2 -2 18 24";
+const CURSOR_ARROW_PATH_DARK =
+  "M1.5 1.5L1.5 14.5L5.25 11.75L6.75 9.75L12.75 9.75L1.5 1.5Z";
+
+const ARROW_VIEWBOX_LIGHT = "-1 -1 16 20";
+const ARROW_VIEWBOX_DARK = "-1 -1 16 17";
 
 type CursorNameLabelProps = {
   color: string;
@@ -55,6 +61,13 @@ export function CursorArrow({
   className = "",
   showArrow = true,
 }: CursorArrowProps) {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+  const arrowPath = isLight ? CURSOR_ARROW_PATH_LIGHT : CURSOR_ARROW_PATH_DARK;
+  const arrowViewBox = isLight ? ARROW_VIEWBOX_LIGHT : ARROW_VIEWBOX_DARK;
+  const arrowHeight = isLight ? 20 : 18;
+  const labelOffset = isLight ? "mt-[20px]" : "mt-[16px]";
+
   if (!showArrow) {
     return (
       <div className={`inline-block ${className}`}>
@@ -66,36 +79,28 @@ export function CursorArrow({
   return (
     <div className={`relative inline-block ${className}`}>
       <svg
-        width="20"
-        height="24"
-        viewBox={ARROW_VIEWBOX}
+        width="18"
+        height={arrowHeight}
+        viewBox={arrowViewBox}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute left-0 top-0 overflow-visible"
+        className="absolute left-0 top-0"
         aria-hidden="true"
       >
         <path
-          d={CURSOR_ARROW_PATH}
-          fill="none"
-          stroke="rgba(0, 0, 0, 0.45)"
-          strokeWidth="3"
-          strokeLinejoin="miter"
-          strokeMiterlimit="4"
-        />
-        <path
-          d={CURSOR_ARROW_PATH}
-          fill="none"
+          d={arrowPath}
+          fill={isLight ? "#0A0A0A" : "none"}
           stroke="#FFFFFF"
-          strokeWidth="2"
-          strokeLinejoin="miter"
-          strokeMiterlimit="4"
+          strokeWidth={isLight ? 1.75 : 2}
+          strokeLinejoin="round"
+          strokeLinecap="round"
         />
       </svg>
 
       <CursorNameLabel
         color={color}
         name={name}
-        className="relative ml-[7px] mt-[22px]"
+        className={`relative ml-[7px] ${labelOffset}`}
       />
     </div>
   );
