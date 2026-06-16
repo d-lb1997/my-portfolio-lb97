@@ -68,7 +68,7 @@ export function ContactFrame() {
         ))}
       </div>
 
-      <div className="mt-10 border-t border-[#e6e6e6] pt-8" data-no-pan>
+      <div className="mt-10 border-t border-border-subtle pt-8" data-no-pan>
         <p className="text-sm text-text-secondary">
           Drop your cursor here to say hi
         </p>
@@ -78,11 +78,11 @@ export function ContactFrame() {
             value={guestName}
             onChange={(event) => setGuestName(event.target.value)}
             placeholder="Your name (optional)"
-            className="flex-1 rounded-md border border-[#e6e6e6] px-3 py-2 text-sm text-text-primary outline-none focus:border-text-primary"
+            className="flex-1 rounded-md border border-border-subtle bg-surface-white px-3 py-2 text-sm text-text-primary outline-none focus:border-text-primary"
           />
           <button
             type="submit"
-            className="rounded-md bg-text-primary px-4 py-2 text-sm font-medium text-white cursor-pointer"
+            className="rounded-md bg-text-primary px-4 py-2 text-sm font-medium text-[var(--button-fg)] cursor-pointer"
           >
             Drop cursor
           </button>

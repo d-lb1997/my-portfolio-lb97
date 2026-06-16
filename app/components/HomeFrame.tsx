@@ -21,7 +21,7 @@ export function HomeFrame() {
         <HeroText />
 
         <motion.p
-          className="mt-10 text-center text-sm font-medium text-text-secondary"
+          className="mt-14 text-center text-sm font-medium text-text-secondary md:mt-[3.75rem]"
           initial={{ opacity: 0 }}
           animate={{ opacity: showHint ? 1 : 0 }}
           transition={{ duration: 0.6 }}

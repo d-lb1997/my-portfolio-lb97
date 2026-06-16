@@ -30,7 +30,7 @@ export function AboutFrame() {
 
       <div className="grid w-full grid-cols-1 items-center gap-10 md:grid-cols-2">
         <div className="flex justify-center">
-          <div className="relative h-[280px] w-[280px] overflow-hidden rounded-full border-[6px] border-white shadow-lg">
+          <div className="relative h-[280px] w-[280px] overflow-hidden rounded-full border-[6px] border-[var(--portrait-border)] shadow-lg">
             <Image
               src="/images/portrait.png"
               alt="Portrait of Lukas"

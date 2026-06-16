@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { CanvasProvider } from "@/lib/canvas-context";
 import { CursorProvider } from "@/lib/cursor-context";
 import { googleSans } from "@/lib/fonts";
+import { ThemeProvider } from "@/lib/theme-context";
 import { AmbientCursors } from "./components/AmbientCursors";
 import { Canvas } from "./components/Canvas";
 import { Navbar } from "./components/Navbar";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { VisitorCursor } from "./components/VisitorCursor";
 import "./globals.css";
 
@@ -20,19 +22,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${googleSans.variable} font-sans antialiased cursor-none`}
       >
-        <CursorProvider>
-          <CanvasProvider>
-            <Navbar />
-            <Canvas />
-            <AmbientCursors />
-            <VisitorCursor />
-            {children}
-          </CanvasProvider>
-        </CursorProvider>
+        <ThemeProvider>
+          <CursorProvider>
+            <CanvasProvider>
+              <Navbar />
+              <ThemeToggle />
+              <Canvas />
+              <AmbientCursors />
+              <VisitorCursor />
+              {children}
+            </CanvasProvider>
+          </CursorProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

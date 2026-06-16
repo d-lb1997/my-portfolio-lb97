@@ -43,7 +43,10 @@ export function WorkFrame() {
             href="#"
             className="group block rounded-sm bg-surface-white shadow-sm transition-shadow"
             style={{ borderTop: `3px solid ${project.accent}` }}
-            whileHover={{ scale: 1.03, boxShadow: "0 12px 40px rgba(10,10,10,0.08)" }}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 12px 40px var(--surface-shadow)",
+            }}
             transition={{ duration: 0.2 }}
             data-no-pan
           >
@@ -52,7 +55,7 @@ export function WorkFrame() {
                 {project.title}
               </span>
             </div>
-            <div className="mx-4 mt-2 h-[140px] rounded-sm bg-gradient-to-br from-[#ececec] to-[#f6f6f6]" />
+            <div className="work-card-thumb mx-4 mt-2 h-[140px] rounded-sm" />
             <div className="p-5 pt-4">
               <h3 className="text-lg font-semibold text-text-primary">
                 {project.title}
