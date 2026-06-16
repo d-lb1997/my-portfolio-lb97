@@ -6,27 +6,23 @@ export type ScenePalette = {
   dot: string;
 };
 
-/**
- * Solid page backgrounds — no gradient overlays.
- * Light: near-white bases with #0a0a0a text (WCAG AAA).
- * Dark: deep bases with #f2f2f2 text (WCAG AA+).
- */
+/** Opaque, saturated page bases — each route reads as a distinct solid color. */
 export const PAGE_SCENES: Record<PageId, Record<"light" | "dark", ScenePalette>> = {
   home: {
-    light: { bg: "#ffffff", dot: "#d8d8d8" },
-    dark: { bg: "#000000", dot: "#2e2e2e" },
+    light: { bg: "#ffffff", dot: "#cccccc" },
+    dark: { bg: "#000000", dot: "#3a3a3a" },
   },
   about: {
-    light: { bg: "#f4eef8", dot: "#cfc2d9" },
-    dark: { bg: "#180f28", dot: "#2e2042" },
+    light: { bg: "#ead4ff", dot: "#b892e0" },
+    dark: { bg: "#321068", dot: "#5a2898" },
   },
   work: {
-    light: { bg: "#eef3fa", dot: "#c2cede" },
-    dark: { bg: "#081528", dot: "#1a2840" },
+    light: { bg: "#c5dcff", dot: "#7ea8e8" },
+    dark: { bg: "#082878", dot: "#1a4498" },
   },
   contact: {
-    light: { bg: "#eefaf2", dot: "#c2dcc8" },
-    dark: { bg: "#081f18", dot: "#1a342c" },
+    light: { bg: "#b8f5d0", dot: "#5ecf92" },
+    dark: { bg: "#0a4828", dot: "#1a7048" },
   },
 };
 

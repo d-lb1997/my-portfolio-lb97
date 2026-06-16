@@ -149,8 +149,6 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
           {children}
         </div>
       </div>
-
-      <div className="canvas-edge-fade pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
     </div>
   );
 }
