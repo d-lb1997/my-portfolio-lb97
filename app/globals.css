@@ -80,7 +80,16 @@ body {
   background-color: var(--canvas-bg);
   background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
   background-size: 24px 24px;
+  background-position: 0 0;
   transition: background-color 0.25s ease;
+}
+
+.canvas-edge-fade {
+  background:
+    linear-gradient(to right, var(--canvas-bg) 0%, transparent 16%),
+    linear-gradient(to left, var(--canvas-bg) 0%, transparent 16%),
+    linear-gradient(to bottom, var(--canvas-bg) 0%, transparent 14%),
+    linear-gradient(to top, var(--canvas-bg) 0%, transparent 14%);
 }
 
 .hero-gradient-text {

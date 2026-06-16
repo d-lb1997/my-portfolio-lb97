@@ -4,8 +4,6 @@ export type PageConfig = {
   id: PageId;
   href: string;
   label: string;
-  canvasWidth: number;
-  canvasHeight: number;
   contentX: number;
   contentY: number;
   initialZoom: number;
@@ -20,8 +18,6 @@ export const PAGES: Record<PageId, PageConfig> = {
     id: "home",
     href: "/",
     label: "Home",
-    canvasWidth: 5200,
-    canvasHeight: 5200,
     contentX: -520,
     contentY: -380,
     initialZoom: 0.88,
@@ -34,8 +30,6 @@ export const PAGES: Record<PageId, PageConfig> = {
     id: "about",
     href: "/about",
     label: "About",
-    canvasWidth: 4800,
-    canvasHeight: 4800,
     contentX: 1200,
     contentY: 1000,
     initialZoom: 1,
@@ -48,8 +42,6 @@ export const PAGES: Record<PageId, PageConfig> = {
     id: "work",
     href: "/work",
     label: "Work",
-    canvasWidth: 4800,
-    canvasHeight: 4800,
     contentX: 1100,
     contentY: 900,
     initialZoom: 1,
@@ -62,8 +54,6 @@ export const PAGES: Record<PageId, PageConfig> = {
     id: "contact",
     href: "/contact",
     label: "Contact",
-    canvasWidth: 4800,
-    canvasHeight: 4800,
     contentX: 1300,
     contentY: 1100,
     initialZoom: 1,
