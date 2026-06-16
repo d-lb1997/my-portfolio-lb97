@@ -122,8 +122,23 @@ body {
   padding: 1.5px;
   border-radius: 9999px;
   box-shadow:
-    0 0 24px color-mix(in srgb, var(--chat-accent, #7c6cf0) 24%, transparent),
-    0 8px 32px color-mix(in srgb, #000 12%, transparent);
+    0 0 28px color-mix(in srgb, var(--chat-accent, #7c6cf0) 16%, transparent),
+    0 14px 42px color-mix(in srgb, #000 22%, transparent),
+    0 6px 18px color-mix(in srgb, #000 14%, transparent);
+  transition:
+    border-radius 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+[data-theme="dark"] .gemini-chat-field {
+  box-shadow:
+    0 0 32px color-mix(in srgb, var(--chat-accent, #7c6cf0) 12%, transparent),
+    0 18px 52px color-mix(in srgb, #000 62%, transparent),
+    0 8px 24px color-mix(in srgb, #000 42%, transparent);
+}
+
+.gemini-chat-field--multiline {
+  border-radius: 1.35rem;
 }
 
 .cursor-accent-gradient {
@@ -203,11 +218,30 @@ body {
   align-items: center;
   gap: 0.5rem;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--surface-white) 92%, #1a1a1a);
+  background: color-mix(in srgb, var(--surface-white) 88%, #1a1a1a);
+  transition:
+    border-radius 0.35s ease,
+    background-color 0.25s ease;
+}
+
+.gemini-chat-field--multiline .gemini-chat-inner {
+  border-radius: calc(1.35rem - 1.5px);
+  align-items: flex-end;
+}
+
+.gemini-chat-field--multiline .gemini-chat-submit {
+  margin-bottom: 0.5rem;
 }
 
 [data-theme="dark"] .gemini-chat-inner {
-  background: color-mix(in srgb, var(--surface-white) 88%, #0a0a0a);
+  background: color-mix(in srgb, var(--surface-white) 78%, #050505);
+}
+
+.gemini-chat-input {
+  resize: none;
+  overflow: hidden;
+  max-height: 9rem;
+  line-height: 1.5;
 }
 
 .gemini-chat-submit {

@@ -1,6 +1,14 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { motion } from "framer-motion";
 import {
   buildCursorChatGradient,
   cursorChatGradientStyle,
@@ -9,16 +17,40 @@ import { useVisitorCursor } from "@/lib/cursor-context";
 
 type SubmitState = "idle" | "sending" | "sent" | "error";
 
-export function ContactChatField() {
+type ContactChatFieldProps = {
+  isFocused: boolean;
+  onFocus: () => void;
+};
+
+const FOCUS_TRANSITION = { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
+const SINGLE_LINE_HEIGHT = 52;
+
+export function ContactChatField({ isFocused, onFocus }: ContactChatFieldProps) {
   const { color, name } = useVisitorCursor();
   const [message, setMessage] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [isMultiline, setIsMultiline] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const hasMessage = message.trim().length > 0;
 
   const gradientStyle = useMemo(
     () => cursorChatGradientStyle(buildCursorChatGradient(color)),
     [color],
   );
+
+  const resizeTextarea = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = "auto";
+    const nextHeight = Math.min(textarea.scrollHeight, 144);
+    textarea.style.height = `${nextHeight}px`;
+    setIsMultiline(nextHeight > SINGLE_LINE_HEIGHT || message.includes("\n"));
+  }, [message]);
+
+  useEffect(() => {
+    resizeTextarea();
+  }, [message, resizeTextarea]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,25 +80,39 @@ export function ContactChatField() {
   };
 
   return (
-    <div className="mt-16 w-full max-w-[min(92vw,36rem)] sm:mt-20 md:mt-24">
+    <motion.div
+      layout
+      transition={FOCUS_TRANSITION}
+      className={`w-full max-w-[min(92vw,36rem)] ${isFocused ? "" : "mt-16 sm:mt-20 md:mt-24"}`}
+    >
       <form
         onSubmit={handleSubmit}
-        className="gemini-chat-field cursor-accent-gradient w-full"
+        className={`gemini-chat-field cursor-accent-gradient w-full ${
+          isMultiline ? "gemini-chat-field--multiline" : ""
+        }`}
         style={gradientStyle}
         data-no-pan
       >
         <div className="gemini-chat-inner">
-          <input
-            type="text"
+          <textarea
+            ref={textareaRef}
+            rows={1}
             value={message}
+            onFocus={onFocus}
             onChange={(event) => {
               setMessage(event.target.value);
               if (submitState === "sent" || submitState === "error") {
                 setSubmitState("idle");
               }
             }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                event.currentTarget.form?.requestSubmit();
+              }
+            }}
             placeholder="Drop your message here"
-            className="min-w-0 flex-1 bg-transparent px-4 py-3.5 text-[clamp(0.875rem,2.8vw,1rem)] text-text-primary outline-none placeholder:text-text-secondary/70 sm:px-5 sm:py-4"
+            className="gemini-chat-input min-w-0 flex-1 bg-transparent px-4 py-3.5 text-[clamp(0.875rem,2.8vw,1rem)] text-text-primary outline-none placeholder:text-text-secondary/70 sm:px-5 sm:py-4"
             aria-label="Your message"
             disabled={submitState === "sending"}
           />
@@ -106,6 +152,6 @@ export function ContactChatField() {
         {submitState === "error" &&
           "Could not send right now. Please try again in a moment."}
       </p>
-    </div>
+    </motion.div>
   );
 }
