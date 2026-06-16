@@ -1,5 +1,11 @@
 export type PageId = "home" | "about" | "work" | "contact";
 
+export type PageFitConfig = {
+  width: number;
+  height: number;
+  padding?: number;
+};
+
 export type PageConfig = {
   id: PageId;
   href: string;
@@ -9,22 +15,33 @@ export type PageConfig = {
   initialZoom: number;
   focusX: number;
   focusY: number;
+  focusOffsetY?: number;
+  fitToViewport?: PageFitConfig;
   immerseFocusX: number;
   immerseFocusY: number;
 };
+
+export const HOME_FRAME_WIDTH = 1200;
+export const HOME_FRAME_HEIGHT = 800;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {
     id: "home",
     href: "/",
     label: "Home",
-    contentX: -520,
-    contentY: -380,
-    initialZoom: 0.88,
-    focusX: 260,
-    focusY: 220,
-    immerseFocusX: 1100,
-    immerseFocusY: 820,
+    contentX: 0,
+    contentY: 0,
+    initialZoom: 1,
+    focusX: HOME_FRAME_WIDTH / 2,
+    focusY: HOME_FRAME_HEIGHT / 2,
+    focusOffsetY: -36,
+    fitToViewport: {
+      width: HOME_FRAME_WIDTH,
+      height: HOME_FRAME_HEIGHT,
+      padding: 0.78,
+    },
+    immerseFocusX: 1400,
+    immerseFocusY: 900,
   },
   about: {
     id: "about",

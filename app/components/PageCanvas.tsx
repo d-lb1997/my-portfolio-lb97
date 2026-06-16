@@ -61,6 +61,7 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
     isPanning,
     isNavigating,
     registerPage,
+    recenterToFit,
     containerRef,
     onPanStart,
     bindWheel,
@@ -97,6 +98,14 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
     if (!container) return;
     return bindWheel(container);
   }, [bindWheel, containerRef, pageId]);
+
+  useEffect(() => {
+    if (!page.fitToViewport || viewport.width === 0 || viewport.height === 0) {
+      return;
+    }
+
+    recenterToFit();
+  }, [page.fitToViewport, recenterToFit, viewport.width, viewport.height]);
 
   const dotBounds = useMemo(
     () => getDotBounds(pan.x, pan.y, zoom, viewport),

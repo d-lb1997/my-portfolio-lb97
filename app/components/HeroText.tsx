@@ -24,6 +24,9 @@ const PHRASES = [
 const CYCLE_MS = 2800;
 const TRANSITION = { duration: 0.4, ease: "easeInOut" as const };
 
+const HERO_TEXT_CLASS =
+  "text-[clamp(1.625rem,6.4vw,4rem)] leading-[1.08] tracking-[-0.05em]";
+
 export function HeroText() {
   const [index, setIndex] = useState(0);
 
@@ -37,11 +40,11 @@ export function HeroText() {
 
   return (
     <div className="flex w-full flex-col items-center overflow-visible text-center">
-      <span className="text-[36px] font-black leading-[1.1] tracking-[-0.05em] text-text-primary md:text-[64px]">
+      <span className={`${HERO_TEXT_CLASS} font-black text-text-primary`}>
         Welcome to
       </span>
 
-      <div className="relative mt-0 min-h-[1.25em] w-full overflow-visible pb-2 md:min-h-[1.2em] md:pb-3">
+      <div className="relative mt-0 min-h-[1.2em] w-full overflow-visible pb-2 md:min-h-[1.15em] md:pb-3">
         <AnimatePresence mode="sync">
           <motion.span
             key={index}
@@ -49,7 +52,7 @@ export function HeroText() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className="hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 whitespace-nowrap bg-clip-text text-[36px] font-medium italic leading-[1.1] tracking-[-0.05em] text-transparent md:text-[64px]"
+            className={`hero-gradient-text absolute left-1/2 top-0 w-max max-w-[92vw] -translate-x-1/2 px-2 text-center ${HERO_TEXT_CLASS} font-medium italic text-transparent whitespace-normal sm:max-w-none sm:whitespace-nowrap`}
           >
             {PHRASES[index]}
           </motion.span>

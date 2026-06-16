@@ -31,6 +31,7 @@ type CanvasContextValue = {
   isNavigating: boolean;
   currentPage: PageConfig | null;
   registerPage: (pageId: PageId) => void;
+  recenterToFit: () => void;
   immerseNavigate: (href: string) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onPanStart: (event: React.MouseEvent) => void;
@@ -75,6 +76,23 @@ function centerOnPoint(
     y: viewportH / 2 - focusY * targetZoom,
     zoom: targetZoom,
   };
+}
+
+function resolvePageView(container: HTMLDivElement, page: PageConfig): ViewTarget {
+  let zoom = page.initialZoom;
+
+  if (page.fitToViewport) {
+    const { width, height, padding = 0.85 } = page.fitToViewport;
+    zoom = Math.min(
+      container.clientWidth / width,
+      container.clientHeight / height,
+    ) * padding;
+    zoom = clamp(zoom, MIN_ZOOM, MAX_ZOOM);
+  }
+
+  const focusY = page.focusY + (page.focusOffsetY ?? 0);
+
+  return centerOnPoint(container, page.focusX, focusY, zoom);
 }
 
 export function CanvasProvider({ children }: { children: ReactNode }) {
@@ -168,18 +186,13 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       const entering = sessionStorage.getItem(IMMERSE_SESSION_KEY) === "1";
       sessionStorage.removeItem(IMMERSE_SESSION_KEY);
 
-      const target = centerOnPoint(
-        container,
-        page.focusX,
-        page.focusY,
-        page.initialZoom,
-      );
+      const target = resolvePageView(container, page);
 
       if (entering) {
         const immersed = centerOnPoint(
           container,
           page.focusX,
-          page.focusY,
+          page.focusY + (page.focusOffsetY ?? 0),
           IMMERSE_ZOOM,
         );
         applyTransform({ x: immersed.x, y: immersed.y }, immersed.zoom);
@@ -212,6 +225,15 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     },
     [cancelAnimation, initializePageView],
   );
+
+  const recenterToFit = useCallback(() => {
+    const page = currentPage;
+    const container = containerRef.current;
+    if (!page?.fitToViewport || !container) return;
+
+    const target = resolvePageView(container, page);
+    applyTransform({ x: target.x, y: target.y }, target.zoom);
+  }, [applyTransform, currentPage]);
 
   const immerseNavigate = useCallback(
     (href: string) => {
@@ -357,6 +379,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         isNavigating,
         currentPage,
         registerPage,
+        recenterToFit,
         immerseNavigate,
         containerRef,
         onPanStart,
