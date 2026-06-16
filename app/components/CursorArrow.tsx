@@ -21,8 +21,8 @@ export function CursorArrow({ color, name, className = "" }: CursorArrowProps) {
   return (
     <div className={`relative inline-block ${className}`}>
       <svg
-        width="17"
-        height="21"
+        width="20"
+        height="24"
         viewBox="0 0 17 21"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@ export function CursorArrow({ color, name, className = "" }: CursorArrowProps) {
       </svg>
 
       <span
-        className="relative ml-[11px] mt-[13px] block whitespace-nowrap px-3.5 py-[7px] text-[13px] font-semibold leading-none text-white"
+        className="relative ml-[13px] mt-[15px] block whitespace-nowrap px-4 py-2 text-[14px] font-medium leading-none text-white"
         style={{
           backgroundColor: color,
           border: `2px solid ${borderColor}`,

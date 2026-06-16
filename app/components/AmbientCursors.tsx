@@ -16,8 +16,10 @@ type DrifterConfig = {
 const DRIFTER_CONFIGS: DrifterConfig[] = [
   { side: "left", baseSpeed: 0.014, pauseMin: 900, pauseMax: 2400 },
   { side: "left", baseSpeed: 0.011, pauseMin: 1200, pauseMax: 3200 },
+  { side: "left", baseSpeed: 0.012, pauseMin: 1100, pauseMax: 2800 },
   { side: "right", baseSpeed: 0.013, pauseMin: 1000, pauseMax: 2600 },
   { side: "right", baseSpeed: 0.01, pauseMin: 1400, pauseMax: 3400 },
+  { side: "right", baseSpeed: 0.0125, pauseMin: 950, pauseMax: 2700 },
 ];
 
 function randomBetween(min: number, max: number) {
@@ -85,7 +87,7 @@ function AmbientCursorDrifter({
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
       const { minX, maxX } = getEdgeBounds(config.side, viewportW);
-      const startY = (viewportH / 5) * (index + 1) + randomBetween(-50, 50);
+      const startY = (viewportH / 7) * (index + 1) + randomBetween(-40, 40);
 
       posRef.current = {
         x: randomBetween(minX, maxX),

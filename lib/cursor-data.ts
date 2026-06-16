@@ -65,6 +65,8 @@ export function pickSessionCursors(): {
       { name: names[2], color: colors[2] },
       { name: names[3], color: colors[3] },
       { name: names[4], color: colors[4] },
+      { name: names[5], color: colors[5] },
+      { name: names[6], color: colors[6] },
     ],
   };
 }
