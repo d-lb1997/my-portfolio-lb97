@@ -1,33 +1,40 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
 } from "react";
-import { FRAMES, type FrameId } from "./frames";
+import { PAGES, type PageConfig, type PageId } from "./pages";
 
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 5;
-const NAV_DURATION = 600;
+const IMMERSE_ZOOM = 3.4;
+const IMMERSE_LEAVE_DURATION = 680;
+const IMMERSE_ENTER_DURATION = 720;
 const ZOOM_INTENSITY = 0.0032;
+const IMMERSE_SESSION_KEY = "canvas-immerse";
 
 type Pan = { x: number; y: number };
+
+type ViewTarget = Pan & { zoom: number };
 
 type CanvasContextValue = {
   pan: Pan;
   zoom: number;
   isPanning: boolean;
-  activeFrame: FrameId;
-  navigateToFrame: (frameId: FrameId) => void;
-  setActiveFrame: (frameId: FrameId) => void;
+  isNavigating: boolean;
+  currentPage: PageConfig | null;
+  registerPage: (pageId: PageId) => void;
+  immerseNavigate: (href: string) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onPanStart: (event: React.MouseEvent) => void;
+  bindWheel: (element: HTMLDivElement) => () => void;
 };
 
 const CanvasContext = createContext<CanvasContextValue | null>(null);
@@ -40,6 +47,10 @@ function easeInOutCubic(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
 function normalizeWheelDelta(event: WheelEvent, pageHeight: number) {
   if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
     return event.deltaY * 16;
@@ -50,12 +61,30 @@ function normalizeWheelDelta(event: WheelEvent, pageHeight: number) {
   return event.deltaY;
 }
 
+function centerOnPoint(
+  container: HTMLDivElement,
+  focusX: number,
+  focusY: number,
+  targetZoom: number,
+): ViewTarget {
+  const viewportW = container.clientWidth;
+  const viewportH = container.clientHeight;
+
+  return {
+    x: viewportW / 2 - focusX * targetZoom,
+    y: viewportH / 2 - focusY * targetZoom,
+    zoom: targetZoom,
+  };
+}
+
 export function CanvasProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const [pan, setPan] = useState<Pan>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [isPanning, setIsPanning] = useState(false);
-  const [activeFrame, setActiveFrame] = useState<FrameId>("home");
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [currentPage, setCurrentPage] = useState<PageConfig | null>(null);
   const animationRef = useRef<number | null>(null);
   const panStartRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(
     null,
@@ -65,6 +94,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   const wheelDeltaRef = useRef(0);
   const wheelAnchorRef = useRef<{ x: number; y: number } | null>(null);
   const wheelFrameRef = useRef<number | null>(null);
+  const registeredPageRef = useRef<PageId | null>(null);
 
   useEffect(() => {
     panRef.current = pan;
@@ -81,51 +111,24 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     setZoom(nextZoom);
   }, []);
 
-  const centerOnFrame = useCallback((frameId: FrameId, targetZoom = 1) => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const frame = FRAMES[frameId];
-    const viewportW = container.clientWidth;
-    const viewportH = container.clientHeight;
-    const frameCenterX = frame.x + frame.width / 2;
-    const frameCenterY = frame.y + frame.height / 2;
-
-    return {
-      x: viewportW / 2 - frameCenterX * targetZoom,
-      y: viewportH / 2 - frameCenterY * targetZoom,
-      zoom: targetZoom,
-    };
+  const cancelAnimation = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
   }, []);
 
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const initial = centerOnFrame("home", 1);
-    if (initial) {
-      applyTransform({ x: initial.x, y: initial.y }, initial.zoom);
-    }
-  }, [applyTransform, centerOnFrame]);
-
-  const navigateToFrame = useCallback(
-    (frameId: FrameId) => {
+  const animateTo = useCallback(
+    (
+      target: ViewTarget,
+      duration: number,
+      easing: (t: number) => number = easeInOutCubic,
+      onComplete?: () => void,
+    ) => {
       const container = containerRef.current;
       if (!container) return;
 
-      const target = centerOnFrame(frameId, 1);
-      if (!target) return;
-
-      setActiveFrame(frameId);
-
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      if (wheelFrameRef.current) {
-        cancelAnimationFrame(wheelFrameRef.current);
-        wheelFrameRef.current = null;
-        wheelDeltaRef.current = 0;
-      }
+      cancelAnimation();
 
       const startPan = { ...panRef.current };
       const startZoom = zoomRef.current;
@@ -133,8 +136,8 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
       const animate = (now: number) => {
         const elapsed = now - startTime;
-        const progress = clamp(elapsed / NAV_DURATION, 0, 1);
-        const eased = easeInOutCubic(progress);
+        const progress = clamp(elapsed / duration, 0, 1);
+        const eased = easing(progress);
 
         applyTransform(
           {
@@ -146,12 +149,102 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
         if (progress < 1) {
           animationRef.current = requestAnimationFrame(animate);
+        } else {
+          animationRef.current = null;
+          onComplete?.();
         }
       };
 
       animationRef.current = requestAnimationFrame(animate);
     },
-    [applyTransform, centerOnFrame],
+    [applyTransform, cancelAnimation],
+  );
+
+  const initializePageView = useCallback(
+    (page: PageConfig) => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const entering = sessionStorage.getItem(IMMERSE_SESSION_KEY) === "1";
+      sessionStorage.removeItem(IMMERSE_SESSION_KEY);
+
+      const target = centerOnPoint(
+        container,
+        page.focusX,
+        page.focusY,
+        page.initialZoom,
+      );
+
+      if (entering) {
+        const immersed = centerOnPoint(
+          container,
+          page.focusX,
+          page.focusY,
+          IMMERSE_ZOOM,
+        );
+        applyTransform({ x: immersed.x, y: immersed.y }, immersed.zoom);
+        animateTo(target, IMMERSE_ENTER_DURATION, easeOutCubic);
+        return;
+      }
+
+      applyTransform({ x: target.x, y: target.y }, target.zoom);
+    },
+    [animateTo, applyTransform],
+  );
+
+  const registerPage = useCallback(
+    (pageId: PageId) => {
+      registeredPageRef.current = pageId;
+      const page = PAGES[pageId];
+      setCurrentPage(page);
+
+      if (wheelFrameRef.current) {
+        cancelAnimationFrame(wheelFrameRef.current);
+        wheelFrameRef.current = null;
+        wheelDeltaRef.current = 0;
+      }
+
+      cancelAnimation();
+
+      requestAnimationFrame(() => {
+        initializePageView(page);
+      });
+    },
+    [cancelAnimation, initializePageView],
+  );
+
+  const immerseNavigate = useCallback(
+    (href: string) => {
+      const container = containerRef.current;
+      const page = currentPage;
+      if (!container || !page || isNavigating) return;
+
+      const targetPage = Object.values(PAGES).find((entry) => entry.href === href);
+      if (!targetPage || targetPage.id === page.id) return;
+
+      setIsNavigating(true);
+      cancelAnimation();
+
+      if (wheelFrameRef.current) {
+        cancelAnimationFrame(wheelFrameRef.current);
+        wheelFrameRef.current = null;
+        wheelDeltaRef.current = 0;
+      }
+
+      const immerseTarget = centerOnPoint(
+        container,
+        page.immerseFocusX,
+        page.immerseFocusY,
+        IMMERSE_ZOOM,
+      );
+
+      animateTo(immerseTarget, IMMERSE_LEAVE_DURATION, easeInOutCubic, () => {
+        sessionStorage.setItem(IMMERSE_SESSION_KEY, "1");
+        router.push(href);
+        setIsNavigating(false);
+      });
+    },
+    [animateTo, cancelAnimation, currentPage, isNavigating, router],
   );
 
   const applyWheelZoom = useCallback(() => {
@@ -182,39 +275,41 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     );
   }, [applyTransform]);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  const bindWheel = useCallback(
+    (element: HTMLDivElement) => {
+      const handleWheel = (event: WheelEvent) => {
+        if (isNavigating) return;
+        event.preventDefault();
 
-    const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
+        const rect = element.getBoundingClientRect();
+        wheelAnchorRef.current = {
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top,
+        };
 
-      const rect = container.getBoundingClientRect();
-      wheelAnchorRef.current = {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
+        wheelDeltaRef.current += normalizeWheelDelta(event, rect.height);
+
+        if (wheelFrameRef.current === null) {
+          wheelFrameRef.current = requestAnimationFrame(applyWheelZoom);
+        }
       };
 
-      wheelDeltaRef.current += normalizeWheelDelta(event, rect.height);
+      element.addEventListener("wheel", handleWheel, { passive: false });
 
-      if (wheelFrameRef.current === null) {
-        wheelFrameRef.current = requestAnimationFrame(applyWheelZoom);
-      }
-    };
-
-    container.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      container.removeEventListener("wheel", handleWheel);
-      if (wheelFrameRef.current) {
-        cancelAnimationFrame(wheelFrameRef.current);
-      }
-    };
-  }, [applyWheelZoom]);
+      return () => {
+        element.removeEventListener("wheel", handleWheel);
+        if (wheelFrameRef.current) {
+          cancelAnimationFrame(wheelFrameRef.current);
+          wheelFrameRef.current = null;
+        }
+      };
+    },
+    [applyWheelZoom, isNavigating],
+  );
 
   const onPanStart = useCallback(
     (event: React.MouseEvent) => {
-      if (event.button !== 0) return;
+      if (event.button !== 0 || isNavigating) return;
       const target = event.target as HTMLElement;
       if (target.closest("a, button, input, textarea, [data-no-pan]")) return;
 
@@ -250,7 +345,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onUp);
     },
-    [applyTransform],
+    [applyTransform, isNavigating],
   );
 
   return (
@@ -259,11 +354,13 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         pan,
         zoom,
         isPanning,
-        activeFrame,
-        navigateToFrame,
-        setActiveFrame,
+        isNavigating,
+        currentPage,
+        registerPage,
+        immerseNavigate,
         containerRef,
         onPanStart,
+        bindWheel,
       }}
     >
       {children}
