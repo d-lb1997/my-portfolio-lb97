@@ -26,7 +26,7 @@ export function AboutFrame() {
       style={{ width: ABOUT_FRAME_WIDTH, minHeight: ABOUT_FRAME_HEIGHT }}
       aria-label="About"
     >
-      <div className="grid w-full max-w-[58rem] grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(16rem,20rem)_1fr] lg:gap-14">
+      <div className="grid w-full max-w-[58rem] grid-cols-1 items-start gap-10 pt-10 sm:pt-12 lg:grid-cols-[minmax(16rem,20rem)_1fr] lg:gap-14 lg:pt-16">
         <div className="relative mx-auto w-full max-w-[22rem] lg:mx-0">
           {BADGES.map((badge) => (
             <div key={badge.label} className={`absolute z-10 ${badge.className}`}>
@@ -56,7 +56,7 @@ export function AboutFrame() {
             align="left"
           />
 
-          <div className="mt-6 w-full lg:mt-8">
+          <div className="mt-10 w-full lg:mt-14">
             <p className="text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
               Hi — I&apos;m Lukas, an experience designer focused on human-centered
               products. I work across research, visual design, and interaction to

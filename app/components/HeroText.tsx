@@ -37,11 +37,8 @@ export const CONTACT_HERO_PHRASES = [
 
 export const ABOUT_HERO_PHRASES = [
   "the human behind the pixels.",
-  "a designer, not a deck.",
-  "curious by default.",
-  "systems thinker. people first.",
-  "structure with soul.",
   "the face behind the Figma file.",
+  "curious by default.",
 ];
 
 const CYCLE_MS = 2800;
