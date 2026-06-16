@@ -121,10 +121,12 @@ body {
 .gemini-chat-field {
   padding: 1.5px;
   border-radius: 9999px;
+  overflow: visible;
   box-shadow:
-    0 0 28px color-mix(in srgb, var(--chat-accent, #7c6cf0) 16%, transparent),
-    0 14px 42px color-mix(in srgb, #000 22%, transparent),
-    0 6px 18px color-mix(in srgb, #000 14%, transparent);
+    0 0 32px color-mix(in srgb, var(--chat-accent, #7c6cf0) 22%, transparent),
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    0 22px 56px rgba(0, 0, 0, 0.16),
+    0 36px 72px rgba(0, 0, 0, 0.1);
   transition:
     border-radius 0.35s ease,
     box-shadow 0.35s ease;
@@ -132,9 +134,10 @@ body {
 
 [data-theme="dark"] .gemini-chat-field {
   box-shadow:
-    0 0 32px color-mix(in srgb, var(--chat-accent, #7c6cf0) 12%, transparent),
-    0 18px 52px color-mix(in srgb, #000 62%, transparent),
-    0 8px 24px color-mix(in srgb, #000 42%, transparent);
+    0 0 36px color-mix(in srgb, var(--chat-accent, #7c6cf0) 16%, transparent),
+    0 12px 32px rgba(0, 0, 0, 0.42),
+    0 28px 64px rgba(0, 0, 0, 0.5),
+    0 44px 88px rgba(0, 0, 0, 0.32);
 }
 
 .gemini-chat-field--multiline {

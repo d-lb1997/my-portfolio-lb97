@@ -35,7 +35,7 @@ export function ContactFrame() {
               initial={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -24, height: 0, marginBottom: 0 }}
               transition={FOCUS_TRANSITION}
-              className="w-full overflow-hidden"
+              className="w-full overflow-visible"
             >
               <HeroText headline="Let's" phrases={CONTACT_HERO_PHRASES} />
             </motion.div>
@@ -45,6 +45,7 @@ export function ContactFrame() {
         <ContactChatField
           isFocused={isFocused}
           onFocus={() => setIsFocused(true)}
+          onDismiss={() => setIsFocused(false)}
         />
       </motion.div>
     </section>

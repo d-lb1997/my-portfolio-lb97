@@ -20,17 +20,23 @@ type SubmitState = "idle" | "sending" | "sent" | "error";
 type ContactChatFieldProps = {
   isFocused: boolean;
   onFocus: () => void;
+  onDismiss: () => void;
 };
 
 const FOCUS_TRANSITION = { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
-const SINGLE_LINE_HEIGHT = 52;
+const ONE_LINE_MAX_HEIGHT = 56;
 
-export function ContactChatField({ isFocused, onFocus }: ContactChatFieldProps) {
+export function ContactChatField({
+  isFocused,
+  onFocus,
+  onDismiss,
+}: ContactChatFieldProps) {
   const { color, name } = useVisitorCursor();
   const [message, setMessage] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [isMultiline, setIsMultiline] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const hasMessage = message.trim().length > 0;
 
   const gradientStyle = useMemo(
@@ -45,12 +51,37 @@ export function ContactChatField({ isFocused, onFocus }: ContactChatFieldProps) 
     textarea.style.height = "auto";
     const nextHeight = Math.min(textarea.scrollHeight, 144);
     textarea.style.height = `${nextHeight}px`;
-    setIsMultiline(nextHeight > SINGLE_LINE_HEIGHT || message.includes("\n"));
+    setIsMultiline(
+      message.includes("\n") ||
+        (message.trim().length > 0 && nextHeight > ONE_LINE_MAX_HEIGHT),
+    );
   }, [message]);
 
   useEffect(() => {
     resizeTextarea();
   }, [message, resizeTextarea]);
+
+  useEffect(() => {
+    if (!isFocused) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (containerRef.current?.contains(target)) return;
+
+      textareaRef.current?.blur();
+      onDismiss();
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown, {
+      capture: true,
+    });
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, {
+        capture: true,
+      });
+    };
+  }, [isFocused, onDismiss]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -81,9 +112,10 @@ export function ContactChatField({ isFocused, onFocus }: ContactChatFieldProps) 
 
   return (
     <motion.div
-      layout
+      ref={containerRef}
       transition={FOCUS_TRANSITION}
-      className={`w-full max-w-[min(92vw,36rem)] ${isFocused ? "" : "mt-16 sm:mt-20 md:mt-24"}`}
+      className={`w-full max-w-[min(92vw,36rem)] overflow-visible ${isFocused ? "" : "mt-16 sm:mt-20 md:mt-24"}`}
+      data-no-pan
     >
       <form
         onSubmit={handleSubmit}
