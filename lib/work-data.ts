@@ -15,6 +15,7 @@ export type WorkProjectLogo =
       alt: string;
       width: number;
       height: number;
+      displayHeight?: number;
     };
 
 export type WorkProject = {
@@ -101,6 +102,7 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
       alt: "GTÜ",
       width: 126,
       height: 55,
+      displayHeight: 24,
     },
     layers: [
       { id: "brand-audit", label: "Brand Audit", type: "section" },

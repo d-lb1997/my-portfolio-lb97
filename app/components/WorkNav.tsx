@@ -23,8 +23,16 @@ function NavLogo({ logo }: { logo: WorkProjectLogo }) {
   }
 
   if (!ready) {
-    return <div className="work-nav-brand-logo h-[34px] w-[58px] shrink-0" />;
+    const placeholderHeight = logo.displayHeight ?? 34;
+    return (
+      <div
+        className="work-nav-brand-logo shrink-0"
+        style={{ height: placeholderHeight }}
+      />
+    );
   }
+
+  const logoHeight = logo.displayHeight ?? 34;
 
   return (
     <Image
@@ -33,6 +41,7 @@ function NavLogo({ logo }: { logo: WorkProjectLogo }) {
       width={logo.width}
       height={logo.height}
       className="work-nav-brand-logo shrink-0 object-contain object-left"
+      style={{ height: logoHeight }}
     />
   );
 }
