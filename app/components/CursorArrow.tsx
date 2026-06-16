@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 function darkenHex(hex: string, amount = 0.2): string {
   const normalized = hex.replace("#", "");
   const num = parseInt(normalized, 16);
@@ -56,42 +54,5 @@ export function CursorArrow({ color, name, className = "" }: CursorArrowProps) {
         {name}
       </span>
     </div>
-  );
-}
-
-type AmbientCursorProps = {
-  color: string;
-  name: string;
-  path: { x: number[]; y: number[] };
-  duration: number;
-  delay?: number;
-};
-
-export function AmbientCursor({
-  color,
-  name,
-  path,
-  duration,
-  delay = 0,
-}: AmbientCursorProps) {
-  return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-10"
-      initial={{ x: path.x[0], y: path.y[0], opacity: 0 }}
-      animate={{
-        x: path.x,
-        y: path.y,
-        opacity: 1,
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        repeatType: "mirror",
-        ease: "easeInOut",
-      }}
-    >
-      <CursorArrow color={color} name={name} />
-    </motion.div>
   );
 }
