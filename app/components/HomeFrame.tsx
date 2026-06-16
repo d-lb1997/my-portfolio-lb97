@@ -11,7 +11,7 @@ import { HomeAudio } from "./HomeAudio";
 import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
 
-const BIO_SHOW_DELAY_MS = 5500;
+const BIO_SHOW_DELAY_MS = 6000;
 const BIO_ENTRANCE = { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const };
 const HERO_CTA_GAP = "64px";
 
