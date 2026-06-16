@@ -5,11 +5,6 @@ import Image from "next/image";
 const BADGES = [
   { label: "Based in Munich", color: "#FF3CAC", style: { top: "-20px", right: "40px" } },
   { label: "5 years in the field", color: "#2DCC70", style: { bottom: "60px", left: "-30px" } },
-  {
-    label: "Currently: Open to work",
-    color: "#3498DB",
-    style: { bottom: "-10px", right: "20px" },
-  },
 ];
 
 export function AboutFrame() {

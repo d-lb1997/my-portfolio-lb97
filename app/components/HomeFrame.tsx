@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { HeroText } from "./HeroText";
 
 export function HomeFrame() {
   const [showHint, setShowHint] = useState(true);
@@ -13,18 +14,11 @@ export function HomeFrame() {
 
   return (
     <section
-      className="relative flex h-[800px] w-[1200px] items-center justify-center"
+      className="relative flex h-[800px] w-[1200px] items-center justify-center overflow-visible"
       aria-label="Home"
     >
-      <div className="px-8 text-center md:text-left">
-        <h1 className="text-[64px] leading-[1.05] tracking-[-0.02em] text-text-primary md:text-[72px]">
-          <span className="font-bold">Hey</span>{" "}
-          <span className="font-light">there</span>
-        </h1>
-        <p className="mt-4 text-[22px] leading-snug text-text-primary md:text-[26px]">
-          <span className="font-normal">welcome to </span>
-          <span className="font-bold">my design world</span>
-        </p>
+      <div className="flex flex-col items-center overflow-visible px-8">
+        <HeroText />
 
         <motion.p
           className="mt-10 text-sm text-text-secondary"
