@@ -1,24 +1,29 @@
 # Lukas — Portfolio
 
-Open `index.html` in your browser to preview this minimal portfolio.
+An infinite canvas portfolio experience. Step into a designer's living Figma file — pan, zoom, and explore artboards instead of scrolling.
 
-Files of interest:
-- `index.html`, `work.html`, `about.html`, `contact.html`
-- `assets/styles.css` — site styles
-- `assets/cursor.js` — custom Figma-style active cursor (dot, ring, label)
+## Stack
 
-- `assets/cursor.js` — custom Figma-style active cursor (arrow + label)
+- Next.js (App Router)
+- Tailwind CSS
+- Framer Motion
+- DM Sans (Google Fonts)
 
-Portrait image:
-- I added a neutral SVG placeholder at `assets/images/portrait.svg` and updated the homepage hero to use it.
-- To include your attached photo instead, save the provided image into the project as `assets/images/portrait.png` (or `.jpg`) — it will automatically be used in place of the placeholder.
+## Getting Started
 
-Notes:
-- On touch devices the custom cursor is disabled and the system cursor is used.
-- To serve locally with a simple http server (recommended):
+```bash
+npm install
+npm run dev
+```
 
-  ```bash
-  # from the project folder
-  python3 -m http.server 8000
-  # then open http://localhost:8000
-  ```
+Open [http://localhost:3000](http://localhost:3000).
+
+## Controls
+
+- **Pan**: click and drag on empty canvas space
+- **Zoom**: scroll wheel or pinch (0.25× – 3×)
+- **Navigate**: use the top nav to jump between artboard frames
+
+## Design
+
+See [DESIGN_CONCEPT.md](./DESIGN_CONCEPT.md) for the full design specification.
