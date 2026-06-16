@@ -31,7 +31,7 @@ type CanvasContextValue = {
   isNavigating: boolean;
   currentPage: PageConfig | null;
   registerPage: (pageId: PageId) => void;
-  recenterToFit: () => void;
+  recenterToFit: (pageId?: PageId) => void;
   immerseNavigate: (href: string) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onPanStart: (event: React.MouseEvent) => void;
@@ -180,27 +180,41 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   const initializePageView = useCallback(
     (page: PageConfig) => {
-      const container = containerRef.current;
-      if (!container) return;
+      const run = (attempt = 0) => {
+        const container = containerRef.current;
+        if (
+          !container ||
+          container.clientWidth === 0 ||
+          container.clientHeight === 0
+        ) {
+          if (attempt < 24) {
+            requestAnimationFrame(() => run(attempt + 1));
+          }
+          return;
+        }
 
-      const entering = sessionStorage.getItem(IMMERSE_SESSION_KEY) === "1";
-      sessionStorage.removeItem(IMMERSE_SESSION_KEY);
+        const entering = sessionStorage.getItem(IMMERSE_SESSION_KEY) === "1";
+        sessionStorage.removeItem(IMMERSE_SESSION_KEY);
 
-      const target = resolvePageView(container, page);
+        const target = resolvePageView(container, page);
+        const focusY = page.focusY + (page.focusOffsetY ?? 0);
 
-      if (entering) {
-        const immersed = centerOnPoint(
-          container,
-          page.focusX,
-          page.focusY + (page.focusOffsetY ?? 0),
-          IMMERSE_ZOOM,
-        );
-        applyTransform({ x: immersed.x, y: immersed.y }, immersed.zoom);
-        animateTo(target, IMMERSE_ENTER_DURATION, easeOutCubic);
-        return;
-      }
+        if (entering) {
+          const immersed = centerOnPoint(
+            container,
+            page.focusX,
+            focusY,
+            IMMERSE_ZOOM,
+          );
+          applyTransform({ x: immersed.x, y: immersed.y }, immersed.zoom);
+          animateTo(target, IMMERSE_ENTER_DURATION, easeOutCubic);
+          return;
+        }
 
-      applyTransform({ x: target.x, y: target.y }, target.zoom);
+        applyTransform({ x: target.x, y: target.y }, target.zoom);
+      };
+
+      run();
     },
     [animateTo, applyTransform],
   );
@@ -219,21 +233,24 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
       cancelAnimation();
 
-      requestAnimationFrame(() => {
-        initializePageView(page);
-      });
+      initializePageView(page);
     },
     [cancelAnimation, initializePageView],
   );
 
-  const recenterToFit = useCallback(() => {
-    const page = currentPage;
-    const container = containerRef.current;
-    if (!page?.fitToViewport || !container) return;
+  const recenterToFit = useCallback(
+    (pageId?: PageId) => {
+      const page = pageId ? PAGES[pageId] : currentPage;
+      const container = containerRef.current;
+      if (!page?.fitToViewport || !container || container.clientWidth === 0) {
+        return;
+      }
 
-    const target = resolvePageView(container, page);
-    applyTransform({ x: target.x, y: target.y }, target.zoom);
-  }, [applyTransform, currentPage]);
+      const target = resolvePageView(container, page);
+      applyTransform({ x: target.x, y: target.y }, target.zoom);
+    },
+    [applyTransform, currentPage],
+  );
 
   const immerseNavigate = useCallback(
     (href: string) => {

@@ -104,8 +104,8 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
       return;
     }
 
-    recenterToFit();
-  }, [page.fitToViewport, recenterToFit, viewport.width, viewport.height]);
+    recenterToFit(pageId);
+  }, [page.fitToViewport, pageId, recenterToFit, viewport.width, viewport.height]);
 
   const dotBounds = useMemo(
     () => getDotBounds(pan.x, pan.y, zoom, viewport),

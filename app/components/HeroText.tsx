@@ -52,7 +52,7 @@ export function HeroText() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute left-1/2 top-0 w-max max-w-[92vw] -translate-x-1/2 px-2 text-center ${HERO_TEXT_CLASS} font-medium italic text-transparent whitespace-normal sm:max-w-none sm:whitespace-nowrap`}
+            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 text-center ${HERO_TEXT_CLASS} font-medium italic whitespace-normal sm:whitespace-nowrap`}
           >
             {PHRASES[index]}
           </motion.span>

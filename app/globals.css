@@ -93,6 +93,13 @@ body {
 }
 
 .hero-gradient-text {
+  display: inline-block;
+  width: max-content;
+  max-width: 92vw;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
   background-image: linear-gradient(
     90deg,
     var(--hero-gradient-from) 0%,

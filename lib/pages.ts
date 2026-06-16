@@ -22,26 +22,25 @@ export type PageConfig = {
 };
 
 export const HOME_FRAME_WIDTH = 1200;
-export const HOME_FRAME_HEIGHT = 800;
+export const HOME_FRAME_HEIGHT = 360;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {
     id: "home",
     href: "/",
     label: "Home",
-    contentX: 0,
-    contentY: 0,
+    contentX: -HOME_FRAME_WIDTH / 2,
+    contentY: -HOME_FRAME_HEIGHT / 2,
     initialZoom: 1,
-    focusX: HOME_FRAME_WIDTH / 2,
-    focusY: HOME_FRAME_HEIGHT / 2,
-    focusOffsetY: -36,
+    focusX: 0,
+    focusY: 0,
     fitToViewport: {
       width: HOME_FRAME_WIDTH,
       height: HOME_FRAME_HEIGHT,
-      padding: 0.78,
+      padding: 0.9,
     },
-    immerseFocusX: 1400,
-    immerseFocusY: 900,
+    immerseFocusX: 900,
+    immerseFocusY: 650,
   },
   about: {
     id: "about",
