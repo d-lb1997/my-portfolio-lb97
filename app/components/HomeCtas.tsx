@@ -19,7 +19,7 @@ export function HomeCtas() {
 
   return (
     <div
-      className="mt-14 flex flex-wrap items-center justify-center gap-3 sm:mt-16 md:mt-20"
+      className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:mt-12 md:mt-14"
       data-no-pan
     >
       <button
