@@ -92,6 +92,69 @@ body {
     linear-gradient(to top, var(--canvas-bg) 0%, transparent 14%);
 }
 
+.gemini-chat-field {
+  padding: 1.5px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    #4285f4 0%,
+    #7c6cf0 18%,
+    #b06ee8 36%,
+    #d96570 54%,
+    #e8714a 72%,
+    #4285f4 100%
+  );
+  background-size: 200% 100%;
+  box-shadow:
+    0 0 24px color-mix(in srgb, #7c6cf0 22%, transparent),
+    0 8px 32px color-mix(in srgb, #000 12%, transparent);
+}
+
+.gemini-chat-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--surface-white) 92%, #1a1a1a);
+}
+
+[data-theme="dark"] .gemini-chat-inner {
+  background: color-mix(in srgb, var(--surface-white) 88%, #0a0a0a);
+}
+
+.gemini-chat-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  background: transparent;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.gemini-chat-submit:not(:disabled) {
+  color: #ffffff;
+  background: linear-gradient(135deg, #4285f4 0%, #9b72cb 50%, #d96570 100%);
+  opacity: 1;
+  cursor: pointer;
+}
+
+.gemini-chat-submit:not(:disabled):hover {
+  transform: scale(1.05);
+}
+
+.gemini-chat-submit:not(:disabled):active {
+  transform: scale(0.96);
+}
+
 .hero-gradient-text {
   display: inline-block;
   width: max-content;

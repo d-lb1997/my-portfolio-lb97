@@ -82,11 +82,31 @@ function resolvePageView(container: HTMLDivElement, page: PageConfig): ViewTarge
   let zoom = page.initialZoom;
 
   if (page.fitToViewport) {
-    const { width, height, padding = 0.85 } = page.fitToViewport;
-    zoom = Math.min(
-      container.clientWidth / width,
-      container.clientHeight / height,
-    ) * padding;
+    const {
+      width,
+      height,
+      padding = 0.85,
+      mobilePadding,
+      mobileBreakpoint = 1024,
+    } = page.fitToViewport;
+    const isMobile = container.clientWidth < mobileBreakpoint;
+
+    if (isMobile) {
+      const fitPadding = mobilePadding ?? padding;
+      const contentWidth = Math.min(width, container.clientWidth * 1.08);
+
+      zoom = Math.min(
+        (container.clientWidth * fitPadding) / contentWidth,
+        (container.clientHeight * fitPadding) / height,
+      );
+    } else {
+      zoom =
+        Math.min(
+          container.clientWidth / width,
+          container.clientHeight / height,
+        ) * padding;
+    }
+
     zoom = clamp(zoom, MIN_ZOOM, MAX_ZOOM);
   }
 

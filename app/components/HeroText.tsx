@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const PHRASES = [
+export const HOME_HERO_PHRASES = [
   "my design world.",
   "a pixel-perfect obsession.",
   "the good stuff.",
@@ -20,30 +20,53 @@ const PHRASES = [
   "the portfolio. not the PDF.",
 ];
 
+export const CONTACT_HERO_PHRASES = [
+  "in contact.",
+  "connected.",
+  "in touch.",
+  "in the loop.",
+  "on the same wavelength.",
+  "curious together.",
+  "building something.",
+  "in sync.",
+  "close.",
+  "collaborating.",
+  "talking.",
+  "creating together.",
+];
+
 const CYCLE_MS = 2800;
 const TRANSITION = { duration: 0.4, ease: "easeInOut" as const };
 
 const HERO_TEXT_CLASS =
-  "text-[clamp(1.625rem,6.4vw,4rem)] leading-[1.08] tracking-[-0.05em]";
+  "text-[clamp(2rem,8.5vw,4rem)] leading-[1.08] tracking-[-0.05em] sm:text-[clamp(2.25rem,7.5vw,3.75rem)] lg:text-[clamp(2.5rem,5.5vw,4rem)]";
 
-export function HeroText() {
+type HeroTextProps = {
+  headline?: string;
+  phrases?: string[];
+};
+
+export function HeroText({
+  headline = "Welcome to",
+  phrases = HOME_HERO_PHRASES,
+}: HeroTextProps) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % PHRASES.length);
+      setIndex((prev) => (prev + 1) % phrases.length);
     }, CYCLE_MS);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [phrases.length]);
 
   return (
     <div className="flex w-full flex-col items-center overflow-visible text-center">
       <span className={`${HERO_TEXT_CLASS} font-black text-text-primary`}>
-        Welcome to
+        {headline}
       </span>
 
-      <div className="relative mt-0 min-h-[1.2em] w-full overflow-visible pb-2 md:min-h-[1.15em] md:pb-3">
+      <div className="relative mt-0 min-h-[1.35em] w-full overflow-visible pb-2 sm:min-h-[1.25em] lg:min-h-[1.15em] lg:pb-3">
         <AnimatePresence mode="sync">
           <motion.span
             key={index}
@@ -51,9 +74,9 @@ export function HeroText() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 text-center ${HERO_TEXT_CLASS} font-light italic whitespace-normal sm:whitespace-nowrap`}
+            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 px-2 text-center ${HERO_TEXT_CLASS} font-light italic whitespace-normal sm:max-w-[92vw] sm:px-0 sm:whitespace-nowrap lg:max-w-none`}
           >
-            {PHRASES[index]}
+            {phrases[index]}
           </motion.span>
         </AnimatePresence>
       </div>

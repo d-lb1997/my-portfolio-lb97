@@ -22,7 +22,7 @@ export function HomeFrame() {
       style={{ width: HOME_FRAME_WIDTH, minHeight: HOME_FRAME_HEIGHT }}
       aria-label="Home"
     >
-      <div className="flex w-full max-w-[92vw] flex-col items-center overflow-visible px-6 sm:max-w-none sm:px-10">
+      <div className="flex w-full max-w-[min(92vw,36rem)] flex-col items-center overflow-visible px-4 sm:max-w-none sm:px-10">
         <HeroText />
 
         <motion.p

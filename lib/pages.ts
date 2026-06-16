@@ -4,6 +4,8 @@ export type PageFitConfig = {
   width: number;
   height: number;
   padding?: number;
+  mobilePadding?: number;
+  mobileBreakpoint?: number;
 };
 
 export type PageConfig = {
@@ -22,7 +24,9 @@ export type PageConfig = {
 };
 
 export const HOME_FRAME_WIDTH = 1200;
-export const HOME_FRAME_HEIGHT = 360;
+export const HOME_FRAME_HEIGHT = 420;
+export const CONTACT_FRAME_WIDTH = 1200;
+export const CONTACT_FRAME_HEIGHT = 520;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {
@@ -38,6 +42,8 @@ export const PAGES: Record<PageId, PageConfig> = {
       width: HOME_FRAME_WIDTH,
       height: HOME_FRAME_HEIGHT,
       padding: 0.9,
+      mobilePadding: 0.94,
+      mobileBreakpoint: 1024,
     },
     immerseFocusX: 900,
     immerseFocusY: 650,
@@ -73,10 +79,17 @@ export const PAGES: Record<PageId, PageConfig> = {
     contentX: 1300,
     contentY: 1100,
     initialZoom: 1,
-    focusX: 1650,
-    focusY: 1400,
-    immerseFocusX: 1650,
-    immerseFocusY: 1400,
+    focusX: 1300 + CONTACT_FRAME_WIDTH / 2,
+    focusY: 1100 + CONTACT_FRAME_HEIGHT / 2,
+    fitToViewport: {
+      width: CONTACT_FRAME_WIDTH,
+      height: CONTACT_FRAME_HEIGHT,
+      padding: 0.9,
+      mobilePadding: 0.94,
+      mobileBreakpoint: 1024,
+    },
+    immerseFocusX: 1300 + CONTACT_FRAME_WIDTH / 2,
+    immerseFocusY: 1100 + CONTACT_FRAME_HEIGHT / 2,
   },
 };
 
