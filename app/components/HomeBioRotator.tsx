@@ -1,27 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
-const SHOW_DELAY_MS = 5000;
 const ENTRANCE = { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const };
+const BIO_GAP = "2.75rem";
 
-export function HomeBioRotator() {
-  const [visible, setVisible] = useState(false);
+type HomeBioRotatorProps = {
+  visible: boolean;
+};
 
-  useEffect(() => {
-    const showTimer = window.setTimeout(() => setVisible(true), SHOW_DELAY_MS);
-    return () => window.clearTimeout(showTimer);
-  }, []);
-
+export function HomeBioRotator({ visible }: HomeBioRotatorProps) {
   return (
     <motion.div
       className="relative w-full max-w-[30rem] overflow-hidden"
       initial={false}
       animate={
         visible
-          ? { opacity: 1, height: "auto", marginTop: 0 }
-          : { opacity: 0, height: 0, marginTop: 0 }
+          ? {
+              opacity: 1,
+              height: "auto",
+              marginTop: BIO_GAP,
+              marginBottom: BIO_GAP,
+            }
+          : {
+              opacity: 0,
+              height: 0,
+              marginTop: 0,
+              marginBottom: 0,
+            }
       }
       transition={ENTRANCE}
     >
