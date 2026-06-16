@@ -3,8 +3,9 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { PAGES, type PageId } from "@/lib/pages";
+import { DOT_GRID_SIZE } from "@/lib/canvas-dots";
+import { CanvasPacMan } from "./CanvasPacMan";
 
-const DOT_GRID_SIZE = 24;
 const DOT_MARGIN = 3200;
 
 type ViewportSize = {
@@ -138,6 +139,8 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
           }}
           aria-hidden="true"
         />
+
+        {pageId === "home" ? <CanvasPacMan dotBounds={dotBounds} /> : null}
 
         <div
           className="absolute"
