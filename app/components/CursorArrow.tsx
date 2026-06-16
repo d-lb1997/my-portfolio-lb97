@@ -72,13 +72,16 @@ export function CursorArrow({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="absolute left-0 top-0 overflow-visible"
-        style={{
-          overflow: "visible",
-          filter:
-            "drop-shadow(0 0 1px rgba(0, 0, 0, 0.85)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35))",
-        }}
         aria-hidden="true"
       >
+        <path
+          d={CURSOR_ARROW_PATH}
+          fill="none"
+          stroke="rgba(0, 0, 0, 0.45)"
+          strokeWidth="3"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
+        />
         <path
           d={CURSOR_ARROW_PATH}
           fill="none"
@@ -92,7 +95,7 @@ export function CursorArrow({
       <CursorNameLabel
         color={color}
         name={name}
-        className="relative ml-[6px] mt-[20px]"
+        className="relative ml-[7px] mt-[22px]"
       />
     </div>
   );

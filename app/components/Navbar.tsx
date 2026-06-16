@@ -18,7 +18,10 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={() => navigateToFrame(item.id)}
-                className="relative bg-transparent border-none text-[14px] font-medium uppercase tracking-[0.08em] text-text-primary cursor-pointer transition-opacity hover:opacity-70"
+                aria-current={isActive ? "page" : undefined}
+                className={`relative border-none bg-transparent text-[14px] font-medium uppercase tracking-[0.08em] text-text-primary cursor-pointer transition-opacity duration-200 ${
+                  isActive ? "opacity-100" : "opacity-50 hover:opacity-100"
+                }`}
                 style={
                   isActive && ready
                     ? {

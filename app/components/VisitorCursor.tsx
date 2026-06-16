@@ -43,7 +43,11 @@ export function VisitorCursor() {
       }}
       aria-hidden="true"
     >
-      <CursorNameLabel color={color} name={name} />
+      <CursorNameLabel
+        color={color}
+        name={name}
+        className="relative ml-[7px] mt-[22px]"
+      />
     </div>
   );
 }
