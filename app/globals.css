@@ -454,20 +454,20 @@ body {
 .work-logo-marquee {
   position: relative;
   overflow: hidden;
-  width: 100%;
-  max-width: 42rem;
+  width: min(100%, 47.5rem);
+  max-width: 47.5rem;
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    #000 10%,
-    #000 90%,
+    #000 8%,
+    #000 92%,
     transparent 100%
   );
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    #000 10%,
-    #000 90%,
+    #000 8%,
+    #000 92%,
     transparent 100%
   );
 }
@@ -475,14 +475,17 @@ body {
 .work-logo-marquee-track {
   display: flex;
   width: max-content;
-  animation: work-logo-marquee 36s linear infinite;
+  animation: work-logo-marquee 40s linear infinite;
 }
 
 .work-logo-marquee-image {
   display: block;
-  height: 3rem;
-  width: auto;
+  height: 5.5rem;
+  width: 47.5rem;
+  max-width: none;
   flex-shrink: 0;
+  object-fit: contain;
+  object-position: left center;
 }
 
 @keyframes work-logo-marquee {

@@ -11,8 +11,8 @@ export function WorkOverviewHero() {
   const { theme, ready } = useTheme();
   const logoSrc =
     theme === "dark"
-      ? "/images/work/clients-dark.png"
-      : "/images/work/clients-light.png";
+      ? "/images/work/clients-light.png"
+      : "/images/work/clients-dark.png";
 
   return (
     <div className="flex w-full max-w-[52rem] flex-col items-start overflow-visible text-left">
