@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const ENTRANCE = { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const };
 const BIO_GAP = "2.75rem";
-const BIO_GAP_TOP = "calc(2.75rem + 16px)";
+const BIO_GAP_TOP = "calc(2.75rem + 32px)";
 
 type HomeBioRotatorProps = {
   visible: boolean;
