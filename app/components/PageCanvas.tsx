@@ -115,7 +115,7 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
   return (
     <div
       ref={containerRef}
-      className={`fixed inset-0 overflow-hidden bg-transparent transition-opacity duration-300 ${
+      className={`fixed inset-0 overflow-hidden bg-canvas-bg transition-opacity duration-300 ${
         isNavigating ? "pointer-events-none" : ""
       }`}
       onMouseDown={onPanStart}

@@ -1,21 +1,8 @@
 @import "tailwindcss";
 
-@property --canvas-bg {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #ffffff;
-}
-
-@property --dot-color {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #d8d8d8;
-}
-
 :root {
-  --scene-transition: 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   --canvas-bg: #ffffff;
-  --dot-color: #d8d8d8;
+  --dot-color: #cccccc;
   --text-primary: #0a0a0a;
   --text-secondary: #555555;
   --accent-pink: #ff3cac;
@@ -49,21 +36,6 @@
     0 0 0 1px rgba(10, 10, 10, 0.06),
     0 20px 56px rgba(10, 10, 10, 0.12),
     0 6px 20px rgba(10, 10, 10, 0.08);
-}
-
-:root[data-page="work"] {
-  --canvas-bg: #c5dcff;
-  --dot-color: #7ea8e8;
-}
-
-:root[data-page="about"] {
-  --canvas-bg: #ead4ff;
-  --dot-color: #b892e0;
-}
-
-:root[data-page="contact"] {
-  --canvas-bg: #b8f5d0;
-  --dot-color: #5ecf92;
 }
 
 [data-theme="dark"] {
@@ -101,21 +73,6 @@
     0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-[data-theme="dark"][data-page="work"] {
-  --canvas-bg: #082878;
-  --dot-color: #1a4498;
-}
-
-[data-theme="dark"][data-page="about"] {
-  --canvas-bg: #321068;
-  --dot-color: #5a2898;
-}
-
-[data-theme="dark"][data-page="contact"] {
-  --canvas-bg: #0a4828;
-  --dot-color: #1a7048;
-}
-
 @theme inline {
   --color-canvas-bg: var(--canvas-bg);
   --color-dot: var(--dot-color);
@@ -135,30 +92,16 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  background-color: var(--canvas-bg);
+  background: var(--canvas-bg);
   color: var(--text-primary);
   transition:
-    background-color var(--scene-transition),
-    color 0.25s ease,
-    --canvas-bg var(--scene-transition),
-    --dot-color var(--scene-transition);
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.canvas-scene {
-  isolation: isolate;
-}
-
-.canvas-scene-base {
-  position: absolute;
-  inset: 0;
-  background-color: var(--canvas-bg);
-  opacity: 1;
-  transition: background-color var(--scene-transition);
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -168,11 +111,11 @@ body {
 }
 
 .dot-grid {
-  background-color: transparent;
+  background-color: var(--canvas-bg);
   background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
   background-size: 24px 24px;
   background-position: 0 0;
-  transition: background-image var(--scene-transition);
+  transition: background-color 0.25s ease;
 }
 
 .gemini-chat-field {
