@@ -26,7 +26,7 @@ export function HomeFrame() {
           animate={{ opacity: showHint ? 1 : 0 }}
           transition={{ duration: 0.6 }}
         >
-          drag to navigate · scroll to zoom
+          drag to navigate · scroll to zoom · use the menu to dive in
         </motion.p>
       </div>
     </section>
