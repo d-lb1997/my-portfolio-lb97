@@ -55,13 +55,16 @@ const HERO_SUBTITLE_CLASS = `${HERO_TEXT_CLASS} leading-[1.2]`;
 type HeroTextProps = {
   headline?: string;
   phrases?: string[];
+  align?: "center" | "left";
 };
 
 export function HeroText({
   headline = "Welcome to",
   phrases = HOME_HERO_PHRASES,
+  align = "center",
 }: HeroTextProps) {
   const [index, setIndex] = useState(0);
+  const isLeft = align === "left";
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -72,7 +75,11 @@ export function HeroText({
   }, [phrases.length]);
 
   return (
-    <div className="flex w-full flex-col items-center overflow-visible text-center">
+    <div
+      className={`flex w-full flex-col overflow-visible ${
+        isLeft ? "items-start text-left" : "items-center text-center"
+      }`}
+    >
       <span className={`${HERO_TEXT_CLASS} font-black text-text-primary`}>
         {headline}
       </span>
@@ -85,7 +92,11 @@ export function HeroText({
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 px-2 text-center ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal sm:max-w-[92vw] sm:px-0 sm:whitespace-nowrap lg:max-w-none`}
+            className={`hero-gradient-text absolute top-0 ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none ${
+              isLeft
+                ? "left-0 text-left"
+                : "left-1/2 -translate-x-1/2 px-2 text-center sm:px-0"
+            }`}
           >
             {phrases[index]}
           </motion.span>
