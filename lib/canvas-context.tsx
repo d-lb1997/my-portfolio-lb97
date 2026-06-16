@@ -12,9 +12,10 @@ import {
 } from "react";
 import { FRAMES, type FrameId } from "./frames";
 
-const MIN_ZOOM = 0.25;
-const MAX_ZOOM = 3;
+const MIN_ZOOM = 0.2;
+const MAX_ZOOM = 5;
 const NAV_DURATION = 600;
+const ZOOM_INTENSITY = 0.0032;
 
 type Pan = { x: number; y: number };
 
@@ -26,7 +27,6 @@ type CanvasContextValue = {
   navigateToFrame: (frameId: FrameId) => void;
   setActiveFrame: (frameId: FrameId) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
-  onWheel: (event: WheelEvent) => void;
   onPanStart: (event: React.MouseEvent) => void;
 };
 
@@ -38,6 +38,16 @@ function clamp(value: number, min: number, max: number) {
 
 function easeInOutCubic(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function normalizeWheelDelta(event: WheelEvent, pageHeight: number) {
+  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+    return event.deltaY * 16;
+  }
+  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+    return event.deltaY * pageHeight;
+  }
+  return event.deltaY;
 }
 
 export function CanvasProvider({ children }: { children: ReactNode }) {
@@ -52,6 +62,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   );
   const panRef = useRef(pan);
   const zoomRef = useRef(zoom);
+  const wheelDeltaRef = useRef(0);
+  const wheelAnchorRef = useRef<{ x: number; y: number } | null>(null);
+  const wheelFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     panRef.current = pan;
@@ -60,6 +73,13 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     zoomRef.current = zoom;
   }, [zoom]);
+
+  const applyTransform = useCallback((nextPan: Pan, nextZoom: number) => {
+    panRef.current = nextPan;
+    zoomRef.current = nextZoom;
+    setPan(nextPan);
+    setZoom(nextZoom);
+  }, []);
 
   const centerOnFrame = useCallback((frameId: FrameId, targetZoom = 1) => {
     const container = containerRef.current;
@@ -84,10 +104,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
     const initial = centerOnFrame("home", 1);
     if (initial) {
-      setPan({ x: initial.x, y: initial.y });
-      setZoom(initial.zoom);
+      applyTransform({ x: initial.x, y: initial.y }, initial.zoom);
     }
-  }, [centerOnFrame]);
+  }, [applyTransform, centerOnFrame]);
 
   const navigateToFrame = useCallback(
     (frameId: FrameId) => {
@@ -102,6 +121,11 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      if (wheelFrameRef.current) {
+        cancelAnimationFrame(wheelFrameRef.current);
+        wheelFrameRef.current = null;
+        wheelDeltaRef.current = 0;
+      }
 
       const startPan = { ...panRef.current };
       const startZoom = zoomRef.current;
@@ -112,11 +136,13 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         const progress = clamp(elapsed / NAV_DURATION, 0, 1);
         const eased = easeInOutCubic(progress);
 
-        setPan({
-          x: startPan.x + (target.x - startPan.x) * eased,
-          y: startPan.y + (target.y - startPan.y) * eased,
-        });
-        setZoom(startZoom + (target.zoom - startZoom) * eased);
+        applyTransform(
+          {
+            x: startPan.x + (target.x - startPan.x) * eased,
+            y: startPan.y + (target.y - startPan.y) * eased,
+          },
+          startZoom + (target.zoom - startZoom) * eased,
+        );
 
         if (progress < 1) {
           animationRef.current = requestAnimationFrame(animate);
@@ -125,47 +151,66 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
       animationRef.current = requestAnimationFrame(animate);
     },
-    [centerOnFrame],
+    [applyTransform, centerOnFrame],
   );
 
-  const onWheel = useCallback(
-    (event: WheelEvent) => {
-      event.preventDefault();
-      const container = containerRef.current;
-      if (!container) return;
+  const applyWheelZoom = useCallback(() => {
+    wheelFrameRef.current = null;
 
-      const rect = container.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+    const anchor = wheelAnchorRef.current;
+    const delta = wheelDeltaRef.current;
+    wheelDeltaRef.current = 0;
 
-      setZoom((currentZoom) => {
-        const delta = -event.deltaY * 0.0015;
-        const nextZoom = clamp(currentZoom + delta * currentZoom, MIN_ZOOM, MAX_ZOOM);
+    if (!anchor || delta === 0) return;
 
-        setPan((currentPan) => {
-          const canvasX = (mouseX - currentPan.x) / currentZoom;
-          const canvasY = (mouseY - currentPan.y) / currentZoom;
+    const currentZoom = zoomRef.current;
+    const currentPan = panRef.current;
+    const zoomFactor = Math.exp(-delta * ZOOM_INTENSITY);
+    const nextZoom = clamp(currentZoom * zoomFactor, MIN_ZOOM, MAX_ZOOM);
 
-          return {
-            x: mouseX - canvasX * nextZoom,
-            y: mouseY - canvasY * nextZoom,
-          };
-        });
+    if (nextZoom === currentZoom) return;
 
-        return nextZoom;
-      });
-    },
-    [],
-  );
+    const canvasX = (anchor.x - currentPan.x) / currentZoom;
+    const canvasY = (anchor.y - currentPan.y) / currentZoom;
+
+    applyTransform(
+      {
+        x: anchor.x - canvasX * nextZoom,
+        y: anchor.y - canvasY * nextZoom,
+      },
+      nextZoom,
+    );
+  }, [applyTransform]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const handler = (event: WheelEvent) => onWheel(event);
-    container.addEventListener("wheel", handler, { passive: false });
-    return () => container.removeEventListener("wheel", handler);
-  }, [onWheel]);
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+
+      const rect = container.getBoundingClientRect();
+      wheelAnchorRef.current = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      };
+
+      wheelDeltaRef.current += normalizeWheelDelta(event, rect.height);
+
+      if (wheelFrameRef.current === null) {
+        wheelFrameRef.current = requestAnimationFrame(applyWheelZoom);
+      }
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+      if (wheelFrameRef.current) {
+        cancelAnimationFrame(wheelFrameRef.current);
+      }
+    };
+  }, [applyWheelZoom]);
 
   const onPanStart = useCallback(
     (event: React.MouseEvent) => {
@@ -178,18 +223,21 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       panStartRef.current = {
         x: event.clientX,
         y: event.clientY,
-        panX: pan.x,
-        panY: pan.y,
+        panX: panRef.current.x,
+        panY: panRef.current.y,
       };
 
       const onMove = (moveEvent: MouseEvent) => {
         if (!panStartRef.current) return;
         const dx = moveEvent.clientX - panStartRef.current.x;
         const dy = moveEvent.clientY - panStartRef.current.y;
-        setPan({
-          x: panStartRef.current.panX + dx,
-          y: panStartRef.current.panY + dy,
-        });
+        applyTransform(
+          {
+            x: panStartRef.current.panX + dx,
+            y: panStartRef.current.panY + dy,
+          },
+          zoomRef.current,
+        );
       };
 
       const onUp = () => {
@@ -202,7 +250,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseup", onUp);
     },
-    [pan.x, pan.y],
+    [applyTransform],
   );
 
   return (
@@ -215,7 +263,6 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         navigateToFrame,
         setActiveFrame,
         containerRef,
-        onWheel,
         onPanStart,
       }}
     >

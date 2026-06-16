@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { CanvasProvider } from "@/lib/canvas-context";
 import { CursorProvider } from "@/lib/cursor-context";
+import { AmbientCursors } from "./components/AmbientCursors";
 import { Canvas } from "./components/Canvas";
 import { Navbar } from "./components/Navbar";
 import { VisitorCursor } from "./components/VisitorCursor";
@@ -31,6 +32,7 @@ export default function RootLayout({
           <CanvasProvider>
             <Navbar />
             <Canvas />
+            <AmbientCursors />
             <VisitorCursor />
             {children}
           </CanvasProvider>

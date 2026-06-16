@@ -10,42 +10,43 @@ import {
 import {
   CURSOR_COLORS,
   CURSOR_NAMES,
-  pickRandomCursor,
-  type CursorColor,
+  pickSessionCursors,
+  type SessionCursor,
 } from "./cursor-data";
 
 type CursorContextValue = {
-  color: CursorColor;
-  name: string;
+  visitor: SessionCursor;
+  ambient: SessionCursor[];
   ready: boolean;
 };
 
-const defaultColor = CURSOR_COLORS[0].hex;
-const defaultName = CURSOR_NAMES[0];
-
-const CursorContext = createContext<CursorContextValue>({
-  color: defaultColor,
-  name: defaultName,
+const defaultSession: CursorContextValue = {
+  visitor: { name: CURSOR_NAMES[0], color: CURSOR_COLORS[0] },
+  ambient: [],
   ready: false,
-});
+};
+
+const CursorContext = createContext<CursorContextValue>(defaultSession);
 
 export function CursorProvider({ children }: { children: ReactNode }) {
-  const [cursor, setCursor] = useState<CursorContextValue>({
-    color: defaultColor,
-    name: defaultName,
-    ready: false,
-  });
+  const [session, setSession] = useState<CursorContextValue>(defaultSession);
 
   useEffect(() => {
-    const { color, name } = pickRandomCursor();
-    setCursor({ color, name, ready: true });
+    const { visitor, ambient } = pickSessionCursors();
+    setSession({ visitor, ambient, ready: true });
   }, []);
 
   return (
-    <CursorContext.Provider value={cursor}>{children}</CursorContext.Provider>
+    <CursorContext.Provider value={session}>{children}</CursorContext.Provider>
   );
 }
 
 export function useVisitorCursor() {
-  return useContext(CursorContext);
+  const context = useContext(CursorContext);
+  return { ...context.visitor, ready: context.ready };
+}
+
+export function useAmbientCursors() {
+  const context = useContext(CursorContext);
+  return { cursors: context.ambient, ready: context.ready };
 }

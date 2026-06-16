@@ -2,6 +2,15 @@
 
 import { motion } from "framer-motion";
 
+function darkenHex(hex: string, amount = 0.2): string {
+  const normalized = hex.replace("#", "");
+  const num = parseInt(normalized, 16);
+  const r = Math.max(0, Math.round(((num >> 16) & 0xff) * (1 - amount)));
+  const g = Math.max(0, Math.round(((num >> 8) & 0xff) * (1 - amount)));
+  const b = Math.max(0, Math.round((num & 0xff) * (1 - amount)));
+  return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
+}
+
 type CursorArrowProps = {
   color: string;
   name: string;
@@ -9,27 +18,40 @@ type CursorArrowProps = {
 };
 
 export function CursorArrow({ color, name, className = "" }: CursorArrowProps) {
+  const borderColor = darkenHex(color);
+
   return (
-    <div className={`flex items-start ${className}`}>
+    <div className={`relative inline-block ${className}`}>
       <svg
-        width="12"
-        height="16"
-        viewBox="0 0 12 16"
+        width="17"
+        height="21"
+        viewBox="0 0 17 21"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="shrink-0 drop-shadow-sm"
+        className="absolute left-0 top-0"
+        style={{
+          filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.22))",
+        }}
         aria-hidden="true"
       >
         <path
-          d="M1 1L1 13.5L4.2 10.3L7.5 15.5L9.5 14.5L6.2 9.3L10.5 9.3L1 1Z"
-          fill={color}
-          stroke="#0A0A0A"
-          strokeWidth="0.5"
+          d="M1 1V16.2L5.4 12.4L8.2 18.6L10.6 17.2L7.8 11.4H13.8L1 1Z"
+          fill="white"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinejoin="round"
+          strokeLinecap="round"
         />
       </svg>
+
       <span
-        className="ml-1 rounded-md px-2 py-1 text-[13px] font-semibold leading-none text-white shadow-md whitespace-nowrap"
-        style={{ backgroundColor: color }}
+        className="relative ml-[11px] mt-[13px] block whitespace-nowrap px-3.5 py-[7px] text-[13px] font-semibold leading-none text-white"
+        style={{
+          backgroundColor: color,
+          border: `2px solid ${borderColor}`,
+          borderRadius: "0 999px 999px 999px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.16)",
+        }}
       >
         {name}
       </span>
@@ -54,7 +76,7 @@ export function AmbientCursor({
 }: AmbientCursorProps) {
   return (
     <motion.div
-      className="pointer-events-none absolute z-10"
+      className="pointer-events-none fixed left-0 top-0 z-10"
       initial={{ x: path.x[0], y: path.y[0], opacity: 0 }}
       animate={{
         x: path.x,

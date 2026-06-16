@@ -1,12 +1,12 @@
 export const CURSOR_COLORS = [
-  { hex: "#FF3CAC", name: "Hot Pink" },
-  { hex: "#2DCC70", name: "Emerald Green" },
-  { hex: "#3498DB", name: "Bright Blue" },
-  { hex: "#F39C12", name: "Amber Orange" },
-  { hex: "#00C9E4", name: "Cyan Blue" },
-  { hex: "#A855F7", name: "Violet" },
-  { hex: "#F43F5E", name: "Rose Red" },
-  { hex: "#10B981", name: "Teal" },
+  "#FF3CAC",
+  "#2DCC70",
+  "#3498DB",
+  "#F39C12",
+  "#00C9E4",
+  "#A855F7",
+  "#F43F5E",
+  "#10B981",
 ] as const;
 
 export const CURSOR_NAMES = [
@@ -30,17 +30,47 @@ export const CURSOR_NAMES = [
   "Future Collaborator",
   "Uninvited Art Director",
   "Just Here for Inspiration",
-  "Ctrl+Z Addict",
   "Dark Mode Evangelist",
   "Sans Serif Supremacist",
   "Helvetica Agnostic",
 ] as const;
 
-export type CursorColor = (typeof CURSOR_COLORS)[number]["hex"];
+export type CursorColor = (typeof CURSOR_COLORS)[number];
 
-export function pickRandomCursor() {
-  const color =
-    CURSOR_COLORS[Math.floor(Math.random() * CURSOR_COLORS.length)].hex;
-  const name = CURSOR_NAMES[Math.floor(Math.random() * CURSOR_NAMES.length)];
-  return { color, name };
+export type SessionCursor = {
+  name: (typeof CURSOR_NAMES)[number];
+  color: CursorColor;
+};
+
+function shuffle<T>(items: T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+export function pickSessionCursors(): {
+  visitor: SessionCursor;
+  ambient: SessionCursor[];
+} {
+  const names = shuffle([...CURSOR_NAMES]);
+  const colors = shuffle([...CURSOR_COLORS]);
+
+  return {
+    visitor: { name: names[0], color: colors[0] },
+    ambient: [
+      { name: names[1], color: colors[1] },
+      { name: names[2], color: colors[2] },
+      { name: names[3], color: colors[3] },
+      { name: names[4], color: colors[4] },
+    ],
+  };
+}
+
+export function pickRandomCursor(): SessionCursor {
+  const names = shuffle([...CURSOR_NAMES]);
+  const colors = shuffle([...CURSOR_COLORS]);
+  return { name: names[0], color: colors[0] };
 }

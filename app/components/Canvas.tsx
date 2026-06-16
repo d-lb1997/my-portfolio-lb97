@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useCanvas } from "@/lib/canvas-context";
 import { FRAMES } from "@/lib/frames";
 import { AboutFrame } from "./AboutFrame";
@@ -18,17 +17,14 @@ export function Canvas() {
       onMouseDown={onPanStart}
       style={{ cursor: isPanning ? "grabbing" : "grab" }}
     >
-      <motion.div
+      <div
         className="dot-grid absolute left-0 top-0 will-change-transform"
         style={{
           width: 5200,
           height: 2800,
-          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          transform: `translate3d(${pan.x}px, ${pan.y}px, 0) scale(${zoom})`,
           transformOrigin: "0 0",
         }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div
           className="absolute"
@@ -57,7 +53,7 @@ export function Canvas() {
         >
           <ContactFrame />
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
