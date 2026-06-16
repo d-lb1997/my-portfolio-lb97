@@ -8,6 +8,7 @@ import {
 } from "@/lib/pages";
 import { HeroText } from "./HeroText";
 import { HomeAudio } from "./HomeAudio";
+import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
 
 export function HomeFrame() {
@@ -27,6 +28,7 @@ export function HomeFrame() {
       <HomeAudio />
       <div className="flex w-full max-w-[min(92vw,36rem)] flex-col items-center overflow-visible px-4 sm:max-w-none sm:px-10">
         <HeroText />
+        <HomeBioRotator />
         <HomeCtas />
 
         <motion.p

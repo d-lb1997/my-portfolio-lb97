@@ -13,7 +13,7 @@ export const HOME_HERO_PHRASES = [
   "the work. and the chaos behind it.",
   "a designer's train of thought.",
   "grids, gaps & glory.",
-  "my 3am decisions.",
+  "my 3am thoughts.",
   "a Figma file you can walk through.",
   "the vibe. and the system behind it.",
   "deliberate design.",
