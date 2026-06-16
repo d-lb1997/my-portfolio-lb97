@@ -24,12 +24,14 @@ export type PageConfig = {
 };
 
 export const HOME_FRAME_WIDTH = 1200;
-export const HOME_FRAME_HEIGHT = 420;
+export const HOME_FRAME_HEIGHT = 480;
 export const CONTACT_FRAME_WIDTH = 1200;
 export const CONTACT_FRAME_HEIGHT = 580;
 export const WORK_FRAME_WIDTH = 1400;
 export const WORK_FRAME_HEIGHT = 700;
 export const WORK_NAV_WIDTH = 300;
+export const WORK_NAV_OFFSET_X = -72;
+export const WORK_NAV_OFFSET_Y = 96;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {

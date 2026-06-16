@@ -1,7 +1,6 @@
 "use client";
 
 import { WORK_FRAME_HEIGHT, WORK_FRAME_WIDTH } from "@/lib/pages";
-import { WorkNav } from "./WorkNav";
 
 export function WorkFrame() {
   return (
@@ -9,8 +8,6 @@ export function WorkFrame() {
       className="relative overflow-visible"
       style={{ width: WORK_FRAME_WIDTH, minHeight: WORK_FRAME_HEIGHT }}
       aria-label="Work"
-    >
-      <WorkNav />
-    </section>
+    />
   );
 }

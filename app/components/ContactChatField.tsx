@@ -51,7 +51,7 @@ export function ContactChatField() {
     <div className="mt-16 w-full max-w-[min(92vw,36rem)] sm:mt-20 md:mt-24">
       <form
         onSubmit={handleSubmit}
-        className="gemini-chat-field w-full"
+        className="gemini-chat-field cursor-accent-gradient w-full"
         style={gradientStyle}
         data-no-pan
       >

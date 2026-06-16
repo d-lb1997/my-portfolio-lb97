@@ -8,7 +8,8 @@ export type WorkLayer = {
 
 export type WorkProjectLogo =
   | { kind: "lb97" }
-  | { kind: "placeholder"; label: string };
+  | { kind: "placeholder"; label: string }
+  | { kind: "none" };
 
 export type WorkProject = {
   id: string;
@@ -23,7 +24,7 @@ export const WORK_OVERVIEW: WorkProject = {
   id: "overview",
   title: "Overview",
   subtitle: "Selected Work",
-  logo: { kind: "lb97" },
+  logo: { kind: "none" },
   isOverview: true,
   layers: [
     { id: "intro", label: "Introduction", type: "frame" },

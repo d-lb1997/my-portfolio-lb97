@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useTheme } from "@/lib/theme-context";
 import {
   WORK_OVERVIEW,
   WORK_PROJECTS,
@@ -12,10 +13,20 @@ import {
 } from "@/lib/work-data";
 
 function NavLogo({ logo }: { logo: WorkProjectLogo }) {
+  const { theme, ready } = useTheme();
+
+  if (logo.kind === "none") {
+    return null;
+  }
+
   if (logo.kind === "lb97") {
+    if (!ready) {
+      return <div className="work-nav-logo-mark h-[34px] w-[58px] shrink-0" />;
+    }
+
     return (
       <Image
-        src="/images/logo-dark.png"
+        src={theme === "dark" ? "/images/logo-dark.png" : "/images/logo.png"}
         alt="lb97"
         width={156}
         height={73}
@@ -208,17 +219,21 @@ export function WorkNav() {
     setSelectedLayerId(project.layers[0]?.id ?? null);
   };
 
+  const showNavLogo = selectedProject.logo.kind !== "none";
+
   return (
     <aside className="work-nav" data-no-pan aria-label="Work navigation">
       <div className="work-nav-topbar">
-        <div className="flex min-w-0 items-center gap-3">
-          <NavLogo logo={selectedProject.logo} />
+        <div
+          className={`flex min-w-0 flex-1 items-center ${showNavLogo ? "gap-3" : ""}`}
+        >
+          {showNavLogo && <NavLogo logo={selectedProject.logo} />}
           <div className="min-w-0">
-            <p className="truncate text-[14px] font-medium leading-tight text-white">
+            <p className="work-nav-title truncate text-[14px] font-medium leading-tight">
               {selectedProject.title}
             </p>
             {selectedProject.subtitle && (
-              <p className="truncate text-[12px] leading-tight text-white/55">
+              <p className="work-nav-subtitle truncate text-[12px] leading-tight">
                 {selectedProject.subtitle}
               </p>
             )}
