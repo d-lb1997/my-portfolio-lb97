@@ -21,18 +21,18 @@ export const HOME_HERO_PHRASES = [
 ];
 
 export const CONTACT_HERO_PHRASES = [
-  "in contact.",
-  "connected.",
-  "in touch.",
-  "in the loop.",
-  "on the same wavelength.",
-  "curious together.",
-  "building something.",
-  "in sync.",
-  "close.",
-  "collaborating.",
-  "talking.",
-  "creating together.",
+  "stay in touch",
+  "collaborate",
+  "connect",
+  "build something",
+  "create together",
+  "stay connected",
+  "work together",
+  "share ideas",
+  "design together",
+  "make something",
+  "stay curious",
+  "keep talking",
 ];
 
 const CYCLE_MS = 2800;

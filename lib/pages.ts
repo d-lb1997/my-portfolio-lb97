@@ -26,7 +26,7 @@ export type PageConfig = {
 export const HOME_FRAME_WIDTH = 1200;
 export const HOME_FRAME_HEIGHT = 420;
 export const CONTACT_FRAME_WIDTH = 1200;
-export const CONTACT_FRAME_HEIGHT = 520;
+export const CONTACT_FRAME_HEIGHT = 580;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {

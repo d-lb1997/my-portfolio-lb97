@@ -15,7 +15,7 @@ export function ContactFrame() {
       aria-label="Contact"
     >
       <div className="flex w-full max-w-[min(92vw,36rem)] flex-col items-center overflow-visible px-4 sm:max-w-none sm:px-10">
-        <HeroText headline="Let's stay" phrases={CONTACT_HERO_PHRASES} />
+        <HeroText headline="Let's" phrases={CONTACT_HERO_PHRASES} />
         <ContactChatField />
       </div>
     </section>
