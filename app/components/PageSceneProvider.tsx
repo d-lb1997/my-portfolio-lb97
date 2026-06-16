@@ -1,15 +1,18 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import { pathnameToPageId } from "@/lib/pages";
+import { useLayoutEffect } from "react";
+import { useTheme } from "@/lib/theme-context";
+import { applyPageScene, pathnameToScenePage } from "@/lib/page-scene";
 
 export function PageSceneProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { theme, ready } = useTheme();
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-page", pathnameToPageId(pathname));
-  }, [pathname]);
+  useLayoutEffect(() => {
+    if (!ready) return;
+    applyPageScene(pathnameToScenePage(pathname), theme);
+  }, [pathname, theme, ready]);
 
   return children;
 }

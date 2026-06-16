@@ -208,9 +208,17 @@ body {
     radial-gradient(ellipse 78% 58% at 12% 8%, var(--scene-glow-a) 0%, transparent 58%),
     radial-gradient(ellipse 72% 56% at 90% 82%, var(--scene-glow-b) 0%, transparent 62%),
     radial-gradient(ellipse 54% 42% at 74% 16%, var(--scene-glow-c) 0%, transparent 68%);
-  transition:
-    background var(--scene-transition),
-    opacity var(--scene-transition);
+  animation: scene-spectrum-in var(--scene-transition) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes scene-spectrum-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {
