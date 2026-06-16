@@ -25,7 +25,7 @@ export function HomeBioRotator() {
       }
       transition={ENTRANCE}
     >
-      <motion.div
+      <motion.p
         initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
         animate={
           visible
@@ -33,11 +33,10 @@ export function HomeBioRotator() {
             : { opacity: 0, y: 10, filter: "blur(6px)" }
         }
         transition={ENTRANCE}
-        className="space-y-0.5 px-2 text-center text-[clamp(0.9375rem,2.6vw,1.0625rem)] font-medium leading-relaxed tracking-[-0.01em] text-text-secondary sm:px-0"
+        className="px-2 text-center text-[clamp(0.9375rem,2.6vw,1.0625rem)] font-medium leading-relaxed tracking-[-0.01em] text-text-secondary sm:px-0"
       >
-        <p>Hi there, I&apos;m Lukas —</p>
-        <p>experience designer based in Munich.</p>
-      </motion.div>
+        Hi there, I&apos;m Lukas — experience designer based in Munich.
+      </motion.p>
       <motion.p
         initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
         animate={
