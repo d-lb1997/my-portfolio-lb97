@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const HOME_AUDIO_SRC = "/audio/sunflower.mp4";
+const HOME_AUDIO_SRC = "/audio/sunflower.mp3";
 const HOME_AUDIO_VOLUME = 0.32;
 
 export function HomeAudio() {
