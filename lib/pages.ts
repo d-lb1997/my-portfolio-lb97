@@ -21,7 +21,49 @@ export type PageConfig = {
   fitToViewport?: PageFitConfig;
   immerseFocusX: number;
   immerseFocusY: number;
+  /** When true, the page uses a fixed layout instead of the infinite canvas. */
+  staticPage?: boolean;
 };
+
+const MIN_FIT_ZOOM = 0.2;
+const MAX_FIT_ZOOM = 5;
+
+export function computeFitZoom(
+  containerWidth: number,
+  containerHeight: number,
+  fit: PageFitConfig,
+  initialZoom = 1,
+): number {
+  if (containerWidth === 0 || containerHeight === 0) {
+    return initialZoom;
+  }
+
+  const {
+    width,
+    height,
+    padding = 0.85,
+    mobilePadding,
+    mobileBreakpoint = 1024,
+  } = fit;
+  const isMobile = containerWidth < mobileBreakpoint;
+
+  let zoom: number;
+
+  if (isMobile) {
+    const fitPadding = mobilePadding ?? padding;
+    const contentWidth = Math.min(width, containerWidth * 1.08);
+
+    zoom = Math.min(
+      (containerWidth * fitPadding) / contentWidth,
+      (containerHeight * fitPadding) / height,
+    );
+  } else {
+    zoom =
+      Math.min(containerWidth / width, containerHeight / height) * padding;
+  }
+
+  return Math.min(MAX_FIT_ZOOM, Math.max(MIN_FIT_ZOOM, zoom));
+}
 
 export const HOME_FRAME_WIDTH = 1200;
 export const HOME_FRAME_HEIGHT = 520;
@@ -83,6 +125,7 @@ export const PAGES: Record<PageId, PageConfig> = {
     },
     immerseFocusX: 1100 + WORK_FRAME_WIDTH / 2,
     immerseFocusY: 900 + WORK_FRAME_HEIGHT / 2,
+    staticPage: true,
   },
   contact: {
     id: "contact",

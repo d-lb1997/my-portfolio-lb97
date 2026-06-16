@@ -10,7 +10,7 @@ import {
 
 export function HomeCtas() {
   const { color } = useVisitorCursor();
-  const { immerseNavigate, isNavigating } = useCanvas();
+  const { navigateToPage, isNavigating } = useCanvas();
 
   const gradientStyle = useMemo(
     () => cursorChatGradientStyle(buildCursorChatGradient(color)),
@@ -26,7 +26,7 @@ export function HomeCtas() {
         type="button"
         className="home-cta-primary cursor-accent-gradient"
         style={gradientStyle}
-        onClick={() => immerseNavigate("/work")}
+        onClick={() => navigateToPage("/work")}
         disabled={isNavigating}
       >
         <span className="font-normal">See </span>
@@ -37,7 +37,7 @@ export function HomeCtas() {
         <button
           type="button"
           className="home-cta-secondary-inner"
-          onClick={() => immerseNavigate("/about")}
+          onClick={() => navigateToPage("/about")}
           disabled={isNavigating}
         >
           <span className="font-normal">Get to </span>

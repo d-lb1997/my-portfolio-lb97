@@ -222,7 +222,7 @@ function ProjectButton({
 export function WorkNav() {
   const clientProjects = getClientProjects();
   const { setVisitorLabelOverride } = useVisitorCursor();
-  const { immerseNavigate, isNavigating } = useCanvas();
+  const { navigateToPage, isNavigating } = useCanvas();
   const {
     selectedProjectId,
     selectedLayerId,
@@ -245,7 +245,7 @@ export function WorkNav() {
 
   const handleCollaborateClick = () => {
     clearCollaborationLabel();
-    immerseNavigate("/contact");
+    navigateToPage("/contact");
   };
 
   const showNavLogo = selectedProject.logo.kind !== "none";

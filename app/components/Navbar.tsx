@@ -78,7 +78,7 @@ function MenuIcon({ open }: { open: boolean }) {
 export function Navbar() {
   const pathname = usePathname();
   const activePageId = pathnameToPageId(pathname);
-  const { immerseNavigate, isNavigating } = useCanvas();
+  const { navigateToPage, isNavigating } = useCanvas();
   const { color, ready } = useVisitorCursor();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -104,7 +104,7 @@ export function Navbar() {
 
   const handleNavigate = (href: string) => {
     setMenuOpen(false);
-    immerseNavigate(href);
+    navigateToPage(href);
   };
 
   return (
@@ -119,7 +119,7 @@ export function Navbar() {
                 ready={ready}
                 color={color}
                 disabled={isNavigating}
-                onClick={() => immerseNavigate(item.href)}
+                onClick={() => navigateToPage(item.href)}
               />
             </li>
           ))}

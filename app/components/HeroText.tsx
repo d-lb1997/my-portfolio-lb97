@@ -41,6 +41,8 @@ const TRANSITION = { duration: 0.4, ease: "easeInOut" as const };
 const HERO_TEXT_CLASS =
   "text-[clamp(2rem,8.5vw,4rem)] leading-[1.08] tracking-[-0.05em] sm:text-[clamp(2.25rem,7.5vw,3.75rem)] lg:text-[clamp(2.5rem,5.5vw,4rem)]";
 
+const HERO_SUBTITLE_CLASS = `${HERO_TEXT_CLASS} leading-[1.2]`;
+
 type HeroTextProps = {
   headline?: string;
   phrases?: string[];
@@ -66,7 +68,7 @@ export function HeroText({
         {headline}
       </span>
 
-      <div className="relative mt-0 min-h-[1.35em] w-full overflow-visible pb-2 sm:min-h-[1.25em] lg:min-h-[1.15em] lg:pb-3">
+      <div className="relative mt-0 min-h-[1.5em] w-full overflow-visible pb-3 sm:pb-4">
         <AnimatePresence mode="sync">
           <motion.span
             key={index}
@@ -74,7 +76,7 @@ export function HeroText({
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 px-2 text-center ${HERO_TEXT_CLASS} font-light italic whitespace-normal sm:max-w-[92vw] sm:px-0 sm:whitespace-nowrap lg:max-w-none`}
+            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 px-2 text-center ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal sm:max-w-[92vw] sm:px-0 sm:whitespace-nowrap lg:max-w-none`}
           >
             {phrases[index]}
           </motion.span>

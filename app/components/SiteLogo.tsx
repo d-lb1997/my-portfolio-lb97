@@ -7,7 +7,7 @@ import { useTheme } from "@/lib/theme-context";
 
 export function SiteLogo() {
   const pathname = usePathname();
-  const { immerseNavigate, recenterToFit, isNavigating } = useCanvas();
+  const { navigateToPage, recenterToFit, isNavigating } = useCanvas();
   const { theme, ready } = useTheme();
 
   if (!ready) return null;
@@ -21,7 +21,7 @@ export function SiteLogo() {
           return;
         }
 
-        immerseNavigate("/");
+        navigateToPage("/");
       }}
       disabled={isNavigating}
       aria-label="Go to home"

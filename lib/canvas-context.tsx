@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PAGES, type PageConfig, type PageId } from "./pages";
+import { PAGES, computeFitZoom, type PageConfig, type PageId } from "./pages";
 
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 5;
@@ -32,6 +32,7 @@ type CanvasContextValue = {
   currentPage: PageConfig | null;
   registerPage: (pageId: PageId) => void;
   recenterToFit: (pageId?: PageId) => void;
+  navigateToPage: (href: string) => void;
   immerseNavigate: (href: string) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onPanStart: (event: React.MouseEvent) => void;
@@ -82,32 +83,12 @@ function resolvePageView(container: HTMLDivElement, page: PageConfig): ViewTarge
   let zoom = page.initialZoom;
 
   if (page.fitToViewport) {
-    const {
-      width,
-      height,
-      padding = 0.85,
-      mobilePadding,
-      mobileBreakpoint = 1024,
-    } = page.fitToViewport;
-    const isMobile = container.clientWidth < mobileBreakpoint;
-
-    if (isMobile) {
-      const fitPadding = mobilePadding ?? padding;
-      const contentWidth = Math.min(width, container.clientWidth * 1.08);
-
-      zoom = Math.min(
-        (container.clientWidth * fitPadding) / contentWidth,
-        (container.clientHeight * fitPadding) / height,
-      );
-    } else {
-      zoom =
-        Math.min(
-          container.clientWidth / width,
-          container.clientHeight / height,
-        ) * padding;
-    }
-
-    zoom = clamp(zoom, MIN_ZOOM, MAX_ZOOM);
+    zoom = computeFitZoom(
+      container.clientWidth,
+      container.clientHeight,
+      page.fitToViewport,
+      page.initialZoom,
+    );
   }
 
   const focusY = page.focusY + (page.focusOffsetY ?? 0);
@@ -253,6 +234,10 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
       cancelAnimation();
 
+      if (page.staticPage) {
+        return;
+      }
+
       initializePageView(page);
     },
     [cancelAnimation, initializePageView],
@@ -304,6 +289,22 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       });
     },
     [animateTo, cancelAnimation, currentPage, isNavigating, router],
+  );
+
+  const navigateToPage = useCallback(
+    (href: string) => {
+      const page = currentPage;
+      const targetPage = Object.values(PAGES).find((entry) => entry.href === href);
+      if (!targetPage || targetPage.id === page?.id) return;
+
+      if (page?.staticPage || targetPage.staticPage) {
+        router.push(href);
+        return;
+      }
+
+      immerseNavigate(href);
+    },
+    [currentPage, immerseNavigate, router],
   );
 
   const applyWheelZoom = useCallback(() => {
@@ -417,6 +418,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         currentPage,
         registerPage,
         recenterToFit,
+        navigateToPage,
         immerseNavigate,
         containerRef,
         onPanStart,

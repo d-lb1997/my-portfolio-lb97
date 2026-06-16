@@ -1,17 +1,15 @@
 "use client";
 
-import { PageCanvas } from "@/app/components/PageCanvas";
 import { WorkFrame } from "@/app/components/WorkFrame";
-import { WorkNavOverlay } from "@/app/components/WorkNavOverlay";
+import { WorkPageLayout } from "@/app/components/WorkPageLayout";
 import { WorkPageProvider } from "@/lib/work-page-context";
 
 export default function WorkPage() {
   return (
     <WorkPageProvider>
-      <PageCanvas pageId="work">
+      <WorkPageLayout>
         <WorkFrame />
-      </PageCanvas>
-      <WorkNavOverlay />
+      </WorkPageLayout>
     </WorkPageProvider>
   );
 }

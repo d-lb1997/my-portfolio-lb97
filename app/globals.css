@@ -260,6 +260,7 @@ body {
   display: inline-block;
   width: max-content;
   max-width: 92vw;
+  padding-bottom: 0.12em;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
