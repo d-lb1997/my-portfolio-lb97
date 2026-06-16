@@ -9,69 +9,70 @@ export type ScenePalette = {
   glowC: string;
 };
 
+/** Base tints stay in an accessible luminance band; glows stay subtle overlays. */
 export const PAGE_SCENES: Record<PageId, Record<"light" | "dark", ScenePalette>> = {
   home: {
     light: {
-      bg: "#f2f2f2",
-      dot: "#cccccc",
-      glowA: "rgba(124, 108, 240, 0.12)",
-      glowB: "rgba(255, 60, 172, 0.08)",
-      glowC: "rgba(45, 204, 112, 0.06)",
+      bg: "#eceaee",
+      dot: "#c8c4cc",
+      glowA: "rgba(124, 108, 240, 0.09)",
+      glowB: "rgba(255, 60, 172, 0.06)",
+      glowC: "rgba(45, 204, 112, 0.05)",
     },
     dark: {
-      bg: "#131318",
-      dot: "#2c2c34",
-      glowA: "rgba(124, 108, 240, 0.28)",
-      glowB: "rgba(255, 60, 172, 0.18)",
-      glowC: "rgba(45, 204, 112, 0.12)",
+      bg: "#141418",
+      dot: "#2a2a32",
+      glowA: "rgba(124, 108, 240, 0.14)",
+      glowB: "rgba(255, 60, 172, 0.09)",
+      glowC: "rgba(45, 204, 112, 0.07)",
     },
   },
   work: {
     light: {
-      bg: "#eef1f6",
-      dot: "#c8d0dc",
-      glowA: "rgba(56, 189, 198, 0.16)",
-      glowB: "rgba(99, 102, 241, 0.12)",
-      glowC: "rgba(168, 85, 247, 0.09)",
+      bg: "#e5eaf0",
+      dot: "#bcc4d0",
+      glowA: "rgba(56, 130, 180, 0.08)",
+      glowB: "rgba(99, 102, 241, 0.06)",
+      glowC: "rgba(45, 180, 200, 0.05)",
     },
     dark: {
-      bg: "#0f141c",
-      dot: "#263040",
-      glowA: "rgba(45, 200, 215, 0.32)",
-      glowB: "rgba(120, 90, 230, 0.22)",
-      glowC: "rgba(255, 60, 172, 0.14)",
+      bg: "#12161e",
+      dot: "#262d38",
+      glowA: "rgba(56, 160, 190, 0.14)",
+      glowB: "rgba(100, 120, 200, 0.1)",
+      glowC: "rgba(45, 200, 215, 0.08)",
     },
   },
   about: {
     light: {
-      bg: "#f3f1ef",
-      dot: "#d4cfc8",
-      glowA: "rgba(255, 140, 90, 0.14)",
-      glowB: "rgba(124, 108, 240, 0.1)",
-      glowC: "rgba(45, 204, 112, 0.07)",
+      bg: "#ece8e3",
+      dot: "#cfc8bf",
+      glowA: "rgba(200, 120, 80, 0.08)",
+      glowB: "rgba(124, 108, 240, 0.06)",
+      glowC: "rgba(45, 204, 112, 0.05)",
     },
     dark: {
-      bg: "#181310",
-      dot: "#342e28",
-      glowA: "rgba(255, 140, 90, 0.3)",
-      glowB: "rgba(124, 108, 240, 0.2)",
-      glowC: "rgba(255, 196, 80, 0.12)",
+      bg: "#161412",
+      dot: "#302a26",
+      glowA: "rgba(220, 130, 80, 0.13)",
+      glowB: "rgba(124, 108, 240, 0.09)",
+      glowC: "rgba(200, 160, 80, 0.07)",
     },
   },
   contact: {
     light: {
-      bg: "#f0f2f4",
-      dot: "#c9ced6",
-      glowA: "rgba(45, 204, 112, 0.14)",
-      glowB: "rgba(124, 108, 240, 0.1)",
-      glowC: "rgba(56, 189, 198, 0.08)",
+      bg: "#e6ebe8",
+      dot: "#bcc8c0",
+      glowA: "rgba(45, 160, 110, 0.08)",
+      glowB: "rgba(124, 108, 240, 0.06)",
+      glowC: "rgba(56, 130, 170, 0.05)",
     },
     dark: {
-      bg: "#101814",
-      dot: "#243028",
-      glowA: "rgba(45, 204, 112, 0.3)",
-      glowB: "rgba(124, 108, 240, 0.18)",
-      glowC: "rgba(56, 189, 198, 0.16)",
+      bg: "#121816",
+      dot: "#242e28",
+      glowA: "rgba(45, 180, 120, 0.13)",
+      glowB: "rgba(124, 108, 240, 0.09)",
+      glowC: "rgba(56, 160, 170, 0.07)",
     },
   },
 };
@@ -94,4 +95,10 @@ export function applyPageScene(pageId: PageId, theme: "light" | "dark") {
 
 export function pathnameToScenePage(pathname: string): PageId {
   return pathnameToPageId(pathname);
+}
+
+export function getSceneBootstrapScript(): string {
+  const scenesJson = JSON.stringify(PAGE_SCENES);
+
+  return `(function(){try{var t=localStorage.getItem("theme");var theme=t==="light"?"light":"dark";document.documentElement.setAttribute("data-theme",theme);var p=location.pathname;var page=p==="/work"?"work":p==="/about"?"about":p==="/contact"?"contact":"home";document.documentElement.setAttribute("data-page",page);var scenes=${scenesJson};var s=scenes[page][theme];var r=document.documentElement.style;r.setProperty("--canvas-bg",s.bg);r.setProperty("--dot-color",s.dot);r.setProperty("--scene-glow-a",s.glowA);r.setProperty("--scene-glow-b",s.glowB);r.setProperty("--scene-glow-c",s.glowC);}catch(e){}})();`;
 }
