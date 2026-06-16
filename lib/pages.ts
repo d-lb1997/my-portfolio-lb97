@@ -27,6 +27,9 @@ export const HOME_FRAME_WIDTH = 1200;
 export const HOME_FRAME_HEIGHT = 420;
 export const CONTACT_FRAME_WIDTH = 1200;
 export const CONTACT_FRAME_HEIGHT = 580;
+export const WORK_FRAME_WIDTH = 1400;
+export const WORK_FRAME_HEIGHT = 640;
+export const WORK_NAV_WIDTH = 260;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {
@@ -67,10 +70,17 @@ export const PAGES: Record<PageId, PageConfig> = {
     contentX: 1100,
     contentY: 900,
     initialZoom: 1,
-    focusX: 1650,
-    focusY: 1350,
-    immerseFocusX: 1650,
-    immerseFocusY: 1350,
+    focusX: 1100 + WORK_FRAME_WIDTH / 2,
+    focusY: 900 + WORK_FRAME_HEIGHT / 2,
+    fitToViewport: {
+      width: WORK_FRAME_WIDTH,
+      height: WORK_FRAME_HEIGHT,
+      padding: 0.88,
+      mobilePadding: 0.92,
+      mobileBreakpoint: 1024,
+    },
+    immerseFocusX: 1100 + WORK_FRAME_WIDTH / 2,
+    immerseFocusY: 900 + WORK_FRAME_HEIGHT / 2,
   },
   contact: {
     id: "contact",
