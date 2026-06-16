@@ -148,7 +148,7 @@ body {
   border-radius: 9999px;
   padding: 0.75rem 1.5rem;
   font-size: clamp(0.875rem, 2.5vw, 0.9375rem);
-  font-weight: 600;
+  font-weight: 400;
   color: #ffffff;
   box-shadow:
     0 0 20px color-mix(in srgb, var(--chat-accent, #7c6cf0) 22%, transparent),
@@ -183,7 +183,7 @@ body {
   background: var(--canvas-bg);
   padding: calc(0.75rem - 1.5px) calc(1.5rem - 1.5px);
   font-size: clamp(0.875rem, 2.5vw, 0.9375rem);
-  font-weight: 600;
+  font-weight: 400;
   color: var(--text-primary);
   transition:
     transform 0.2s ease,

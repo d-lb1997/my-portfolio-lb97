@@ -19,7 +19,7 @@ export function HomeCtas() {
 
   return (
     <div
-      className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:mt-12"
+      className="mt-14 flex flex-wrap items-center justify-center gap-3 sm:mt-16 md:mt-20"
       data-no-pan
     >
       <button
@@ -29,7 +29,8 @@ export function HomeCtas() {
         onClick={() => immerseNavigate("/work")}
         disabled={isNavigating}
       >
-        See my work
+        <span className="font-normal">See </span>
+        <span className="font-bold">my work</span>
       </button>
 
       <div className="home-cta-secondary cursor-accent-gradient" style={gradientStyle}>
@@ -39,7 +40,8 @@ export function HomeCtas() {
           onClick={() => immerseNavigate("/about")}
           disabled={isNavigating}
         >
-          Get to know me
+          <span className="font-normal">Get to </span>
+          <span className="font-bold">know me</span>
         </button>
       </div>
     </div>
