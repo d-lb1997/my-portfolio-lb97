@@ -37,6 +37,18 @@ export function HomeBioRotator() {
       >
         Hi there, I&apos;m Lukas — experience designer based in Munich.
       </motion.p>
+      <motion.p
+        initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+        animate={
+          visible
+            ? { opacity: 1, y: 0, filter: "blur(0px)" }
+            : { opacity: 0, y: 10, filter: "blur(6px)" }
+        }
+        transition={{ ...ENTRANCE, delay: 0.12 }}
+        className="mt-2 px-2 text-center text-[clamp(0.9375rem,2.6vw,1.0625rem)] font-medium leading-relaxed tracking-[-0.01em] text-text-secondary sm:px-0"
+      >
+        Feel free to look around while you&apos;re here.
+      </motion.p>
     </motion.div>
   );
 }
