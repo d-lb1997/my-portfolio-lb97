@@ -81,7 +81,7 @@ export function WorkPageLayout({ children }: WorkPageLayoutProps) {
     <>
       <div
         ref={containerRef}
-        className="fixed inset-0 z-30 overflow-hidden bg-canvas-bg"
+        className="fixed inset-0 z-30 overflow-hidden bg-transparent"
       >
         <div className="dot-grid absolute inset-0" aria-hidden="true" />
 

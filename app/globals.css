@@ -1,8 +1,42 @@
 @import "tailwindcss";
 
+@property --scene-glow-a {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --scene-glow-b {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --scene-glow-c {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --canvas-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2f2f2;
+}
+
+@property --dot-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #cccccc;
+}
+
 :root {
+  --scene-transition: 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   --canvas-bg: #f2f2f2;
   --dot-color: #cccccc;
+  --scene-glow-a: rgba(124, 108, 240, 0.1);
+  --scene-glow-b: rgba(255, 60, 172, 0.06);
+  --scene-glow-c: rgba(45, 204, 112, 0.05);
   --text-primary: #0a0a0a;
   --text-secondary: #555555;
   --accent-pink: #ff3cac;
@@ -38,9 +72,36 @@
     0 6px 20px rgba(10, 10, 10, 0.08);
 }
 
+:root[data-page="work"] {
+  --canvas-bg: #eef1f6;
+  --dot-color: #c8d0dc;
+  --scene-glow-a: rgba(56, 189, 198, 0.14);
+  --scene-glow-b: rgba(99, 102, 241, 0.1);
+  --scene-glow-c: rgba(168, 85, 247, 0.07);
+}
+
+:root[data-page="about"] {
+  --canvas-bg: #f3f1ef;
+  --dot-color: #d4cfc8;
+  --scene-glow-a: rgba(255, 140, 90, 0.1);
+  --scene-glow-b: rgba(124, 108, 240, 0.08);
+  --scene-glow-c: rgba(45, 204, 112, 0.05);
+}
+
+:root[data-page="contact"] {
+  --canvas-bg: #f0f2f4;
+  --dot-color: #c9ced6;
+  --scene-glow-a: rgba(45, 204, 112, 0.11);
+  --scene-glow-b: rgba(124, 108, 240, 0.08);
+  --scene-glow-c: rgba(56, 189, 198, 0.06);
+}
+
 [data-theme="dark"] {
   --canvas-bg: #141414;
   --dot-color: #2e2e2e;
+  --scene-glow-a: rgba(124, 108, 240, 0.16);
+  --scene-glow-b: rgba(255, 60, 172, 0.1);
+  --scene-glow-c: rgba(45, 204, 112, 0.07);
   --text-primary: #f2f2f2;
   --text-secondary: #a8a8a8;
   --surface-white: #1c1c1c;
@@ -73,6 +134,30 @@
     0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
+[data-theme="dark"][data-page="work"] {
+  --canvas-bg: #12161c;
+  --dot-color: #2a313a;
+  --scene-glow-a: rgba(45, 190, 205, 0.2);
+  --scene-glow-b: rgba(130, 90, 220, 0.14);
+  --scene-glow-c: rgba(255, 60, 172, 0.09);
+}
+
+[data-theme="dark"][data-page="about"] {
+  --canvas-bg: #161412;
+  --dot-color: #2f2b28;
+  --scene-glow-a: rgba(255, 140, 90, 0.14);
+  --scene-glow-b: rgba(124, 108, 240, 0.12);
+  --scene-glow-c: rgba(45, 204, 112, 0.08);
+}
+
+[data-theme="dark"][data-page="contact"] {
+  --canvas-bg: #121614;
+  --dot-color: #2a302c;
+  --scene-glow-a: rgba(45, 204, 112, 0.16);
+  --scene-glow-b: rgba(124, 108, 240, 0.11);
+  --scene-glow-c: rgba(56, 189, 198, 0.09);
+}
+
 @theme inline {
   --color-canvas-bg: var(--canvas-bg);
   --color-dot: var(--dot-color);
@@ -95,13 +180,37 @@ body {
   background: var(--canvas-bg);
   color: var(--text-primary);
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+    background-color var(--scene-transition),
+    color 0.25s ease,
+    --canvas-bg var(--scene-transition),
+    --dot-color var(--scene-transition),
+    --scene-glow-a var(--scene-transition),
+    --scene-glow-b var(--scene-transition),
+    --scene-glow-c var(--scene-transition);
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.canvas-scene-base {
+  position: absolute;
+  inset: 0;
+  background: var(--canvas-bg);
+  transition: background-color var(--scene-transition);
+}
+
+.canvas-scene-spectrum {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 78% 58% at 12% 8%, var(--scene-glow-a) 0%, transparent 58%),
+    radial-gradient(ellipse 72% 56% at 90% 82%, var(--scene-glow-b) 0%, transparent 62%),
+    radial-gradient(ellipse 54% 42% at 74% 16%, var(--scene-glow-c) 0%, transparent 68%);
+  transition:
+    background var(--scene-transition),
+    opacity var(--scene-transition);
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -111,11 +220,11 @@ body {
 }
 
 .dot-grid {
-  background-color: var(--canvas-bg);
+  background-color: transparent;
   background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
   background-size: 24px 24px;
   background-position: 0 0;
-  transition: background-color 0.25s ease;
+  transition: background-image var(--scene-transition);
 }
 
 .canvas-edge-fade {
@@ -124,6 +233,7 @@ body {
     linear-gradient(to left, var(--canvas-bg) 0%, transparent 16%),
     linear-gradient(to bottom, var(--canvas-bg) 0%, transparent 14%),
     linear-gradient(to top, var(--canvas-bg) 0%, transparent 14%);
+  transition: background var(--scene-transition);
 }
 
 .gemini-chat-field {

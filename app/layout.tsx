@@ -4,7 +4,9 @@ import { CursorProvider } from "@/lib/cursor-context";
 import { googleSans } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme-context";
 import { AmbientCursors } from "./components/AmbientCursors";
+import { CanvasBackground } from "./components/CanvasBackground";
 import { Navbar } from "./components/Navbar";
+import { PageSceneProvider } from "./components/PageSceneProvider";
 import { SiteLogo } from "./components/SiteLogo";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { VisitorCursor } from "./components/VisitorCursor";
@@ -26,7 +28,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");document.documentElement.setAttribute("data-page","home");}catch(e){}})();`,
           }}
         />
       </head>
@@ -35,16 +37,19 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <CursorProvider>
-            <CanvasProvider>
-              <SiteLogo />
+            <PageSceneProvider>
+              <CanvasProvider>
+                <CanvasBackground />
+                <SiteLogo />
               <Navbar />
               <ThemeToggle />
               <AmbientCursors />
               <VisitorCursor />
               {children}
             </CanvasProvider>
-          </CursorProvider>
-        </ThemeProvider>
+          </PageSceneProvider>
+        </CursorProvider>
+      </ThemeProvider>
       </body>
     </html>
   );
