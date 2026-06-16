@@ -13,7 +13,6 @@ const PHRASES = [
   "the work. and the chaos behind it.",
   "a designer's train of thought.",
   "grids, gaps & glory.",
-  "the part they don't teach in school.",
   "my 3am decisions.",
   "a Figma file you can walk through.",
   "the vibe. and the system behind it.",
@@ -52,7 +51,7 @@ export function HeroText() {
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 text-center ${HERO_TEXT_CLASS} font-medium italic whitespace-normal sm:whitespace-nowrap`}
+            className={`hero-gradient-text absolute left-1/2 top-0 -translate-x-1/2 text-center ${HERO_TEXT_CLASS} font-normal italic whitespace-normal sm:whitespace-nowrap`}
           >
             {PHRASES[index]}
           </motion.span>

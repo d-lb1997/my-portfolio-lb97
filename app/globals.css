@@ -108,6 +108,12 @@ body {
   );
 }
 
+.mobile-menu-backdrop {
+  background: color-mix(in srgb, var(--canvas-bg) 72%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
 .work-card-thumb {
   background: linear-gradient(
     135deg,
