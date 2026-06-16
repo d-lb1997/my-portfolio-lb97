@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { useVisitorCursor } from "@/lib/cursor-context";
-import { CursorArrow } from "./CursorArrow";
+import { CursorNameLabel } from "./CursorArrow";
 
 export function VisitorCursor() {
   const { color, name, ready } = useVisitorCursor();
@@ -43,7 +43,7 @@ export function VisitorCursor() {
       }}
       aria-hidden="true"
     >
-      <CursorArrow color={color} name={name} />
+      <CursorNameLabel color={color} name={name} />
     </div>
   );
 }

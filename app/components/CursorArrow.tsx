@@ -9,50 +9,91 @@ function darkenHex(hex: string, amount = 0.2): string {
   return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
 }
 
-type CursorArrowProps = {
+const CURSOR_ARROW_PATH =
+  "M1.5 1.5L1.5 16.5L5 13L7 18.5L8.5 17L6.5 10.5L13 10.5L1.5 1.5Z";
+
+const ARROW_VIEWBOX = "-2 -2 18 24";
+
+type CursorNameLabelProps = {
   color: string;
   name: string;
   className?: string;
 };
 
-export function CursorArrow({ color, name, className = "" }: CursorArrowProps) {
+export function CursorNameLabel({
+  color,
+  name,
+  className = "",
+}: CursorNameLabelProps) {
   const borderColor = darkenHex(color);
+
+  return (
+    <span
+      className={`block whitespace-nowrap px-4 py-2 text-[14px] font-medium leading-none text-white ${className}`}
+      style={{
+        backgroundColor: color,
+        border: `2px solid ${borderColor}`,
+        borderRadius: "0 999px 999px 999px",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.16)",
+      }}
+    >
+      {name}
+    </span>
+  );
+}
+
+type CursorArrowProps = {
+  color: string;
+  name: string;
+  className?: string;
+  showArrow?: boolean;
+};
+
+export function CursorArrow({
+  color,
+  name,
+  className = "",
+  showArrow = true,
+}: CursorArrowProps) {
+  if (!showArrow) {
+    return (
+      <div className={`inline-block ${className}`}>
+        <CursorNameLabel color={color} name={name} />
+      </div>
+    );
+  }
 
   return (
     <div className={`relative inline-block ${className}`}>
       <svg
-        width="15"
-        height="15"
-        viewBox="0 0 15 15"
+        width="20"
+        height="24"
+        viewBox={ARROW_VIEWBOX}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute left-0 top-0"
+        className="absolute left-0 top-0 overflow-visible"
         style={{
-          filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))",
+          overflow: "visible",
+          filter:
+            "drop-shadow(0 0 1px rgba(0, 0, 0, 0.85)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35))",
         }}
         aria-hidden="true"
       >
         <path
-          d="M1.5 1.5L12.5 12.5L8 12.5L3.5 8L1.5 1.5Z"
-          fill="#0A0A0A"
+          d={CURSOR_ARROW_PATH}
+          fill="none"
           stroke="#FFFFFF"
-          strokeWidth="1.75"
-          strokeLinejoin="round"
-          strokeLinecap="round"
+          strokeWidth="2"
+          strokeLinejoin="miter"
+          strokeMiterlimit="4"
         />
       </svg>
 
-      <span
-        className="relative ml-[6px] mt-[20px] block whitespace-nowrap px-4 py-2 text-[14px] font-medium leading-none text-white"
-        style={{
-          backgroundColor: color,
-          border: `2px solid ${borderColor}`,
-          borderRadius: "0 999px 999px 999px",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.16)",
-        }}
-      >
-        {name}
-      </span>
+      <CursorNameLabel
+        color={color}
+        name={name}
+        className="relative ml-[6px] mt-[20px]"
+      />
     </div>
   );
 }

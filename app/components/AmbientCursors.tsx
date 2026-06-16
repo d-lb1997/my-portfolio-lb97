@@ -221,7 +221,7 @@ export function AmbientCursors() {
   if (!ready) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-40 overflow-visible">
       {cursors.map((cursor, index) => (
         <AmbientCursorDrifter
           key={cursor.name}

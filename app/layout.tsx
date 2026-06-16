@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/lib/theme-context";
 import { AmbientCursors } from "./components/AmbientCursors";
 import { Canvas } from "./components/Canvas";
 import { Navbar } from "./components/Navbar";
+import { SiteLogo } from "./components/SiteLogo";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { VisitorCursor } from "./components/VisitorCursor";
 import "./globals.css";
@@ -36,6 +37,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CursorProvider>
             <CanvasProvider>
+              <SiteLogo />
               <Navbar />
               <ThemeToggle />
               <Canvas />
