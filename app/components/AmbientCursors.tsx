@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useAmbientCursors } from "@/lib/cursor-context";
 import { CursorArrow } from "./CursorArrow";
@@ -217,11 +218,13 @@ function AmbientCursorDrifter({
 
 export function AmbientCursors() {
   const { cursors, ready } = useAmbientCursors();
+  const pathname = usePathname();
+  const layerClass = pathname === "/work" ? "z-20" : "z-40";
 
   if (!ready) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-40 overflow-visible">
+    <div className={`pointer-events-none fixed inset-0 overflow-visible ${layerClass}`}>
       {cursors.map((cursor, index) => (
         <AmbientCursorDrifter
           key={cursor.name}

@@ -116,8 +116,8 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
     <div
       ref={containerRef}
       className={`fixed inset-0 overflow-hidden bg-canvas-bg transition-opacity duration-300 ${
-        isNavigating ? "pointer-events-none" : ""
-      }`}
+        pageId === "work" ? "z-30" : ""
+      } ${isNavigating ? "pointer-events-none" : ""}`}
       onMouseDown={onPanStart}
       style={{ cursor: isPanning ? "grabbing" : "grab" }}
     >

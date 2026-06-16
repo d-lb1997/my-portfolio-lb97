@@ -1,13 +1,38 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import {
-  getActiveProjects,
-  getArchivedProjects,
+  WORK_OVERVIEW,
   WORK_PROJECTS,
+  getClientProjects,
   type WorkLayerType,
   type WorkProject,
+  type WorkProjectLogo,
 } from "@/lib/work-data";
+
+function NavLogo({ logo }: { logo: WorkProjectLogo }) {
+  if (logo.kind === "lb97") {
+    return (
+      <Image
+        src="/images/logo-dark.png"
+        alt="lb97"
+        width={156}
+        height={73}
+        className="work-nav-logo-mark h-auto w-[58px] shrink-0"
+      />
+    );
+  }
+
+  return (
+    <div
+      className="work-nav-logo-placeholder shrink-0"
+      aria-label={`${logo.label} logo placeholder`}
+    >
+      <span>{logo.label}</span>
+    </div>
+  );
+}
 
 function LayerIcon({ type }: { type: WorkLayerType }) {
   switch (type) {
@@ -165,19 +190,16 @@ function ProjectButton({
 }
 
 export function WorkNav() {
-  const activeProjects = getActiveProjects();
-  const archivedProjects = getArchivedProjects();
-  const [selectedProjectId, setSelectedProjectId] = useState(
-    activeProjects[0]?.id ?? WORK_PROJECTS[0].id,
-  );
+  const clientProjects = getClientProjects();
+  const [selectedProjectId, setSelectedProjectId] = useState(WORK_OVERVIEW.id);
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(
-    activeProjects[0]?.layers[0]?.id ?? null,
+    WORK_OVERVIEW.layers[0]?.id ?? null,
   );
 
   const selectedProject = useMemo(
     () =>
       WORK_PROJECTS.find((project) => project.id === selectedProjectId) ??
-      WORK_PROJECTS[0],
+      WORK_OVERVIEW,
     [selectedProjectId],
   );
 
@@ -189,20 +211,14 @@ export function WorkNav() {
   return (
     <aside className="work-nav" data-no-pan aria-label="Work navigation">
       <div className="work-nav-topbar">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <div className="work-nav-logo" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 14 14">
-              <circle cx="4" cy="7" r="2.5" fill="currentColor" />
-              <circle cx="10" cy="4" r="2" fill="currentColor" opacity="0.85" />
-              <circle cx="10" cy="10" r="2" fill="currentColor" opacity="0.65" />
-            </svg>
-          </div>
+        <div className="flex min-w-0 items-center gap-3">
+          <NavLogo logo={selectedProject.logo} />
           <div className="min-w-0">
-            <p className="truncate text-[13px] font-medium leading-tight text-white">
+            <p className="truncate text-[14px] font-medium leading-tight text-white">
               {selectedProject.title}
             </p>
             {selectedProject.subtitle && (
-              <p className="truncate text-[11px] leading-tight text-white/55">
+              <p className="truncate text-[12px] leading-tight text-white/55">
                 {selectedProject.subtitle}
               </p>
             )}
@@ -229,7 +245,17 @@ export function WorkNav() {
         <div className="work-nav-section">
           <SectionHeader label="Projects" showActions />
           <div className="work-nav-list">
-            {activeProjects.map((project) => (
+            <ProjectButton
+              project={WORK_OVERVIEW}
+              isActive={selectedProjectId === WORK_OVERVIEW.id}
+              onSelect={() => handleSelectProject(WORK_OVERVIEW)}
+            />
+          </div>
+
+          <div className="work-nav-divider" />
+
+          <div className="work-nav-list">
+            {clientProjects.map((project) => (
               <ProjectButton
                 key={project.id}
                 project={project}
@@ -238,22 +264,6 @@ export function WorkNav() {
               />
             ))}
           </div>
-
-          {archivedProjects.length > 0 && (
-            <>
-              <div className="work-nav-divider" />
-              <div className="work-nav-list">
-                {archivedProjects.map((project) => (
-                  <ProjectButton
-                    key={project.id}
-                    project={project}
-                    isActive={project.id === selectedProjectId}
-                    onSelect={() => handleSelectProject(project)}
-                  />
-                ))}
-              </div>
-            </>
-          )}
         </div>
 
         <div className="work-nav-section work-nav-section-grow">

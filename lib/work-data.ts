@@ -6,71 +6,76 @@ export type WorkLayer = {
   type: WorkLayerType;
 };
 
+export type WorkProjectLogo =
+  | { kind: "lb97" }
+  | { kind: "placeholder"; label: string };
+
 export type WorkProject = {
   id: string;
   title: string;
   subtitle?: string;
-  archived?: boolean;
+  logo: WorkProjectLogo;
+  isOverview?: boolean;
   layers: WorkLayer[];
 };
 
-export const WORK_PROJECTS: WorkProject[] = [
+export const WORK_OVERVIEW: WorkProject = {
+  id: "overview",
+  title: "Overview",
+  subtitle: "Selected Work",
+  logo: { kind: "lb97" },
+  isOverview: true,
+  layers: [
+    { id: "intro", label: "Introduction", type: "frame" },
+    { id: "approach", label: "Approach", type: "text" },
+    { id: "highlights", label: "Project Highlights", type: "section" },
+  ],
+};
+
+export const WORK_CLIENT_PROJECTS: WorkProject[] = [
   {
-    id: "advantest-jumbo",
-    title: "Advantest · JUMBO",
-    subtitle: "Proposals",
+    id: "carl-zeiss",
+    title: "Carl ZEISS — Design Systems and AI",
+    subtitle: "Design Systems · AI",
+    logo: { kind: "placeholder", label: "ZEISS" },
     layers: [
-      { id: "overview", label: "Overview", type: "frame" },
-      { id: "video-concept", label: "Video Concept", type: "video" },
-      { id: "stickers", label: "Stickers", type: "component" },
-      { id: "problem", label: "The Problem", type: "text" },
-      {
-        id: "solution",
-        label: "The Solution (All Tools come together…)",
-        type: "text",
-      },
-      { id: "final-frames", label: "Final Frames", type: "frame" },
+      { id: "research", label: "Research", type: "section" },
+      { id: "design-system", label: "Design System", type: "component" },
+      { id: "ai-patterns", label: "AI Patterns", type: "frame" },
+      { id: "prototypes", label: "Prototypes", type: "video" },
     ],
   },
   {
-    id: "copilot-system",
-    title: "Copilot System",
-    subtitle: "Product Design",
+    id: "mercedes-mbux",
+    title: "Mercedes Benz and MBUX",
+    subtitle: "Automotive UX",
+    logo: { kind: "placeholder", label: "MB" },
     layers: [
-      { id: "discovery", label: "Discovery", type: "section" },
-      { id: "system-map", label: "System Map", type: "frame" },
-      { id: "ui-components", label: "UI Components", type: "component" },
-      { id: "prototype", label: "Interactive Prototype", type: "video" },
-      { id: "handoff", label: "Handoff Notes", type: "text" },
+      { id: "mbux-concept", label: "MBUX Concept", type: "frame" },
+      { id: "ui-patterns", label: "UI Patterns", type: "component" },
+      { id: "interaction", label: "Interaction Design", type: "text" },
+      { id: "final-ui", label: "Final UI", type: "frame" },
     ],
   },
   {
-    id: "design-system",
-    title: "Design System",
-    subtitle: "Components",
+    id: "gtu-design-system",
+    title: "GUI GTÜ Design System",
+    subtitle: "Design System",
+    logo: { kind: "placeholder", label: "GTÜ" },
     layers: [
-      { id: "tokens", label: "Tokens & Variables", type: "section" },
-      { id: "typography", label: "Typography", type: "text" },
+      { id: "brand-audit", label: "Brand Audit", type: "section" },
       { id: "components", label: "Component Library", type: "component" },
-      { id: "documentation", label: "Documentation", type: "frame" },
-    ],
-  },
-  {
-    id: "archive-infographics",
-    title: "Infographics",
-    subtitle: "Archive",
-    archived: true,
-    layers: [
-      { id: "data-viz", label: "Data Visualization", type: "frame" },
-      { id: "export", label: "Export Assets", type: "component" },
+      { id: "documentation", label: "Documentation", type: "text" },
+      { id: "guidelines", label: "Guidelines", type: "frame" },
     ],
   },
 ];
 
-export function getActiveProjects() {
-  return WORK_PROJECTS.filter((project) => !project.archived);
-}
+export const WORK_PROJECTS: WorkProject[] = [
+  WORK_OVERVIEW,
+  ...WORK_CLIENT_PROJECTS,
+];
 
-export function getArchivedProjects() {
-  return WORK_PROJECTS.filter((project) => project.archived);
+export function getClientProjects() {
+  return WORK_CLIENT_PROJECTS;
 }
