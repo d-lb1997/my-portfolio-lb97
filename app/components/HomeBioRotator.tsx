@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const SHOW_DELAY_MS = 4500;
+const SHOW_DELAY_MS = 5000;
 const ENTRANCE = { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const };
 
 export function HomeBioRotator() {
@@ -20,12 +20,12 @@ export function HomeBioRotator() {
       initial={false}
       animate={
         visible
-          ? { opacity: 1, height: "auto", marginTop: "1.5rem" }
+          ? { opacity: 1, height: "auto", marginTop: "3.5rem" }
           : { opacity: 0, height: 0, marginTop: 0 }
       }
       transition={ENTRANCE}
     >
-      <motion.p
+      <motion.div
         initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
         animate={
           visible
@@ -33,10 +33,11 @@ export function HomeBioRotator() {
             : { opacity: 0, y: 10, filter: "blur(6px)" }
         }
         transition={ENTRANCE}
-        className="px-2 text-center text-[clamp(0.9375rem,2.6vw,1.0625rem)] font-medium leading-relaxed tracking-[-0.01em] text-text-secondary sm:px-0"
+        className="space-y-0.5 px-2 text-center text-[clamp(0.9375rem,2.6vw,1.0625rem)] font-medium leading-relaxed tracking-[-0.01em] text-text-secondary sm:px-0"
       >
-        Hi there, I&apos;m Lukas — experience designer based in Munich.
-      </motion.p>
+        <p>Hi there, I&apos;m Lukas —</p>
+        <p>experience designer based in Munich.</p>
+      </motion.div>
       <motion.p
         initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
         animate={
