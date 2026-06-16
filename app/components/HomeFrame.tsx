@@ -26,9 +26,14 @@ export function HomeFrame() {
       aria-label="Home"
     >
       <HomeAudio />
-      <div className="flex w-full max-w-[min(92vw,36rem)] flex-col items-center overflow-visible px-4 sm:max-w-none sm:px-10">
+      <div
+        className="flex w-full max-w-[min(92vw,36rem)] flex-col items-center overflow-visible px-4 sm:max-w-none sm:px-10"
+        style={{ minHeight: HOME_FRAME_HEIGHT }}
+      >
         <HeroText />
-        <HomeBioRotator />
+        <div className="flex w-full flex-1 flex-col items-center justify-center">
+          <HomeBioRotator />
+        </div>
         <HomeCtas />
 
         <motion.p

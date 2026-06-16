@@ -20,7 +20,7 @@ export function HomeBioRotator() {
       initial={false}
       animate={
         visible
-          ? { opacity: 1, height: "auto", marginTop: "3.5rem" }
+          ? { opacity: 1, height: "auto", marginTop: 0 }
           : { opacity: 0, height: 0, marginTop: 0 }
       }
       transition={ENTRANCE}
