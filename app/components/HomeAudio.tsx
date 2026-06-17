@@ -14,24 +14,33 @@ const INTERACTION_EVENTS = [
   "scroll",
 ] as const;
 
+const audioSession = {
+  started: false,
+  finished: false,
+};
+
 export function HomeAudio() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const startedRef = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || audioSession.finished) return;
 
     audio.volume = HOME_AUDIO_VOLUME;
+
+    if (!audioSession.started) {
+      audio.currentTime = 0;
+    }
 
     let removeInteractionListeners = () => {};
 
     const tryPlay = async () => {
-      if (startedRef.current && !audio.paused) return;
+      if (audioSession.finished || audio.ended) return;
+      if (audioSession.started && !audio.paused) return;
 
       try {
         await audio.play();
-        startedRef.current = true;
+        audioSession.started = true;
         removeInteractionListeners();
       } catch {
         /* Autoplay blocked until the visitor interacts with the page. */
@@ -62,14 +71,20 @@ export function HomeAudio() {
     };
 
     const onVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
+      if (document.visibilityState === "visible" && !audio.ended) {
         void tryPlay();
       }
+    };
+
+    const onEnded = () => {
+      audioSession.finished = true;
+      removeInteractionListeners();
     };
 
     addInteractionListeners();
     audio.addEventListener("canplaythrough", onReady);
     audio.addEventListener("loadeddata", onReady);
+    audio.addEventListener("ended", onEnded);
     document.addEventListener("visibilitychange", onVisibilityChange);
 
     if (audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
@@ -80,18 +95,19 @@ export function HomeAudio() {
       removeInteractionListeners();
       audio.removeEventListener("canplaythrough", onReady);
       audio.removeEventListener("loadeddata", onReady);
+      audio.removeEventListener("ended", onEnded);
       document.removeEventListener("visibilitychange", onVisibilityChange);
-      audio.pause();
-      audio.currentTime = 0;
-      startedRef.current = false;
     };
   }, []);
+
+  if (audioSession.finished) {
+    return null;
+  }
 
   return (
     <audio
       ref={audioRef}
       src={HOME_AUDIO_SRC}
-      loop
       preload="auto"
       autoPlay
       playsInline

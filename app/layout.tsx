@@ -4,6 +4,7 @@ import { CursorProvider } from "@/lib/cursor-context";
 import { googleSans } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme-context";
 import { AmbientCursors } from "./components/AmbientCursors";
+import { HomeAudio } from "./components/HomeAudio";
 import { Navbar } from "./components/Navbar";
 import { SiteLogo } from "./components/SiteLogo";
 import { ThemeToggle } from "./components/ThemeToggle";
@@ -36,6 +37,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CursorProvider>
             <CanvasProvider>
+              <HomeAudio />
               <SiteLogo />
               <Navbar />
               <ThemeToggle />

@@ -7,7 +7,6 @@ import {
   HOME_FRAME_WIDTH,
 } from "@/lib/pages";
 import { HeroText } from "./HeroText";
-import { HomeAudio } from "./HomeAudio";
 import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
 
@@ -35,7 +34,6 @@ export function HomeFrame() {
       style={{ width: HOME_FRAME_WIDTH, minHeight: HOME_FRAME_HEIGHT }}
       aria-label="Home"
     >
-      <HomeAudio />
       <div
         className="flex w-full max-w-[min(92vw,36rem)] flex-col items-center justify-center overflow-visible px-4 sm:max-w-none sm:px-10"
         style={{ minHeight: HOME_FRAME_HEIGHT }}
