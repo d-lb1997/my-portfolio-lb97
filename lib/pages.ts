@@ -78,10 +78,11 @@ export const WORK_NAV_OFFSET_X = -72;
 export const WORK_NAV_OFFSET_Y = 76;
 export const WORK_UI_TOP = "6.75rem";
 export const WORK_UI_BOTTOM = "2rem";
-export const WORK_NAV_VIEWPORT_LEFT = "max(1.25rem, calc(50vw - 42rem))";
-export const WORK_CONTENT_VIEWPORT_LEFT =
-  "max(22rem, calc(50vw - 42rem + 21.5rem))";
-export const WORK_CONTENT_VIEWPORT_RIGHT = "max(1.25rem, calc(50vw - 42rem))";
+export const ABOUT_HERO_SHIFT_X = 168;
+export const WORK_NAV_CONTENT_GAP = "2.75rem";
+export const WORK_NAV_VIEWPORT_LEFT = `max(1.25rem, calc(50vw - ${ABOUT_FRAME_WIDTH / 2}px - ${ABOUT_HERO_SHIFT_X}px))`;
+export const WORK_CONTENT_VIEWPORT_LEFT = `max(22rem, calc(50vw - ${ABOUT_FRAME_WIDTH / 2}px - ${ABOUT_HERO_SHIFT_X}px + ${WORK_NAV_WIDTH}px + ${WORK_NAV_CONTENT_GAP}))`;
+export const WORK_CONTENT_VIEWPORT_RIGHT = `max(1.25rem, calc(50vw - ${ABOUT_FRAME_WIDTH / 2}px))`;
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {
