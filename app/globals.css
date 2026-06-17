@@ -330,6 +330,11 @@ body {
   gap: 0.875rem;
   border-bottom: 1px solid var(--work-nav-divider);
   padding: 0.75rem 0.875rem;
+  transition: border-color 0.45s ease-in-out;
+}
+
+.work-nav--collapsed .work-nav-topbar {
+  border-bottom-color: transparent;
 }
 
 .work-nav-title {
@@ -370,6 +375,18 @@ body {
   flex: 1;
   flex-direction: column;
   max-height: 600px;
+  overflow: hidden;
+  opacity: 1;
+  transition:
+    max-height 0.45s ease-in-out,
+    opacity 0.35s ease-in-out;
+}
+
+.work-nav--collapsed .work-nav-body {
+  max-height: 0;
+  flex: 0 0 auto;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .work-nav-section {

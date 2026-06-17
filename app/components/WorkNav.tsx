@@ -249,9 +249,14 @@ export function WorkNav() {
   };
 
   const showNavLogo = selectedProject.logo.kind !== "none";
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <aside className="work-nav" data-no-pan aria-label="Work navigation">
+    <aside
+      className={`work-nav${isCollapsed ? " work-nav--collapsed" : ""}`}
+      data-no-pan
+      aria-label="Work navigation"
+    >
       <div className="work-nav-topbar">
         <div
           className={`flex min-w-0 flex-1 items-center ${showNavLogo ? "gap-3" : ""}`}
@@ -268,7 +273,13 @@ export function WorkNav() {
             )}
           </div>
         </div>
-        <button type="button" className="work-nav-icon-btn shrink-0" aria-label="Toggle sidebar">
+        <button
+          type="button"
+          className="work-nav-icon-btn shrink-0"
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!isCollapsed}
+          onClick={() => setIsCollapsed((collapsed) => !collapsed)}
+        >
           <svg viewBox="0 0 14 14" aria-hidden="true">
             <rect
               x="2"
