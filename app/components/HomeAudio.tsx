@@ -1,11 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-const HOME_AUDIO_SRC = "/audio/sunflower.mp3";
 const HOME_AUDIO_VOLUME = 0.32;
-const AUTOPLAY_RETRY_MS = 200;
-const AUTOPLAY_RETRY_WINDOW_MS = 5000;
+const AUDIO_ID = "portfolio-audio";
 
 const INTERACTION_EVENTS = [
   "pointerdown",
@@ -16,165 +14,116 @@ const INTERACTION_EVENTS = [
   "scroll",
 ] as const;
 
-const audioSession = {
-  started: false,
-  finished: false,
+type AudioSession = {
+  started: boolean;
+  finished: boolean;
 };
 
-export function HomeAudio() {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const retryTimerRef = useRef<number | null>(null);
-  const retryUntilRef = useRef(0);
+declare global {
+  interface Window {
+    __portfolioAudioSession?: AudioSession;
+    __portfolioAudioCleanup?: () => void;
+  }
+}
 
-  const clearRetryTimer = useCallback(() => {
-    if (retryTimerRef.current !== null) {
-      window.clearInterval(retryTimerRef.current);
-      retryTimerRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || audioSession.finished) return;
-
-    audio.volume = HOME_AUDIO_VOLUME;
-
-    if (!audioSession.started) {
-      audio.currentTime = 0;
-    }
-
-    let removeInteractionListeners = () => {};
-
-    const tryPlay = async () => {
-      if (audioSession.finished || audio.ended) return;
-      if (audioSession.started && !audio.paused) return;
-
-      try {
-        await audio.play();
-        audioSession.started = true;
-        clearRetryTimer();
-        removeInteractionListeners();
-      } catch {
-        /* Retry while loading; interaction fallback handles autoplay policy blocks. */
-      }
-    };
-
-    const startRetryWindow = () => {
-      retryUntilRef.current = performance.now() + AUTOPLAY_RETRY_WINDOW_MS;
-      if (retryTimerRef.current !== null) return;
-
-      retryTimerRef.current = window.setInterval(() => {
-        if (performance.now() > retryUntilRef.current) {
-          clearRetryTimer();
-          return;
-        }
-
-        void tryPlay();
-      }, AUTOPLAY_RETRY_MS);
-    };
-
-    const onInteraction = () => {
-      void tryPlay();
-    };
-
-    const addInteractionListeners = () => {
-      for (const event of INTERACTION_EVENTS) {
-        document.addEventListener(event, onInteraction, {
-          capture: true,
-          passive: true,
-        });
-      }
-    };
-
-    removeInteractionListeners = () => {
-      for (const event of INTERACTION_EVENTS) {
-        document.removeEventListener(event, onInteraction, { capture: true });
-      }
-    };
-
-    const onReady = () => {
-      void tryPlay();
-      startRetryWindow();
-    };
-
-    const onVisibilityChange = () => {
-      if (document.visibilityState === "visible" && !audio.ended) {
-        void tryPlay();
-      }
-    };
-
-    const onEnded = () => {
-      audioSession.finished = true;
-      clearRetryTimer();
-      removeInteractionListeners();
-    };
-
-    const onWindowLoad = () => {
-      void tryPlay();
-      startRetryWindow();
-    };
-
-    addInteractionListeners();
-    audio.load();
-    audio.addEventListener("loadedmetadata", onReady);
-    audio.addEventListener("canplay", onReady);
-    audio.addEventListener("canplaythrough", onReady);
-    audio.addEventListener("loadeddata", onReady);
-    audio.addEventListener("ended", onEnded);
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    window.addEventListener("load", onWindowLoad);
-
-    void tryPlay();
-    startRetryWindow();
-
-    if (document.readyState === "complete") {
-      onWindowLoad();
-    }
-
-    return () => {
-      clearRetryTimer();
-      removeInteractionListeners();
-      audio.removeEventListener("loadedmetadata", onReady);
-      audio.removeEventListener("canplay", onReady);
-      audio.removeEventListener("canplaythrough", onReady);
-      audio.removeEventListener("loadeddata", onReady);
-      audio.removeEventListener("ended", onEnded);
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      window.removeEventListener("load", onWindowLoad);
-    };
-  }, [clearRetryTimer]);
-
-  const setAudioNode = useCallback((node: HTMLAudioElement | null) => {
-    audioRef.current = node;
-    if (!node || audioSession.finished) return;
-
-    node.volume = HOME_AUDIO_VOLUME;
-    if (!audioSession.started) {
-      node.currentTime = 0;
-    }
-
-    void node.play()
-      .then(() => {
-        audioSession.started = true;
-      })
-      .catch(() => {
-        /* Autoplay may still be blocked until the track is ready or allowed. */
-      });
-  }, []);
-
-  if (audioSession.finished) {
-    return null;
+function getSession(): AudioSession {
+  if (!window.__portfolioAudioSession) {
+    window.__portfolioAudioSession = { started: false, finished: false };
   }
 
-  return (
-    <audio
-      ref={setAudioNode}
-      src={HOME_AUDIO_SRC}
-      preload="auto"
-      autoPlay
-      playsInline
-      aria-label="Sunflower from Spider-Man: Into the Spider-Verse"
-      className="hidden"
-    />
-  );
+  return window.__portfolioAudioSession;
+}
+
+function getAudioElement() {
+  return document.getElementById(AUDIO_ID) as HTMLAudioElement | null;
+}
+
+async function tryPlay(audio: HTMLAudioElement, session: AudioSession) {
+  if (session.finished || audio.ended) return;
+  if (session.started && !audio.paused && !audio.muted) return;
+
+  try {
+    audio.muted = true;
+    await audio.play();
+    audio.muted = false;
+    audio.volume = HOME_AUDIO_VOLUME;
+    session.started = true;
+  } catch {
+    audio.muted = false;
+    audio.volume = HOME_AUDIO_VOLUME;
+  }
+}
+
+export function bootstrapPortfolioAudio() {
+  if (typeof window === "undefined") return;
+
+  window.__portfolioAudioCleanup?.();
+
+  const audio = getAudioElement();
+  if (!audio) return;
+
+  const session = getSession();
+  if (session.finished) return;
+
+  audio.volume = HOME_AUDIO_VOLUME;
+
+  if (!session.started) {
+    if (!audio.paused && audio.currentTime > 0) {
+      session.started = true;
+    } else if (audio.paused && audio.currentTime < 0.05) {
+      audio.currentTime = 0;
+    }
+  }
+
+  const onInteraction = () => {
+    audio.muted = false;
+    audio.volume = HOME_AUDIO_VOLUME;
+    void tryPlay(audio, session);
+  };
+
+  const onReady = () => {
+    void tryPlay(audio, session);
+  };
+
+  const onEnded = () => {
+    session.finished = true;
+  };
+
+  for (const event of INTERACTION_EVENTS) {
+    document.addEventListener(event, onInteraction, {
+      capture: true,
+      passive: true,
+    });
+  }
+
+  audio.addEventListener("canplay", onReady);
+  audio.addEventListener("canplaythrough", onReady);
+  audio.addEventListener("loadeddata", onReady);
+  audio.addEventListener("ended", onEnded);
+
+  void tryPlay(audio, session);
+
+  window.__portfolioAudioCleanup = () => {
+    for (const event of INTERACTION_EVENTS) {
+      document.removeEventListener(event, onInteraction, { capture: true });
+    }
+
+    audio.removeEventListener("canplay", onReady);
+    audio.removeEventListener("canplaythrough", onReady);
+    audio.removeEventListener("loadeddata", onReady);
+    audio.removeEventListener("ended", onEnded);
+  };
+}
+
+export function HomeAudio() {
+  useEffect(() => {
+    bootstrapPortfolioAudio();
+
+    return () => {
+      window.__portfolioAudioCleanup?.();
+      window.__portfolioAudioCleanup = undefined;
+    };
+  }, []);
+
+  return null;
 }

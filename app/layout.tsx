@@ -30,10 +30,26 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="light"?"light":"dark");}catch(e){}})();`,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function p(){var a=document.getElementById("portfolio-audio");if(!a)return;window.__portfolioAudioSession=window.__portfolioAudioSession||{started:false,finished:false};if(window.__portfolioAudioSession.finished)return;var v=0.32;function t(){if(window.__portfolioAudioSession.finished||a.ended)return;if(window.__portfolioAudioSession.started&&!a.paused&&!a.muted)return;a.muted=true;a.play().then(function(){a.muted=false;a.volume=v;window.__portfolioAudioSession.started=true;}).catch(function(){a.muted=false;a.volume=v;});}a.volume=v;t();a.addEventListener("canplaythrough",t);a.addEventListener("ended",function(){window.__portfolioAudioSession.finished=true;});}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",p);}else{p();}})();`,
+          }}
+        />
       </head>
       <body
         className={`${googleSans.variable} font-sans antialiased cursor-none`}
       >
+        <audio
+          id="portfolio-audio"
+          src="/audio/sunflower.mp3"
+          preload="auto"
+          autoPlay
+          muted
+          playsInline
+          aria-label="Sunflower from Spider-Man: Into the Spider-Verse"
+          className="hidden"
+          suppressHydrationWarning
+        />
         <ThemeProvider>
           <CursorProvider>
             <CanvasProvider>
