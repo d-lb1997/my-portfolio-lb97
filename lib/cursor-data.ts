@@ -11,9 +11,9 @@ export const CURSOR_COLORS = [
 
 export const CURSOR_NAMES = [
   "Portfolio Stalker",
-  "Silent Fan",
+  "Kerning Detective",
   "Curious Bystander",
-  "Secret Admirer",
+  "Wireframe Ghost",
   "Design Critic",
   "Pixel Peeper",
   "Color Theory Nerd",

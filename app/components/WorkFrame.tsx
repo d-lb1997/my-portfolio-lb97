@@ -8,9 +8,11 @@ import {
 import { WORK_OVERVIEW } from "@/lib/work-data";
 import { useWorkPage } from "@/lib/work-page-context";
 import { WorkOverviewHero } from "./WorkOverviewHero";
+import { WorkProjectPanel } from "./WorkProjectPanel";
 
 export function WorkFrame() {
-  const { selectedProjectId } = useWorkPage();
+  const { selectedProjectId, selectedProject } = useWorkPage();
+  const isOverview = selectedProjectId === WORK_OVERVIEW.id;
 
   return (
     <section
@@ -18,13 +20,15 @@ export function WorkFrame() {
       style={{ width: WORK_FRAME_WIDTH, minHeight: WORK_FRAME_HEIGHT }}
       aria-label="Work"
     >
-      {selectedProjectId === WORK_OVERVIEW.id && (
+      {isOverview ? (
         <div
           className="absolute top-[88px] flex items-start pr-10"
           style={{ left: WORK_NAV_WIDTH + 48 }}
         >
           <WorkOverviewHero />
         </div>
+      ) : (
+        <WorkProjectPanel project={selectedProject} />
       )}
     </section>
   );
