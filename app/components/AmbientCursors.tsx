@@ -216,14 +216,21 @@ function AmbientCursorDrifter({
   );
 }
 
+const RIGHT_EDGE_ONLY_PATHS = new Set(["/work", "/about"]);
+
+function getDrifterConfigs(pathname: string) {
+  if (RIGHT_EDGE_ONLY_PATHS.has(pathname)) {
+    return DRIFTER_CONFIGS.filter((config) => config.side === "right");
+  }
+
+  return DRIFTER_CONFIGS;
+}
+
 export function AmbientCursors() {
   const { cursors, ready } = useAmbientCursors();
   const pathname = usePathname();
   const layerClass = pathname === "/work" ? "z-20" : "z-40";
-  const configs =
-    pathname === "/work"
-      ? DRIFTER_CONFIGS.filter((config) => config.side === "right")
-      : DRIFTER_CONFIGS;
+  const configs = getDrifterConfigs(pathname);
 
   if (!ready) return null;
 

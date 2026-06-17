@@ -13,8 +13,8 @@ export function AboutFrame() {
       style={{ width: ABOUT_FRAME_WIDTH, minHeight: ABOUT_FRAME_HEIGHT }}
       aria-label="About"
     >
-      <div className="grid w-full max-w-[58rem] grid-cols-1 items-start gap-10 pb-[clamp(14rem,32vh,20rem)] pt-10 sm:pt-12 lg:grid-cols-2 lg:gap-16 lg:pt-14">
-        <div className="flex w-full flex-col items-start">
+      <div className="grid w-full max-w-[62rem] grid-cols-1 items-start gap-10 pb-[clamp(18rem,46vh,30rem)] pt-10 sm:pt-12 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-0 lg:pt-14">
+        <div className="flex w-full flex-col items-start self-start">
           <HeroText
             headline="About me"
             phrases={ABOUT_HERO_PHRASES}
@@ -22,7 +22,7 @@ export function AboutFrame() {
           />
         </div>
 
-        <div className="max-w-[34rem] text-left lg:pt-1">
+        <div className="max-w-[34rem] self-start text-left">
           <p className="text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
             Hi — I&apos;m Lukas, an experience designer focused on human-centered
             products. I work across research, visual design, and interaction to
