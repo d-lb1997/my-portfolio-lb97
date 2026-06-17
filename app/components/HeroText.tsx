@@ -83,20 +83,28 @@ export function HeroText({
         {headline}
       </span>
 
-      <div className="relative mt-0 min-h-[1.5em] w-full overflow-visible pb-3 sm:pb-4">
-        <AnimatePresence mode="sync">
+      <div
+        className={`relative mt-0 w-full pb-3 sm:pb-4 ${
+          wrapSubtitle && isLeft
+            ? "max-w-[17rem] overflow-hidden sm:max-w-[19rem] lg:max-w-[18rem]"
+            : "min-h-[1.5em] overflow-visible"
+        }`}
+      >
+        <AnimatePresence mode={wrapSubtitle ? "wait" : "sync"}>
           <motion.span
             key={index}
             initial={{ opacity: 0, filter: "blur(12px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute top-0 ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal ${
-              isLeft
-                ? wrapSubtitle
-                  ? "left-0 max-w-[min(100%,22rem)] text-left sm:max-w-[24rem] lg:max-w-[26rem]"
-                  : "left-0 text-left sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none"
-                : "left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0"
+            className={`hero-gradient-text ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal ${
+              wrapSubtitle && isLeft
+                ? "relative block w-full text-left"
+                : `absolute top-0 ${
+                    isLeft
+                      ? "left-0 text-left sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none"
+                      : "left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0"
+                  }`
             }`}
           >
             {phrases[index]}
