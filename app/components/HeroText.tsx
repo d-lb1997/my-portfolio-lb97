@@ -53,12 +53,14 @@ type HeroTextProps = {
   headline?: string;
   phrases?: string[];
   align?: "center" | "left";
+  wrapSubtitle?: boolean;
 };
 
 export function HeroText({
   headline = "Welcome to",
   phrases = HOME_HERO_PHRASES,
   align = "center",
+  wrapSubtitle = false,
 }: HeroTextProps) {
   const [index, setIndex] = useState(0);
   const isLeft = align === "left";
@@ -89,10 +91,12 @@ export function HeroText({
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text absolute top-0 ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none ${
+            className={`hero-gradient-text absolute top-0 ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal ${
               isLeft
-                ? "left-0 text-left"
-                : "left-1/2 -translate-x-1/2 px-2 text-center sm:px-0"
+                ? wrapSubtitle
+                  ? "left-0 max-w-[min(100%,22rem)] text-left sm:max-w-[24rem] lg:max-w-[26rem]"
+                  : "left-0 text-left sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none"
+                : "left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0"
             }`}
           >
             {phrases[index]}

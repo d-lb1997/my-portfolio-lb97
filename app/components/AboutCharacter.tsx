@@ -28,7 +28,7 @@ export function AboutCharacter() {
           width={872}
           height={1024}
           priority
-          className="h-[clamp(320px,52vh,720px)] w-auto max-w-[min(98vw,820px)] select-none object-contain object-bottom"
+          className="h-[clamp(360px,56vh,780px)] w-auto max-w-[min(98vw,900px)] select-none object-contain object-bottom"
           draggable={false}
         />
       </motion.div>
