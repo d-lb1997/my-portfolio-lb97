@@ -1,9 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { WORK_NAV_WIDTH } from "@/lib/pages";
+import { useEffect } from "react";
 import {
-  getLayerContent,
   type WorkContentBlock,
   type WorkProject,
 } from "@/lib/work-data";
@@ -11,6 +9,14 @@ import { useWorkPage } from "@/lib/work-page-context";
 
 const BODY_CLASS =
   "text-[clamp(0.9375rem,2.1vw,1.0625rem)] leading-relaxed text-text-secondary";
+
+function isTextBlock(block: WorkContentBlock): boolean {
+  return (
+    block.type === "paragraph" ||
+    block.type === "list" ||
+    block.type === "quote"
+  );
+}
 
 function ContentBlock({ block }: { block: WorkContentBlock }) {
   switch (block.type) {
@@ -44,34 +50,6 @@ function ContentBlock({ block }: { block: WorkContentBlock }) {
           ) : null}
         </blockquote>
       );
-    case "image":
-      return (
-        <figure className="overflow-hidden rounded-xl border border-border-subtle bg-surface-white/70 shadow-sm">
-          <Image
-            src={block.src}
-            alt={block.alt}
-            width={960}
-            height={540}
-            className="h-auto w-full object-cover"
-          />
-          {block.caption ? (
-            <figcaption className="px-4 py-2.5 text-[0.8125rem] text-text-secondary">
-              {block.caption}
-            </figcaption>
-          ) : null}
-        </figure>
-      );
-    case "placeholder":
-      return (
-        <div
-          className="flex w-full items-center justify-center rounded-xl border border-dashed border-border-subtle bg-surface-white/70 shadow-sm"
-          style={{ aspectRatio: block.aspectRatio ?? "16 / 10" }}
-        >
-          <span className="text-[13px] font-medium uppercase tracking-[0.12em] text-text-secondary">
-            {block.label}
-          </span>
-        </div>
-      );
     default:
       return null;
   }
@@ -83,36 +61,54 @@ type WorkProjectPanelProps = {
 
 export function WorkProjectPanel({ project }: WorkProjectPanelProps) {
   const { selectedLayerId } = useWorkPage();
-  const layerContent = getLayerContent(project, selectedLayerId);
 
-  if (!layerContent) {
-    return null;
-  }
+  useEffect(() => {
+    if (!selectedLayerId) return;
+
+    document
+      .getElementById(`work-layer-${selectedLayerId}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [selectedLayerId, project.id]);
 
   return (
-    <div
-      className="absolute top-[72px] flex max-h-[calc(100%-88px)] w-[min(52rem,calc(100%-3rem))] flex-col overflow-y-auto pr-6 pb-10"
-      style={{ left: WORK_NAV_WIDTH + 48 }}
-      data-no-pan
-    >
-      {project.description && (
-        <p className="mb-6 max-w-[40rem] text-[clamp(1rem,2.4vw,1.125rem)] leading-relaxed text-text-secondary">
+    <div className="flex w-full max-w-[40rem] flex-col pb-10">
+      {project.description ? (
+        <p className="mb-8 text-[clamp(1rem,2.4vw,1.125rem)] leading-relaxed text-text-secondary">
           {project.description}
         </p>
-      )}
+      ) : null}
 
-      <div className="flex flex-col gap-5">
-        {layerContent.heading ? (
-          <h2 className="text-[clamp(1.25rem,3vw,1.5rem)] font-semibold tracking-[-0.02em] text-text-primary">
-            {layerContent.heading}
-          </h2>
-        ) : null}
+      <div className="flex flex-col gap-10">
+        {project.layers.map((layer) => {
+          const textBlocks = layer.content.blocks.filter(isTextBlock);
+          if (textBlocks.length === 0) {
+            return null;
+          }
 
-        <div className="flex flex-col gap-4">
-          {layerContent.blocks.map((block, index) => (
-            <ContentBlock key={`${block.type}-${index}`} block={block} />
-          ))}
-        </div>
+          const isActive = selectedLayerId === layer.id;
+
+          return (
+            <section
+              key={layer.id}
+              id={`work-layer-${layer.id}`}
+              className={`scroll-mt-6 flex flex-col gap-4 rounded-xl transition-colors ${
+                isActive ? "bg-surface-white/40 p-4 -mx-4" : ""
+              }`}
+            >
+              {layer.content.heading ? (
+                <h2 className="text-[clamp(1.25rem,3vw,1.5rem)] font-semibold tracking-[-0.02em] text-text-primary">
+                  {layer.content.heading}
+                </h2>
+              ) : null}
+
+              <div className="flex flex-col gap-4">
+                {textBlocks.map((block, index) => (
+                  <ContentBlock key={`${layer.id}-${block.type}-${index}`} block={block} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </div>
     </div>
   );

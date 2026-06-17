@@ -220,17 +220,21 @@ export function AmbientCursors() {
   const { cursors, ready } = useAmbientCursors();
   const pathname = usePathname();
   const layerClass = pathname === "/work" ? "z-20" : "z-40";
+  const configs =
+    pathname === "/work"
+      ? DRIFTER_CONFIGS.filter((config) => config.side === "right")
+      : DRIFTER_CONFIGS;
 
   if (!ready) return null;
 
   return (
     <div className={`pointer-events-none fixed inset-0 overflow-visible ${layerClass}`}>
-      {cursors.map((cursor, index) => (
+      {cursors.slice(0, configs.length).map((cursor, index) => (
         <AmbientCursorDrifter
           key={cursor.name}
           color={cursor.color}
           name={cursor.name}
-          config={DRIFTER_CONFIGS[index]}
+          config={configs[index]}
         />
       ))}
     </div>

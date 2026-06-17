@@ -76,6 +76,12 @@ export const WORK_FRAME_HEIGHT = 760;
 export const WORK_NAV_WIDTH = 300;
 export const WORK_NAV_OFFSET_X = -72;
 export const WORK_NAV_OFFSET_Y = 76;
+export const WORK_UI_TOP = "6.75rem";
+export const WORK_UI_BOTTOM = "2rem";
+export const WORK_NAV_VIEWPORT_LEFT = "max(1.25rem, calc(50vw - 42rem))";
+export const WORK_CONTENT_VIEWPORT_LEFT =
+  "max(22rem, calc(50vw - 42rem + 21.5rem))";
+export const WORK_CONTENT_VIEWPORT_RIGHT = "max(1.25rem, calc(50vw - 42rem))";
 
 export const PAGES: Record<PageId, PageConfig> = {
   home: {

@@ -508,6 +508,20 @@ body {
   color: var(--work-nav-text-muted);
 }
 
+.work-project-panel {
+  scrollbar-width: thin;
+  scrollbar-color: var(--work-nav-scrollbar) transparent;
+}
+
+.work-project-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.work-project-panel::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: var(--work-nav-scrollbar);
+}
+
 .work-logo-marquee {
   position: relative;
   overflow: hidden;

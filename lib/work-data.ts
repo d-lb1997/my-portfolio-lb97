@@ -155,11 +155,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
                 "What are the opportunities and challenges of incorporating AI as technology into the design system?",
               ],
             },
-            {
-              type: "image",
-              src: "/images/work/zeiss/hero.png",
-              alt: "Design Systems and Generative AI thesis cover",
-            },
           ],
         },
       },
@@ -177,13 +172,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
             {
               type: "paragraph",
               text: "It is expected that we will see an interplay of four different AI personas, as it is unlikely that there will be a single AI tool or technology that takes over all tasks in a design system.",
-            },
-            {
-              type: "image",
-              src: "/images/work/zeiss/ai-personas.png",
-              alt: "The four different AI personas expected to work on design systems",
-              caption:
-                "The four different AI personas expected to work on design systems",
             },
           ],
         },
@@ -207,17 +195,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
               type: "paragraph",
               text: "A design system is also restricted by its constraints and is therefore limited to specific features such as components, specific style guides or the use of UI patterns in certain contexts.",
             },
-            {
-              type: "image",
-              src: "/images/work/zeiss/prompting-constraints.png",
-              alt: "Prompting constraints for design systems",
-            },
-            {
-              type: "image",
-              src: "/images/work/zeiss/design-system-constraints.png",
-              alt: "Design system constraints",
-              caption: "Design system constraints",
-            },
           ],
         },
       },
@@ -231,12 +208,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
             {
               type: "paragraph",
               text: "As part of my thesis I conducted a requirements elicitation according to the requirements engineering method to determine which functional and non-functional requirements Carl ZEISS has for AI tools to be used on the internal design system Beyond for Products. For this, I conducted interviews with relevant stakeholders of the design system at Carl ZEISS.",
-            },
-            {
-              type: "image",
-              src: "/images/work/zeiss/requirements-elicitation.png",
-              alt: "Requirements elicitation for thesis",
-              caption: "Requirements elicitation for thesis",
             },
           ],
         },
@@ -261,24 +232,12 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
               text: "Humans have always invented technology to do their work for them and will continue to do so as long as we exist. In fact: AI and automation will make designers more effective (not redundant), as design evolves alongside technology.",
             },
             {
-              type: "image",
-              src: "/images/work/zeiss/design-evolves.png",
-              alt: "Design evolves alongside technology",
-              caption: "Design evolves alongside technology",
-            },
-            {
               type: "paragraph",
               text: "AI will not replace thoughtful design. As Noah Levin, Vice President of Design at Figma, explains, there is just going to be a change in how we will work on design systems and designs. This change can be viewed through three lenses: what we design, how we design and who designs.",
             },
             {
               type: "paragraph",
               text: "With regard to how we design, AI will lower the bar for design system contribution and enable collaboration for non-designers as well. Stakeholders will be able to express their visual ideas more easily.",
-            },
-            {
-              type: "image",
-              src: "/images/work/zeiss/ai-lowers-bar.png",
-              alt: "AI will lower the bar of how good we can be at designing",
-              caption: "AI will lower the bar of how good we can be at designing",
             },
             {
               type: "paragraph",
@@ -316,11 +275,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
               type: "paragraph",
               text: "Exploration of next-generation MBUX concepts focused on clarity, hierarchy, and glanceable information architecture for in-car contexts.",
             },
-            {
-              type: "placeholder",
-              label: "Concept screens",
-              aspectRatio: "16 / 10",
-            },
           ],
         },
       },
@@ -334,11 +288,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
             {
               type: "paragraph",
               text: "Reusable UI patterns for navigation tiles, media controls, and contextual overlays — designed to scale across vehicle displays and aspect ratios.",
-            },
-            {
-              type: "placeholder",
-              label: "Pattern library preview",
-              aspectRatio: "4 / 3",
             },
           ],
         },
@@ -376,11 +325,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
               type: "paragraph",
               text: "High-fidelity UI compositions applying the MBUX design language across home, media, and vehicle settings modules.",
             },
-            {
-              type: "placeholder",
-              label: "Final UI screens",
-              aspectRatio: "16 / 10",
-            },
           ],
         },
       },
@@ -414,11 +358,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
               type: "paragraph",
               text: "Audit of existing GTÜ digital touchpoints to identify inconsistencies in typography, color usage, and component behavior across products.",
             },
-            {
-              type: "placeholder",
-              label: "Audit findings",
-              aspectRatio: "16 / 9",
-            },
           ],
         },
       },
@@ -432,11 +371,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
             {
               type: "paragraph",
               text: "Foundational component library covering forms, navigation, data display, and feedback patterns — built for consistency and accessibility.",
-            },
-            {
-              type: "placeholder",
-              label: "Component library",
-              aspectRatio: "4 / 3",
             },
           ],
         },
@@ -473,11 +407,6 @@ export const WORK_CLIENT_PROJECTS: WorkProject[] = [
             {
               type: "paragraph",
               text: "Visual and interaction guidelines defining spacing, elevation, motion, and layout principles for GTÜ GUI products.",
-            },
-            {
-              type: "placeholder",
-              label: "Guideline overview",
-              aspectRatio: "16 / 10",
             },
           ],
         },

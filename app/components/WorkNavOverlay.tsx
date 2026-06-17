@@ -1,21 +1,18 @@
 "use client";
 
-import { useCanvas } from "@/lib/canvas-context";
-import { PAGES, WORK_NAV_OFFSET_X, WORK_NAV_OFFSET_Y } from "@/lib/pages";
+import { WORK_NAV_VIEWPORT_LEFT, WORK_UI_TOP, WORK_NAV_WIDTH } from "@/lib/pages";
 import { WorkNav } from "./WorkNav";
 
 export function WorkNavOverlay() {
-  const { pan, zoom } = useCanvas();
-  const page = PAGES.work;
-
-  const left = pan.x + (page.contentX + WORK_NAV_OFFSET_X) * zoom;
-  const top = pan.y + (page.contentY + WORK_NAV_OFFSET_Y) * zoom;
-
   return (
     <div className="pointer-events-none fixed inset-0 z-[80]">
       <div
-        className="pointer-events-auto absolute"
-        style={{ left, top }}
+        className="pointer-events-auto fixed"
+        style={{
+          top: WORK_UI_TOP,
+          left: WORK_NAV_VIEWPORT_LEFT,
+          width: WORK_NAV_WIDTH,
+        }}
         data-no-pan
       >
         <WorkNav />

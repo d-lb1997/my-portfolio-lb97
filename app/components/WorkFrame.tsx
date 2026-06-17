@@ -8,10 +8,9 @@ import {
 import { WORK_OVERVIEW } from "@/lib/work-data";
 import { useWorkPage } from "@/lib/work-page-context";
 import { WorkOverviewHero } from "./WorkOverviewHero";
-import { WorkProjectPanel } from "./WorkProjectPanel";
 
 export function WorkFrame() {
-  const { selectedProjectId, selectedProject } = useWorkPage();
+  const { selectedProjectId } = useWorkPage();
   const isOverview = selectedProjectId === WORK_OVERVIEW.id;
 
   return (
@@ -27,9 +26,7 @@ export function WorkFrame() {
         >
           <WorkOverviewHero />
         </div>
-      ) : (
-        <WorkProjectPanel project={selectedProject} />
-      )}
+      ) : null}
     </section>
   );
 }
