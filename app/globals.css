@@ -398,14 +398,24 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 4px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
   color: var(--work-nav-icon);
   transition:
     background-color 0.15s ease,
     color 0.15s ease;
   cursor: pointer;
+}
+
+.work-nav-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.work-nav-topbar .work-nav-icon-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .work-nav-icon-btn:hover {
