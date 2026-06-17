@@ -135,7 +135,6 @@ export const PAGES: Record<PageId, PageConfig> = {
     },
     immerseFocusX: 1100 + WORK_FRAME_WIDTH / 2,
     immerseFocusY: 900 + WORK_FRAME_HEIGHT / 2,
-    staticPage: true,
   },
   contact: {
     id: "contact",

@@ -233,11 +233,6 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       }
 
       cancelAnimation();
-
-      if (page.staticPage) {
-        return;
-      }
-
       initializePageView(page);
     },
     [cancelAnimation, initializePageView],
@@ -297,14 +292,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       const targetPage = Object.values(PAGES).find((entry) => entry.href === href);
       if (!targetPage || targetPage.id === page?.id) return;
 
-      if (page?.staticPage || targetPage.staticPage) {
-        router.push(href);
-        return;
-      }
-
       immerseNavigate(href);
     },
-    [currentPage, immerseNavigate, router],
+    [currentPage, immerseNavigate],
   );
 
   const applyWheelZoom = useCallback(() => {

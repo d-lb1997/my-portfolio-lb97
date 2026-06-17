@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { PAGES, type PageId } from "@/lib/pages";
 
@@ -69,6 +69,11 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
 
   const page = PAGES[pageId];
   const [viewport, setViewport] = useState<ViewportSize>({ width: 0, height: 0 });
+  const hasInitialLayoutRef = useRef(false);
+
+  useLayoutEffect(() => {
+    hasInitialLayoutRef.current = false;
+  }, [pageId]);
 
   useLayoutEffect(() => {
     registerPage(pageId);
@@ -101,6 +106,11 @@ export function PageCanvas({ pageId, children }: PageCanvasProps) {
 
   useEffect(() => {
     if (!page.fitToViewport || viewport.width === 0 || viewport.height === 0) {
+      return;
+    }
+
+    if (!hasInitialLayoutRef.current) {
+      hasInitialLayoutRef.current = true;
       return;
     }
 
