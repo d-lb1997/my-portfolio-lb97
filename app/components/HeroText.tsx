@@ -84,10 +84,10 @@ export function HeroText({
       </span>
 
       <div
-        className={`relative mt-0 w-full pb-3 sm:pb-4 ${
+        className={`relative mt-0 w-full overflow-visible pb-3 sm:pb-4 ${
           wrapSubtitle && isLeft
-            ? "max-w-[17rem] overflow-hidden sm:max-w-[19rem] lg:max-w-[18rem]"
-            : "min-h-[1.5em] overflow-visible"
+            ? "max-w-[20rem] sm:max-w-[22rem] lg:max-w-[21rem]"
+            : "min-h-[1.5em]"
         }`}
       >
         <AnimatePresence mode={wrapSubtitle ? "wait" : "sync"}>
