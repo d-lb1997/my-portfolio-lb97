@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAmbientCursors } from "@/lib/cursor-context";
 import { CursorArrow } from "./CursorArrow";
 
@@ -17,6 +17,7 @@ type DrifterConfig = {
 
 const LANES_PER_SIDE = 3;
 const CURSOR_BLOCK_HEIGHT = 76;
+const COMPACT_VIEWPORT_MAX_WIDTH = 1023;
 
 const DRIFTER_CONFIGS: DrifterConfig[] = [
   { side: "left", laneIndex: 0, baseSpeed: 0.014, pauseMin: 900, pauseMax: 2400 },
@@ -218,32 +219,65 @@ function AmbientCursorDrifter({
 
 const RIGHT_EDGE_ONLY_PATHS = new Set(["/work", "/about"]);
 
-function getDrifterConfigs(pathname: string) {
-  if (RIGHT_EDGE_ONLY_PATHS.has(pathname)) {
-    return DRIFTER_CONFIGS.filter((config) => config.side === "right");
+function useCompactViewport() {
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${COMPACT_VIEWPORT_MAX_WIDTH}px)`,
+    );
+    const update = () => setIsCompact(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  return isCompact;
+}
+
+function getDrifterConfigs(pathname: string, hideMiddleLanes: boolean) {
+  let configs = RIGHT_EDGE_ONLY_PATHS.has(pathname)
+    ? DRIFTER_CONFIGS.filter((config) => config.side === "right")
+    : DRIFTER_CONFIGS;
+
+  if (hideMiddleLanes) {
+    configs = configs.filter((config) => config.laneIndex !== 1);
   }
 
-  return DRIFTER_CONFIGS;
+  return configs;
+}
+
+function getDrifterIndex(config: DrifterConfig) {
+  return DRIFTER_CONFIGS.findIndex(
+    (entry) => entry.side === config.side && entry.laneIndex === config.laneIndex,
+  );
 }
 
 export function AmbientCursors() {
   const { cursors, ready } = useAmbientCursors();
   const pathname = usePathname();
+  const isCompactViewport = useCompactViewport();
   const layerClass = pathname === "/work" ? "z-20" : "z-40";
-  const configs = getDrifterConfigs(pathname);
+  const configs = getDrifterConfigs(pathname, isCompactViewport);
 
   if (!ready) return null;
 
   return (
     <div className={`pointer-events-none fixed inset-0 overflow-visible ${layerClass}`}>
-      {cursors.slice(0, configs.length).map((cursor, index) => (
-        <AmbientCursorDrifter
-          key={cursor.name}
-          color={cursor.color}
-          name={cursor.name}
-          config={configs[index]}
-        />
-      ))}
+      {configs.map((config) => {
+        const cursor = cursors[getDrifterIndex(config)];
+        if (!cursor) return null;
+
+        return (
+          <AmbientCursorDrifter
+            key={`${config.side}-${config.laneIndex}`}
+            color={cursor.color}
+            name={cursor.name}
+            config={config}
+          />
+        );
+      })}
     </div>
   );
 }
