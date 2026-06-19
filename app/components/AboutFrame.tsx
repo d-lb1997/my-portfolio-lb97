@@ -27,7 +27,7 @@ export function AboutFrame() {
       style={{ width: ABOUT_FRAME_WIDTH, minHeight: ABOUT_FRAME_HEIGHT }}
       aria-label="About"
     >
-      <div className="mx-auto grid w-full max-w-[68rem] grid-cols-1 items-center gap-8 pb-[clamp(20rem,52vh,34rem)] pt-[clamp(1.5rem,5vh,2.5rem)] text-center sm:gap-10 sm:pt-10 lg:mx-0 lg:items-start lg:gap-x-20 lg:gap-y-0 lg:pb-[clamp(22rem,54vh,34rem)] lg:pt-14 lg:text-left lg:-ml-12 xl:-ml-16 xl:gap-x-24">
+      <div className="mx-auto grid w-full max-w-[68rem] grid-cols-1 items-center gap-8 pb-[clamp(20rem,52vh,34rem)] pt-[clamp(1.5rem,5vh,2.5rem)] text-center sm:gap-10 sm:pt-10 lg:mx-0 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-start lg:gap-x-20 lg:gap-y-0 lg:pb-[clamp(22rem,54vh,34rem)] lg:pt-14 lg:text-left lg:-ml-12 xl:-ml-16 xl:gap-x-24">
         <div className="flex w-full max-w-[min(92vw,28rem)] flex-col items-center self-center overflow-visible sm:max-w-[30rem] lg:max-w-none lg:items-start lg:self-start lg:-ml-[120px]">
           <HeroText
             headline="About me"
