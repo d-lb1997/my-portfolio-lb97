@@ -359,7 +359,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   const onPanStart = useCallback(
     (event: React.MouseEvent) => {
-      if (event.button !== 0 || isNavigating) return;
+      if (!event.isTrusted || event.button !== 0 || isNavigating) return;
       const target = event.target as HTMLElement;
       if (target.closest("a, button, input, textarea, [data-no-pan]")) return;
 

@@ -54,6 +54,51 @@ async function tryPlay(audio: HTMLAudioElement, session: AudioSession) {
   }
 }
 
+function simulateCanvasInteractionUnlock() {
+  const audio = getAudioElement();
+  if (!audio) return;
+
+  const session = getSession();
+  if (session.finished) return;
+
+  const centerX = Math.round(window.innerWidth / 2);
+  const centerY = Math.round(window.innerHeight / 2);
+  const target = document.elementFromPoint(centerX, centerY) ?? document.body;
+
+  const pointerInit: PointerEventInit = {
+    bubbles: true,
+    cancelable: true,
+    composed: true,
+    clientX: centerX,
+    clientY: centerY,
+    pointerId: 1,
+    pointerType: "mouse",
+    isPrimary: true,
+    button: 0,
+    buttons: 1,
+  };
+
+  target.dispatchEvent(new PointerEvent("pointerdown", pointerInit));
+  target.dispatchEvent(
+    new PointerEvent("pointerup", { ...pointerInit, buttons: 0 }),
+  );
+  target.dispatchEvent(
+    new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      clientX: centerX,
+      clientY: centerY,
+      button: 0,
+      buttons: 0,
+    }),
+  );
+
+  audio.muted = false;
+  audio.volume = HOME_AUDIO_VOLUME;
+  void tryPlay(audio, session);
+}
+
 export function bootstrapPortfolioAudio() {
   if (typeof window === "undefined") return;
 
@@ -103,7 +148,10 @@ export function bootstrapPortfolioAudio() {
 
   void tryPlay(audio, session);
 
+  const unlockTimer = window.setTimeout(simulateCanvasInteractionUnlock, 1);
+
   window.__portfolioAudioCleanup = () => {
+    window.clearTimeout(unlockTimer);
     for (const event of INTERACTION_EVENTS) {
       document.removeEventListener(event, onInteraction, { capture: true });
     }
