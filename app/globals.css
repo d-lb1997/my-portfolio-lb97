@@ -302,10 +302,14 @@ body {
   );
 }
 
-.mobile-menu-overlay {
+.mobile-menu-blur {
+  backdrop-filter: blur(48px) saturate(125%);
+  -webkit-backdrop-filter: blur(48px) saturate(125%);
+  transform: translateZ(0);
+}
+
+.mobile-menu-tint {
   background: rgba(0, 0, 0, 0.68);
-  backdrop-filter: blur(42px) saturate(125%);
-  -webkit-backdrop-filter: blur(42px) saturate(125%);
 }
 
 .work-nav {

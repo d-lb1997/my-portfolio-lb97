@@ -182,21 +182,27 @@ export function Navbar() {
 
       <AnimatePresence>
         {menuOpen ? (
-          <motion.div
+          <div
             id="mobile-site-menu"
-            className="mobile-menu-overlay fixed inset-0 z-[90] flex flex-col lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: MENU_EASE }}
+            className="fixed inset-0 z-[90] flex flex-col lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
           >
+            <div className="mobile-menu-blur absolute inset-0" aria-hidden="true" />
+            <motion.div
+              className="mobile-menu-tint absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: MENU_EASE }}
+              aria-hidden="true"
+            />
+
             <button
               type="button"
               aria-label="Close menu"
-              className="absolute inset-0 cursor-pointer border-none bg-transparent"
+              className="absolute inset-0 z-[1] cursor-pointer border-none bg-transparent"
               onClick={() => setMenuOpen(false)}
             />
 
@@ -234,7 +240,7 @@ export function Navbar() {
             >
               <ThemeToggleButton showLabel variant="overlay" />
             </motion.div>
-          </motion.div>
+          </div>
         ) : null}
       </AnimatePresence>
     </>
