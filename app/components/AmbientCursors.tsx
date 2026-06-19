@@ -18,6 +18,7 @@ type DrifterConfig = {
 const LANES_PER_SIDE = 3;
 const CURSOR_BLOCK_HEIGHT = 76;
 const COMPACT_VIEWPORT_MAX_WIDTH = 1023;
+const COMPACT_BOTTOM_LANE_OFFSET = 72;
 
 const DRIFTER_CONFIGS: DrifterConfig[] = [
   { side: "left", laneIndex: 0, baseSpeed: 0.014, pauseMin: 900, pauseMax: 2400 },
@@ -50,18 +51,26 @@ function getEdgeBounds(side: Side, viewportW: number) {
   };
 }
 
-function getLaneBounds(laneIndex: number, viewportH: number) {
+function getLaneBounds(laneIndex: number, viewportH: number, isCompact = false) {
   const marginY = 96;
   const gap = 18;
+  const bottomLaneOffset =
+    isCompact && laneIndex === 2 ? COMPACT_BOTTOM_LANE_OFFSET : 0;
   const usableH = viewportH - marginY * 2;
   const laneHeight = usableH / LANES_PER_SIDE;
-  const minY = marginY + laneIndex * laneHeight + gap;
-  const maxY = marginY + (laneIndex + 1) * laneHeight - gap - CURSOR_BLOCK_HEIGHT;
+  const minY = marginY + laneIndex * laneHeight + gap + bottomLaneOffset;
+  const maxY =
+    marginY +
+    (laneIndex + 1) * laneHeight -
+    gap -
+    CURSOR_BLOCK_HEIGHT +
+    bottomLaneOffset;
+  const clampedMaxY = Math.min(maxY, viewportH - 24 - CURSOR_BLOCK_HEIGHT);
 
   return {
     minY,
-    maxY: Math.max(minY, maxY),
-    centerY: minY + (Math.max(minY, maxY) - minY) / 2,
+    maxY: Math.max(minY, clampedMaxY),
+    centerY: minY + (Math.max(minY, clampedMaxY) - minY) / 2,
   };
 }
 
@@ -71,9 +80,10 @@ function pickTarget(
   viewportW: number,
   viewportH: number,
   currentY: number,
+  isCompact = false,
 ) {
   const { minX, maxX } = getEdgeBounds(side, viewportW);
-  const lane = getLaneBounds(laneIndex, viewportH);
+  const lane = getLaneBounds(laneIndex, viewportH, isCompact);
   const maxVerticalStep = Math.min(120, (lane.maxY - lane.minY) * 0.45);
 
   let y = randomBetween(lane.minY, lane.maxY);
@@ -91,10 +101,12 @@ function AmbientCursorDrifter({
   color,
   name,
   config,
+  isCompactViewport,
 }: {
   color: string;
   name: string;
   config: DrifterConfig;
+  isCompactViewport: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: 0, y: 0 });
@@ -107,7 +119,7 @@ function AmbientCursorDrifter({
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
       const { minX, maxX } = getEdgeBounds(config.side, viewportW);
-      const lane = getLaneBounds(config.laneIndex, viewportH);
+      const lane = getLaneBounds(config.laneIndex, viewportH, isCompactViewport);
 
       posRef.current = {
         x: randomBetween(minX, maxX),
@@ -123,6 +135,7 @@ function AmbientCursorDrifter({
         viewportW,
         viewportH,
         posRef.current.y,
+        isCompactViewport,
       );
 
       if (rootRef.current) {
@@ -140,7 +153,7 @@ function AmbientCursorDrifter({
 
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
-      const lane = getLaneBounds(config.laneIndex, viewportH);
+      const lane = getLaneBounds(config.laneIndex, viewportH, isCompactViewport);
       const pos = posRef.current;
       const target = targetRef.current;
 
@@ -156,6 +169,7 @@ function AmbientCursorDrifter({
           viewportW,
           viewportH,
           pos.y,
+          isCompactViewport,
         );
       } else {
         const ease = clamp(distance / 320, 0.35, 1);
@@ -178,7 +192,7 @@ function AmbientCursorDrifter({
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
       const { minX, maxX } = getEdgeBounds(config.side, viewportW);
-      const lane = getLaneBounds(config.laneIndex, viewportH);
+      const lane = getLaneBounds(config.laneIndex, viewportH, isCompactViewport);
 
       posRef.current = {
         x: clamp(posRef.current.x, minX, maxX),
@@ -190,6 +204,7 @@ function AmbientCursorDrifter({
         viewportW,
         viewportH,
         posRef.current.y,
+        isCompactViewport,
       );
 
       if (rootRef.current) {
@@ -204,7 +219,7 @@ function AmbientCursorDrifter({
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", handleResize);
     };
-  }, [config]);
+  }, [config, isCompactViewport]);
 
   return (
     <div
@@ -275,6 +290,7 @@ export function AmbientCursors() {
             color={cursor.color}
             name={cursor.name}
             config={config}
+            isCompactViewport={isCompactViewport}
           />
         );
       })}

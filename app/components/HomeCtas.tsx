@@ -19,12 +19,12 @@ export function HomeCtas() {
 
   return (
     <div
-      className="flex flex-wrap items-center justify-center gap-3"
+      className="flex flex-wrap items-center justify-center gap-3 max-lg:w-full max-lg:flex-col max-lg:gap-4"
       data-no-pan
     >
       <button
         type="button"
-        className="home-cta-primary cursor-accent-gradient"
+        className="home-cta-primary cursor-accent-gradient max-lg:w-full max-lg:px-8 max-lg:py-4 max-lg:text-center max-lg:text-[1.0625rem]"
         style={gradientStyle}
         onClick={() => navigateToPage("/work")}
         disabled={isNavigating}
@@ -33,10 +33,13 @@ export function HomeCtas() {
         <span className="font-bold">my work</span>
       </button>
 
-      <div className="home-cta-secondary cursor-accent-gradient" style={gradientStyle}>
+      <div
+        className="home-cta-secondary cursor-accent-gradient max-lg:w-full"
+        style={gradientStyle}
+      >
         <button
           type="button"
-          className="home-cta-secondary-inner"
+          className="home-cta-secondary-inner max-lg:w-full max-lg:px-8 max-lg:py-4 max-lg:text-center max-lg:text-[1.0625rem]"
           onClick={() => navigateToPage("/about")}
           disabled={isNavigating}
         >
