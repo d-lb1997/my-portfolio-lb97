@@ -36,8 +36,8 @@ export const CONTACT_HERO_PHRASES = [
 ];
 
 export const ABOUT_HERO_PHRASES = [
-  "the human behind the pixels.",
-  "the face behind the Figma file.",
+  "the human behind\nthe pixels.",
+  "the face behind\nthe Figma file.",
   "curious by default.",
 ];
 
@@ -107,7 +107,12 @@ export function HeroText({
                   }`
             }`}
           >
-            {phrases[index]}
+            {phrases[index].split("\n").map((line, lineIndex, lines) => (
+              <span key={`${index}-${lineIndex}`}>
+                {line}
+                {lineIndex < lines.length - 1 ? <br /> : null}
+              </span>
+            ))}
           </motion.span>
         </AnimatePresence>
       </div>
