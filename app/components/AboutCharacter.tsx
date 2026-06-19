@@ -28,6 +28,7 @@ export function AboutCharacter() {
           width={872}
           height={1024}
           priority
+          unoptimized
           className="h-[clamp(400px,60vh,840px)] w-auto max-w-[min(98vw,960px)] select-none object-contain object-bottom"
           draggable={false}
         />

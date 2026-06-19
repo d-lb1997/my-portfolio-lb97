@@ -2,7 +2,6 @@
 
 import { WorkFrame } from "@/app/components/WorkFrame";
 import { WorkNavOverlay } from "@/app/components/WorkNavOverlay";
-import { WorkOverviewOverlay } from "@/app/components/WorkOverviewOverlay";
 import { WorkProjectOverlay } from "@/app/components/WorkProjectOverlay";
 import { PageCanvas } from "@/app/components/PageCanvas";
 import { WorkPageProvider } from "@/lib/work-page-context";
@@ -14,7 +13,6 @@ export default function WorkPage() {
         <WorkFrame />
       </PageCanvas>
       <WorkNavOverlay />
-      <WorkOverviewOverlay />
       <WorkProjectOverlay />
     </WorkPageProvider>
   );
