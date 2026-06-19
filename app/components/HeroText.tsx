@@ -77,19 +77,19 @@ export function HeroText({
   }, [phrases.length]);
 
   const rootClassName = isResponsive
-    ? "items-center text-center lg:items-start lg:text-left"
+    ? "items-center text-center xl:items-start xl:text-left"
     : isLeft
       ? "items-start text-left"
       : "items-center text-center";
 
   const subtitleContainerClassNameResolved = isResponsive
-    ? "min-h-[4.75rem] sm:min-h-[5.25rem] lg:min-h-0 lg:max-w-[20rem] sm:max-w-[22rem] lg:max-w-[21rem]"
+    ? "min-h-[4.75rem] sm:min-h-[5.25rem] xl:min-h-0 xl:max-w-[20rem] sm:max-w-[22rem] xl:max-w-[21rem]"
     : wrapSubtitle && isLeft
       ? "max-w-[20rem] sm:max-w-[22rem] lg:max-w-[21rem]"
       : subtitleContainerClassName ?? "min-h-[1.5em]";
 
   const subtitleClassName = isResponsive
-    ? "absolute top-0 left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0 lg:relative lg:left-auto lg:block lg:w-full lg:max-w-none lg:translate-x-0 lg:text-left"
+    ? "absolute top-0 left-1/2 max-w-[min(92vw,30rem)] -translate-x-1/2 px-2 text-center sm:max-w-[32rem] sm:px-0 xl:relative xl:left-auto xl:block xl:w-full xl:max-w-none xl:translate-x-0 xl:text-left"
     : wrapSubtitle && isLeft
       ? "relative block w-full text-left"
       : `absolute top-0 ${

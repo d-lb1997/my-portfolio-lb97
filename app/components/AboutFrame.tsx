@@ -23,12 +23,12 @@ export function AboutFrame() {
 
   return (
     <section
-      className="relative flex flex-col overflow-visible px-4 sm:px-6 lg:pl-0 lg:pr-8"
+      className="relative flex flex-col overflow-visible px-4 sm:px-6 xl:pl-0 xl:pr-8"
       style={{ width: ABOUT_FRAME_WIDTH, minHeight: ABOUT_FRAME_HEIGHT }}
       aria-label="About"
     >
-      <div className="mx-auto grid w-full max-w-[68rem] grid-cols-1 items-center gap-8 pb-[clamp(20rem,52vh,34rem)] pt-[clamp(1.5rem,5vh,2.5rem)] text-center sm:gap-10 sm:pt-10 lg:mx-0 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-start lg:gap-x-20 lg:gap-y-0 lg:pb-[clamp(22rem,54vh,34rem)] lg:pt-14 lg:text-left lg:-ml-12 xl:-ml-16 xl:gap-x-24">
-        <div className="flex w-full max-w-[min(92vw,28rem)] flex-col items-center self-center overflow-visible sm:max-w-[30rem] lg:max-w-none lg:items-start lg:self-start lg:-ml-[120px]">
+      <div className="mx-auto grid w-full max-w-[min(100%,42rem)] grid-cols-1 items-center justify-items-center gap-8 pb-[clamp(22rem,56vh,36rem)] pt-8 text-center sm:gap-10 sm:pt-10 xl:mx-0 xl:max-w-[68rem] xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:items-start xl:justify-items-stretch xl:gap-x-20 xl:gap-y-0 xl:pb-[clamp(22rem,54vh,34rem)] xl:pt-14 xl:text-left xl:-ml-12 2xl:-ml-16 2xl:gap-x-24">
+        <div className="flex w-full max-w-[min(92vw,30rem)] flex-col items-center self-center overflow-visible sm:max-w-[32rem] xl:max-w-none xl:items-start xl:self-start xl:-ml-[120px]">
           <HeroText
             headline="About me"
             phrases={ABOUT_HERO_PHRASES}
@@ -36,7 +36,7 @@ export function AboutFrame() {
           />
         </div>
 
-        <div className="mx-auto w-full max-w-[min(92vw,28rem)] self-center text-center sm:max-w-[30rem] lg:mx-0 lg:max-w-[30rem] lg:self-start lg:text-left lg:-ml-10 xl:-ml-16">
+        <div className="flex w-full max-w-[min(92vw,30rem)] flex-col items-center self-center text-center sm:max-w-[32rem] xl:max-w-[30rem] xl:items-start xl:self-start xl:text-left xl:-ml-10 2xl:-ml-16">
           <p className="text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
             Hey there, I am Lukas, an experience designer focused on human-centered
             products. I work across research, visual design, and interaction to
@@ -49,7 +49,7 @@ export function AboutFrame() {
 
           <button
             type="button"
-            className="home-cta-primary cursor-accent-gradient mx-auto mt-8 lg:mx-0"
+            className="home-cta-primary cursor-accent-gradient mt-8 xl:mx-0"
             style={gradientStyle}
             onClick={() => navigateToPage("/contact")}
             disabled={isNavigating}
