@@ -14,7 +14,7 @@ export function AboutCharacter() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-[40] flex justify-center"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] flex justify-center"
       aria-hidden="true"
     >
       <motion.div

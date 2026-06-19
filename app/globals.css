@@ -302,10 +302,10 @@ body {
   );
 }
 
-.mobile-menu-backdrop {
-  background: color-mix(in srgb, var(--canvas-bg) 72%, transparent);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+.mobile-menu-overlay {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
 }
 
 .work-nav {

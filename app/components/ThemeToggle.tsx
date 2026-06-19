@@ -5,27 +5,38 @@ import { useTheme } from "@/lib/theme-context";
 type ThemeToggleButtonProps = {
   className?: string;
   showLabel?: boolean;
+  variant?: "default" | "overlay";
 };
 
 export function ThemeToggleButton({
   className = "",
   showLabel = false,
+  variant = "default",
 }: ThemeToggleButtonProps) {
   const { theme, toggleTheme, ready } = useTheme();
 
   if (!ready) return null;
 
   const isDark = theme === "dark";
+  const isOverlay = variant === "overlay";
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className={`flex items-center gap-3 border border-border-subtle bg-toggle-bg text-toggle-fg shadow-md transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer ${className}`}
+      className={`flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer ${
+        isOverlay
+          ? "border-none bg-transparent text-white shadow-none"
+          : "border border-border-subtle bg-toggle-bg text-toggle-fg shadow-md"
+      } ${className}`}
       data-no-pan
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center">
+      <span
+        className={`flex shrink-0 items-center justify-center ${
+          isOverlay ? "h-5 w-5" : "h-11 w-11"
+        }`}
+      >
         {isDark ? (
           <svg
             width="18"
@@ -55,7 +66,13 @@ export function ThemeToggleButton({
         )}
       </span>
       {showLabel ? (
-        <span className="text-[14px] font-medium uppercase tracking-[0.08em]">
+        <span
+          className={`font-bold uppercase tracking-[0.06em] ${
+            isOverlay
+              ? "text-[clamp(1rem,4vw,1.125rem)]"
+              : "text-[14px] font-medium tracking-[0.08em]"
+          }`}
+        >
           {isDark ? "Light mode" : "Dark mode"}
         </span>
       ) : null}
