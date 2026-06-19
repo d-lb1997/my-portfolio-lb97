@@ -52,8 +52,9 @@ const HERO_SUBTITLE_CLASS = `${HERO_TEXT_CLASS} leading-[1.2]`;
 type HeroTextProps = {
   headline?: string;
   phrases?: string[];
-  align?: "center" | "left";
+  align?: "center" | "left" | "responsive";
   wrapSubtitle?: boolean;
+  subtitleContainerClassName?: string;
 };
 
 export function HeroText({
@@ -61,8 +62,10 @@ export function HeroText({
   phrases = HOME_HERO_PHRASES,
   align = "center",
   wrapSubtitle = false,
+  subtitleContainerClassName,
 }: HeroTextProps) {
   const [index, setIndex] = useState(0);
+  const isResponsive = align === "responsive";
   const isLeft = align === "left";
 
   useEffect(() => {
@@ -73,39 +76,47 @@ export function HeroText({
     return () => clearInterval(timer);
   }, [phrases.length]);
 
+  const rootClassName = isResponsive
+    ? "items-center text-center lg:items-start lg:text-left"
+    : isLeft
+      ? "items-start text-left"
+      : "items-center text-center";
+
+  const subtitleContainerClassNameResolved = isResponsive
+    ? "min-h-[4.75rem] sm:min-h-[5.25rem] lg:min-h-0 lg:max-w-[20rem] sm:max-w-[22rem] lg:max-w-[21rem]"
+    : wrapSubtitle && isLeft
+      ? "max-w-[20rem] sm:max-w-[22rem] lg:max-w-[21rem]"
+      : subtitleContainerClassName ?? "min-h-[1.5em]";
+
+  const subtitleClassName = isResponsive
+    ? "absolute top-0 left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0 lg:relative lg:left-auto lg:block lg:w-full lg:max-w-none lg:translate-x-0 lg:text-left"
+    : wrapSubtitle && isLeft
+      ? "relative block w-full text-left"
+      : `absolute top-0 ${
+          isLeft
+            ? "left-0 text-left sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none"
+            : "left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0"
+        }`;
+
   return (
-    <div
-      className={`flex w-full flex-col overflow-visible ${
-        isLeft ? "items-start text-left" : "items-center text-center"
-      }`}
-    >
+    <div className={`flex w-full flex-col overflow-visible ${rootClassName}`}>
       <span className={`${HERO_TEXT_CLASS} font-black text-text-primary`}>
         {headline}
       </span>
 
       <div
-        className={`relative mt-0 w-full overflow-visible pb-3 sm:pb-4 ${
-          wrapSubtitle && isLeft
-            ? "max-w-[20rem] sm:max-w-[22rem] lg:max-w-[21rem]"
-            : "min-h-[1.5em]"
-        }`}
+        className={`relative mt-0 w-full overflow-visible pb-3 sm:pb-4 ${subtitleContainerClassNameResolved}`}
       >
-        <AnimatePresence mode={wrapSubtitle ? "wait" : "sync"}>
+        <AnimatePresence
+          mode={isResponsive || wrapSubtitle ? "wait" : "sync"}
+        >
           <motion.span
             key={index}
             initial={{ opacity: 0, filter: "blur(12px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={{ opacity: 0, filter: "blur(12px)", y: -20 }}
             transition={TRANSITION}
-            className={`hero-gradient-text ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal ${
-              wrapSubtitle && isLeft
-                ? "relative block w-full text-left"
-                : `absolute top-0 ${
-                    isLeft
-                      ? "left-0 text-left sm:max-w-[92vw] sm:whitespace-nowrap lg:max-w-none"
-                      : "left-1/2 max-w-[92vw] -translate-x-1/2 px-2 text-center sm:max-w-none sm:px-0"
-                  }`
-            }`}
+            className={`hero-gradient-text ${HERO_SUBTITLE_CLASS} font-light italic whitespace-normal ${subtitleClassName}`}
           >
             {phrases[index].split("\n").map((line, lineIndex, lines) => (
               <span key={`${index}-${lineIndex}`}>

@@ -6,6 +6,7 @@ export type PageFitConfig = {
   padding?: number;
   mobilePadding?: number;
   mobileBreakpoint?: number;
+  mobileHeight?: number;
 };
 
 export type PageConfig = {
@@ -18,6 +19,7 @@ export type PageConfig = {
   focusX: number;
   focusY: number;
   focusOffsetY?: number;
+  mobileFocusOffsetY?: number;
   fitToViewport?: PageFitConfig;
   immerseFocusX: number;
   immerseFocusY: number;
@@ -44,8 +46,10 @@ export function computeFitZoom(
     padding = 0.85,
     mobilePadding,
     mobileBreakpoint = 1024,
+    mobileHeight,
   } = fit;
   const isMobile = containerWidth < mobileBreakpoint;
+  const fitHeight = isMobile && mobileHeight ? mobileHeight : height;
 
   let zoom: number;
 
@@ -55,7 +59,7 @@ export function computeFitZoom(
 
     zoom = Math.min(
       (containerWidth * fitPadding) / contentWidth,
-      (containerHeight * fitPadding) / height,
+      (containerHeight * fitPadding) / fitHeight,
     );
   } else {
     zoom =
@@ -63,6 +67,19 @@ export function computeFitZoom(
   }
 
   return Math.min(MAX_FIT_ZOOM, Math.max(MIN_FIT_ZOOM, zoom));
+}
+
+export function resolvePageFocusOffset(
+  page: PageConfig,
+  containerWidth: number,
+): number {
+  const breakpoint = page.fitToViewport?.mobileBreakpoint ?? 1024;
+
+  if (containerWidth < breakpoint && page.mobileFocusOffsetY !== undefined) {
+    return page.mobileFocusOffsetY;
+  }
+
+  return page.focusOffsetY ?? 0;
 }
 
 export const HOME_FRAME_WIDTH = 1200;
@@ -114,11 +131,13 @@ export const PAGES: Record<PageId, PageConfig> = {
     focusX: 1200 + ABOUT_FRAME_WIDTH / 2,
     focusY: 1000 + ABOUT_FRAME_HEIGHT / 2,
     focusOffsetY: -48,
+    mobileFocusOffsetY: -250,
     fitToViewport: {
       width: ABOUT_FRAME_WIDTH,
       height: ABOUT_FRAME_HEIGHT,
+      mobileHeight: 540,
       padding: 0.88,
-      mobilePadding: 0.92,
+      mobilePadding: 0.9,
       mobileBreakpoint: 1024,
     },
     immerseFocusX: 1200 + ABOUT_FRAME_WIDTH / 2,

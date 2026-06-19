@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PAGES, computeFitZoom, type PageConfig, type PageId } from "./pages";
+import { PAGES, computeFitZoom, resolvePageFocusOffset, type PageConfig, type PageId } from "./pages";
 
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 5;
@@ -91,7 +91,7 @@ function resolvePageView(container: HTMLDivElement, page: PageConfig): ViewTarge
     );
   }
 
-  const focusY = page.focusY + (page.focusOffsetY ?? 0);
+  const focusY = page.focusY + resolvePageFocusOffset(page, container.clientWidth);
 
   return centerOnPoint(container, page.focusX, focusY, zoom);
 }
@@ -198,7 +198,8 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         sessionStorage.removeItem(IMMERSE_SESSION_KEY);
 
         const target = resolvePageView(container, page);
-        const focusY = page.focusY + (page.focusOffsetY ?? 0);
+        const focusY =
+          page.focusY + resolvePageFocusOffset(page, container.clientWidth);
 
         if (entering) {
           const immersed = centerOnPoint(
