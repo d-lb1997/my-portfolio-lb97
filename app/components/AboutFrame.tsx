@@ -27,7 +27,7 @@ export function AboutFrame() {
       style={{ width: ABOUT_FRAME_WIDTH, minHeight: ABOUT_FRAME_HEIGHT }}
       aria-label="About"
     >
-      <div className="mx-auto grid w-full max-w-[min(100%,42rem)] -translate-y-28 grid-cols-1 items-start justify-items-center gap-6 pb-[clamp(24rem,58vh,36rem)] pt-2 text-center sm:-translate-y-32 sm:gap-8 sm:pt-3 xl:mx-0 xl:max-w-[68rem] xl:translate-y-0 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:justify-items-stretch xl:gap-x-20 xl:gap-y-0 xl:pb-[clamp(22rem,54vh,34rem)] xl:pt-14 xl:text-left xl:-ml-12 2xl:-ml-16 2xl:gap-x-24">
+      <div className="mx-auto grid w-full max-w-[min(100%,42rem)] -translate-y-48 grid-cols-1 items-start justify-items-center gap-5 pb-[clamp(26rem,60vh,38rem)] pt-0 text-center sm:-translate-y-56 sm:gap-6 xl:mx-0 xl:max-w-[68rem] xl:translate-y-0 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:justify-items-stretch xl:gap-x-20 xl:gap-y-0 xl:pb-[clamp(22rem,54vh,34rem)] xl:pt-14 xl:text-left xl:-ml-12 2xl:-ml-16 2xl:gap-x-24">
         <div className="flex w-full max-w-[min(92vw,30rem)] flex-col items-center self-center overflow-visible sm:max-w-[32rem] xl:max-w-none xl:items-start xl:self-start xl:-ml-[120px]">
           <HeroText
             headline="About me"

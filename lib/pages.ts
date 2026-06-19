@@ -131,7 +131,7 @@ export const PAGES: Record<PageId, PageConfig> = {
     focusX: 1200 + ABOUT_FRAME_WIDTH / 2,
     focusY: 1000 + ABOUT_FRAME_HEIGHT / 2,
     focusOffsetY: -48,
-    mobileFocusOffsetY: -380,
+    mobileFocusOffsetY: -520,
     fitToViewport: {
       width: ABOUT_FRAME_WIDTH,
       height: ABOUT_FRAME_HEIGHT,
