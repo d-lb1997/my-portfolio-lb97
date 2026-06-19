@@ -39,13 +39,12 @@ export function AboutFrame() {
 
         <div className="max-w-[30rem] self-start text-left lg:-ml-10 xl:-ml-16">
           <p className="text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
-            Hi — I&apos;m Lukas, an experience designer focused on human-centered
+            Hey there, I am Lukas, an experience designer focused on human-centered
             products. I work across research, visual design, and interaction to
             make interfaces feel natural and useful.
           </p>
           <p className="mt-4 text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
-            This isn&apos;t a resumé — it&apos;s me talking to you like a human. I
-            think in systems, in space, in structure. And I care deeply about the
+            I think in systems, in space, in structure. And I care deeply about the
             people on the other side of the screen.
           </p>
 
