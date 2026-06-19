@@ -77,17 +77,11 @@ function MobileMenuNavLink({
       onClick={onClick}
       disabled={disabled}
       aria-current={isActive ? "page" : undefined}
-      className="border-none bg-transparent text-[clamp(1.75rem,7vw,2.25rem)] font-black uppercase tracking-[0.03em] text-white transition-opacity duration-200 disabled:cursor-wait"
-      style={
+      className={`border-none bg-transparent text-[clamp(1.75rem,7vw,2.25rem)] font-black uppercase tracking-[0.03em] text-text-primary transition-opacity duration-200 disabled:cursor-wait ${
         isActive
-          ? {
-              textDecoration: "underline",
-              textDecorationColor: "#ffffff",
-              textDecorationThickness: "3px",
-              textUnderlineOffset: "0.35em",
-            }
-          : undefined
-      }
+          ? "underline decoration-text-primary decoration-[3px] underline-offset-[0.35em]"
+          : ""
+      }`}
       data-no-pan
     >
       {label}

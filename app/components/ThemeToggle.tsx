@@ -27,7 +27,7 @@ export function ThemeToggleButton({
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className={`flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer ${
         isOverlay
-          ? "border-none bg-transparent text-white shadow-none"
+          ? "border-none bg-transparent text-text-primary shadow-none"
           : "border border-border-subtle bg-toggle-bg text-toggle-fg shadow-md"
       } ${className}`}
       data-no-pan
