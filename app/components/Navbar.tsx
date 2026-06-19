@@ -77,9 +77,7 @@ function MobileMenuNavLink({
       onClick={onClick}
       disabled={disabled}
       aria-current={isActive ? "page" : undefined}
-      className={`border-none bg-transparent text-[clamp(1.625rem,6.5vw,2.125rem)] font-bold uppercase tracking-[0.04em] text-white transition-opacity duration-200 disabled:cursor-wait ${
-        isActive ? "opacity-100" : "opacity-45"
-      }`}
+      className="border-none bg-transparent text-[clamp(1.75rem,7vw,2.25rem)] font-black uppercase tracking-[0.03em] text-white transition-opacity duration-200 disabled:cursor-wait"
       style={
         isActive
           ? {
@@ -202,8 +200,8 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
             />
 
-            <nav className="pointer-events-none relative z-10 flex flex-1 flex-col items-center justify-center px-8">
-              <ul className="pointer-events-auto flex flex-col items-center gap-10 sm:gap-12">
+            <nav className="pointer-events-none relative z-10 flex flex-1 flex-col items-center justify-start px-8 pt-[16vh] sm:pt-[18vh]">
+              <ul className="pointer-events-auto flex flex-col items-center gap-12 sm:gap-14">
                 {NAV_ITEMS.map((item, index) => (
                   <motion.li
                     key={item.id}
@@ -228,7 +226,7 @@ export function Navbar() {
             </nav>
 
             <motion.div
-              className="pointer-events-auto relative z-10 flex justify-center px-8 pb-12 pt-6"
+              className="pointer-events-auto relative z-10 flex justify-center px-8 pb-14 pt-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}

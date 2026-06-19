@@ -67,9 +67,9 @@ export function ThemeToggleButton({
       </span>
       {showLabel ? (
         <span
-          className={`font-bold uppercase tracking-[0.06em] ${
+          className={`font-black uppercase tracking-[0.05em] ${
             isOverlay
-              ? "text-[clamp(1rem,4vw,1.125rem)]"
+              ? "text-[clamp(1rem,4.2vw,1.125rem)]"
               : "text-[14px] font-medium tracking-[0.08em]"
           }`}
         >
