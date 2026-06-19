@@ -19,12 +19,12 @@ export function HomeCtas() {
 
   return (
     <div
-      className="flex flex-wrap items-center justify-center gap-3 max-lg:w-full max-lg:flex-col max-lg:gap-4"
+      className="flex flex-wrap items-center justify-center gap-3 max-sm:w-full max-sm:flex-col max-sm:gap-4"
       data-no-pan
     >
       <button
         type="button"
-        className="home-cta-primary cursor-accent-gradient max-lg:w-full max-lg:px-8 max-lg:py-4 max-lg:text-center max-lg:text-[1.0625rem]"
+        className="home-cta-primary cursor-accent-gradient max-sm:w-full max-sm:px-8 max-sm:py-4 max-sm:text-center max-sm:text-[1.0625rem]"
         style={gradientStyle}
         onClick={() => navigateToPage("/work")}
         disabled={isNavigating}
@@ -34,12 +34,12 @@ export function HomeCtas() {
       </button>
 
       <div
-        className="home-cta-secondary cursor-accent-gradient max-lg:w-full"
+        className="home-cta-secondary cursor-accent-gradient max-sm:w-full"
         style={gradientStyle}
       >
         <button
           type="button"
-          className="home-cta-secondary-inner max-lg:w-full max-lg:px-8 max-lg:py-4 max-lg:text-center max-lg:text-[1.0625rem]"
+          className="home-cta-secondary-inner max-sm:w-full max-sm:px-8 max-sm:py-4 max-sm:text-center max-sm:text-[1.0625rem]"
           onClick={() => navigateToPage("/about")}
           disabled={isNavigating}
         >

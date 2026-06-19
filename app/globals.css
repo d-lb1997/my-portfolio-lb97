@@ -522,7 +522,31 @@ body {
   background: var(--work-nav-scrollbar);
 }
 
+.home-soccer-ball-embed {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 420px);
+  z-index: 0;
+  width: clamp(128px, 16vw, 220px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  opacity: 0.88;
+}
+
+.home-soccer-ball-embed-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .home-soccer-ball-embed {
+    opacity: 0.55;
+  }
+
   *,
   *::before,
   *::after {
