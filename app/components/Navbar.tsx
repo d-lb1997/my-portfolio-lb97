@@ -5,17 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useVisitorCursor } from "@/lib/cursor-context";
 import { useCanvas } from "@/lib/canvas-context";
-import { NAV_ITEMS, pathnameToPageId, type PageId } from "@/lib/pages";
+import { NAV_ITEMS, pathnameToPageId } from "@/lib/pages";
 import { ThemeToggleButton } from "./ThemeToggle";
 
 const MENU_EASE = [0.4, 0, 0.2, 1] as const;
-
-const MOBILE_MENU_LABELS: Record<PageId, string> = {
-  home: "Home",
-  about: "About me",
-  work: "Work",
-  contact: "Contact",
-};
 
 function NavLink({
   label,
@@ -53,35 +46,6 @@ function NavLink({
             }
           : undefined
       }
-      data-no-pan
-    >
-      {label}
-    </button>
-  );
-}
-
-function MobileMenuNavLink({
-  label,
-  isActive,
-  disabled,
-  onClick,
-}: {
-  label: string;
-  isActive: boolean;
-  disabled: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      aria-current={isActive ? "page" : undefined}
-      className={`border-none bg-transparent text-[clamp(1.75rem,7vw,2.25rem)] font-black uppercase tracking-[0.03em] text-white transition-opacity duration-200 disabled:cursor-wait ${
-        isActive
-          ? "underline decoration-white decoration-[3px] underline-offset-[0.35em]"
-          : ""
-      }`}
       data-no-pan
     >
       {label}
@@ -176,59 +140,67 @@ export function Navbar() {
 
       <AnimatePresence>
         {menuOpen ? (
-          <motion.div
-            id="mobile-site-menu"
-            className="mobile-menu-overlay fixed inset-0 z-[90] flex flex-col lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: MENU_EASE }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
-          >
-            <button
+          <>
+            <motion.button
               type="button"
               aria-label="Close menu"
-              className="absolute inset-0 cursor-pointer border-none bg-transparent"
+              className="mobile-menu-backdrop fixed inset-0 z-[90] bg-black/20 lg:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.28, ease: MENU_EASE }}
               onClick={() => setMenuOpen(false)}
             />
 
-            <nav className="pointer-events-none relative z-10 flex flex-1 flex-col items-center justify-start px-8 pt-[16vh] sm:pt-[18vh]">
-              <ul className="pointer-events-auto flex flex-col items-center gap-12 sm:gap-14">
+            <motion.nav
+              id="mobile-site-menu"
+              className="fixed top-0 right-0 z-[95] flex h-full w-[min(100%,19rem)] flex-col border-l border-border-subtle bg-surface-white/90 px-8 pb-10 pt-24 shadow-2xl backdrop-blur-2xl lg:hidden"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.34, ease: MENU_EASE }}
+              aria-label="Mobile navigation"
+            >
+              <ul className="flex flex-col gap-7">
                 {NAV_ITEMS.map((item, index) => (
                   <motion.li
                     key={item.id}
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 8 }}
                     transition={{
-                      duration: 0.3,
+                      duration: 0.28,
                       ease: MENU_EASE,
-                      delay: 0.05 + index * 0.05,
+                      delay: 0.04 + index * 0.04,
                     }}
                   >
-                    <MobileMenuNavLink
-                      label={MOBILE_MENU_LABELS[item.id]}
+                    <NavLink
+                      label={item.label}
                       isActive={activePageId === item.id}
+                      ready={ready}
+                      color={color}
                       disabled={isNavigating}
                       onClick={() => handleNavigate(item.href)}
+                      className="text-[16px]"
                     />
                   </motion.li>
                 ))}
               </ul>
-            </nav>
 
-            <motion.div
-              className="pointer-events-auto relative z-10 flex justify-center px-8 pb-14 pt-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.3, ease: MENU_EASE, delay: 0.2 }}
-            >
-              <ThemeToggleButton showLabel variant="overlay" />
-            </motion.div>
-          </motion.div>
+              <motion.div
+                className="mt-auto border-t border-border-subtle pt-8"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.28, ease: MENU_EASE, delay: 0.12 }}
+              >
+                <ThemeToggleButton
+                  showLabel
+                  className="w-full justify-start rounded-xl px-3 py-2"
+                />
+              </motion.div>
+            </motion.nav>
+          </>
         ) : null}
       </AnimatePresence>
     </>
