@@ -6,10 +6,17 @@ import {
   HOME_FRAME_HEIGHT,
   HOME_FRAME_WIDTH,
 } from "@/lib/pages";
+import dynamic from "next/dynamic";
 import { HeroText } from "./HeroText";
 import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
 import { HomeSoccerBallEmbed } from "./HomeSoccerBallEmbed";
+
+const HomeFloatingModels = dynamic(
+  () =>
+    import("./HomeFloatingModels").then((mod) => mod.HomeFloatingModels),
+  { ssr: false },
+);
 
 const BIO_SHOW_DELAY_MS = 6000;
 const BIO_ENTRANCE = { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const };
@@ -36,6 +43,7 @@ export function HomeFrame() {
       aria-label="Home"
     >
       <HomeSoccerBallEmbed />
+      <HomeFloatingModels />
 
       <div
         className="relative z-10 flex w-full max-w-[min(92vw,36rem)] flex-col items-center justify-center overflow-visible px-4 sm:max-w-none sm:px-10"

@@ -69,15 +69,6 @@ export const HOME_FRAME_WIDTH = 1200;
 export const HOME_FRAME_HEIGHT = 520;
 export const ABOUT_FRAME_WIDTH = 1200;
 export const ABOUT_FRAME_HEIGHT = 780;
-export const ABOUT_STORY_FRAME_WIDTH = 960;
-export const ABOUT_STORY_FRAME_HEIGHT = 680;
-export const ABOUT_STORY_FIT = {
-  width: ABOUT_STORY_FRAME_WIDTH,
-  height: ABOUT_STORY_FRAME_HEIGHT,
-  padding: 0.88,
-  mobilePadding: 0.92,
-  mobileBreakpoint: 1024,
-} satisfies PageFitConfig;
 export const CONTACT_FRAME_WIDTH = 1200;
 export const CONTACT_FRAME_HEIGHT = 580;
 export const WORK_FRAME_WIDTH = 1400;
