@@ -522,6 +522,76 @@ body {
   background: var(--work-nav-scrollbar);
 }
 
+.work-overview-panel {
+  pointer-events: none;
+}
+
+.work-overview-layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .work-overview-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 42%);
+    gap: 2rem;
+    align-items: stretch;
+  }
+}
+
+.work-overview-copy {
+  min-width: 0;
+}
+
+.work-overview-scene {
+  min-height: 18rem;
+  height: 100%;
+}
+
+@media (min-width: 1024px) {
+  .work-overview-scene {
+    min-height: 24rem;
+  }
+}
+
+.work-spline-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.work-spline-scene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.work-spline-loading {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--text-secondary) 8%, transparent);
+  animation: work-spline-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes work-spline-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
 .work-logo-marquee {
   position: relative;
   overflow: hidden;
