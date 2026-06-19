@@ -5,7 +5,7 @@ import { WorkNav } from "./WorkNav";
 
 export function WorkNavOverlay() {
   return (
-    <div className="pointer-events-none fixed inset-0 z-[80]">
+    <div className="pointer-events-none fixed inset-0 z-[80] hidden lg:block">
       <div
         className="pointer-events-auto fixed"
         style={{

@@ -13,9 +13,13 @@ import {
 } from "@/lib/cursor-gradient";
 import { ABOUT_HERO_PHRASES, HeroText } from "./HeroText";
 
-export function AboutFrame() {
+type AboutFrameProps = {
+  onOpenStory: () => void;
+};
+
+export function AboutFrame({ onOpenStory }: AboutFrameProps) {
   const { color } = useVisitorCursor();
-  const { navigateToPage, isNavigating } = useCanvas();
+  const { isNavigating } = useCanvas();
   const gradientStyle = useMemo(
     () => cursorChatGradientStyle(buildCursorChatGradient(color)),
     [color],
@@ -52,7 +56,7 @@ export function AboutFrame() {
             type="button"
             className="home-cta-primary cursor-accent-gradient mt-8"
             style={gradientStyle}
-            onClick={() => navigateToPage("/contact")}
+            onClick={onOpenStory}
             disabled={isNavigating}
             data-no-pan
           >

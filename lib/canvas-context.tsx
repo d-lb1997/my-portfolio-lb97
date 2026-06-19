@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PAGES, computeFitZoom, type PageConfig, type PageId } from "./pages";
+import { PAGES, computeFitZoom, type PageConfig, type PageFitConfig, type PageId } from "./pages";
 
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 5;
@@ -34,6 +34,7 @@ type CanvasContextValue = {
   recenterToFit: (pageId?: PageId) => void;
   navigateToPage: (href: string) => void;
   immerseNavigate: (href: string) => void;
+  immerseSwapView: (config: { fit: PageFitConfig; onSwap: () => void }) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onPanStart: (event: React.MouseEvent) => void;
   bindWheel: (element: HTMLDivElement) => () => void;
@@ -297,6 +298,48 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     [currentPage, immerseNavigate],
   );
 
+  const immerseSwapView = useCallback(
+    (config: { fit: PageFitConfig; onSwap: () => void }) => {
+      const container = containerRef.current;
+      const page = currentPage;
+      if (!container || !page || isNavigating) return;
+
+      setIsNavigating(true);
+      cancelAnimation();
+
+      if (wheelFrameRef.current) {
+        cancelAnimationFrame(wheelFrameRef.current);
+        wheelFrameRef.current = null;
+        wheelDeltaRef.current = 0;
+      }
+
+      const focusY = page.focusY + (page.focusOffsetY ?? 0);
+      const immerseTarget = centerOnPoint(
+        container,
+        page.immerseFocusX,
+        page.immerseFocusY,
+        IMMERSE_ZOOM,
+      );
+
+      animateTo(immerseTarget, IMMERSE_LEAVE_DURATION, easeInOutCubic, () => {
+        config.onSwap();
+
+        const zoom = computeFitZoom(
+          container.clientWidth,
+          container.clientHeight,
+          config.fit,
+          page.initialZoom,
+        );
+        const fitTarget = centerOnPoint(container, page.focusX, focusY, zoom);
+
+        animateTo(fitTarget, IMMERSE_ENTER_DURATION, easeOutCubic, () => {
+          setIsNavigating(false);
+        });
+      });
+    },
+    [animateTo, cancelAnimation, currentPage, isNavigating],
+  );
+
   const applyWheelZoom = useCallback(() => {
     wheelFrameRef.current = null;
 
@@ -410,6 +453,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         recenterToFit,
         navigateToPage,
         immerseNavigate,
+        immerseSwapView,
         containerRef,
         onPanStart,
         bindWheel,

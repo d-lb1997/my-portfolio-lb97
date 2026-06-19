@@ -522,6 +522,28 @@ body {
   background: var(--work-nav-scrollbar);
 }
 
+@media (max-width: 1023px) {
+  .work-compact-layout .work-nav {
+    width: 100%;
+    max-height: min(44vh, 440px);
+  }
+
+  .work-compact-layout .work-nav-body {
+    max-height: min(36vh, 360px);
+  }
+
+  .work-compact-layout .work-nav--collapsed {
+    max-height: none;
+  }
+
+  .work-compact-layout .work-nav--collapsed .work-nav-body {
+    max-height: 0;
+    flex: 0 0 auto;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 .home-soccer-ball-embed {
   position: absolute;
   top: 50%;
@@ -540,6 +562,45 @@ body {
   border: 0;
   background: transparent;
   pointer-events: none;
+}
+
+.about-story-back {
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  background: var(--toggle-bg);
+  padding: 0.625rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  box-shadow: 0 6px 20px var(--surface-shadow);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.about-story-back:hover {
+  transform: scale(1.03);
+}
+
+.about-story-back:active {
+  transform: scale(0.98);
+}
+
+.about-story-embed {
+  width: 100%;
+  height: min(68vh, 640px);
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.about-story-embed-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

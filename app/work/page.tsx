@@ -1,6 +1,7 @@
 "use client";
 
 import { WorkFrame } from "@/app/components/WorkFrame";
+import { WorkCompactOverlay } from "@/app/components/WorkCompactOverlay";
 import { WorkNavOverlay } from "@/app/components/WorkNavOverlay";
 import { WorkProjectOverlay } from "@/app/components/WorkProjectOverlay";
 import { PageCanvas } from "@/app/components/PageCanvas";
@@ -14,6 +15,7 @@ export default function WorkPage() {
       </PageCanvas>
       <WorkNavOverlay />
       <WorkProjectOverlay />
+      <WorkCompactOverlay />
     </WorkPageProvider>
   );
 }
