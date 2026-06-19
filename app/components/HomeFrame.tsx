@@ -10,7 +10,6 @@ import dynamic from "next/dynamic";
 import { HeroText } from "./HeroText";
 import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
-import { HomeSoccerBallEmbed } from "./HomeSoccerBallEmbed";
 
 const HomeFloatingModels = dynamic(
   () =>
@@ -42,7 +41,6 @@ export function HomeFrame() {
       style={{ width: HOME_FRAME_WIDTH, minHeight: HOME_FRAME_HEIGHT }}
       aria-label="Home"
     >
-      <HomeSoccerBallEmbed />
       <HomeFloatingModels />
 
       <div
