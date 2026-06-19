@@ -544,24 +544,6 @@ body {
   }
 }
 
-.home-new-balance-embed {
-  position: absolute;
-  top: 50%;
-  right: calc(100% + 420px);
-  z-index: 0;
-  width: clamp(140px, 18vw, 240px);
-  height: clamp(140px, 18vw, 240px);
-  transform: translateY(-50%);
-  opacity: 0.88;
-}
-
-.home-new-balance-embed canvas {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none;
-}
-
 .home-flowers-embed {
   position: absolute;
   bottom: calc(100% + 360px);
@@ -581,10 +563,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-new-balance-embed {
-    opacity: 0.55;
-  }
-
   .home-flowers-embed {
     opacity: 0.5;
   }

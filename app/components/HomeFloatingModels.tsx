@@ -3,7 +3,6 @@
 import { Component, type ReactNode } from "react";
 import { useShowCanvasOrnaments } from "@/lib/use-show-canvas-ornaments";
 import { HomeFlowersEmbed } from "./HomeFlowersEmbed";
-import { HomeNewBalanceEmbed } from "./HomeNewBalanceEmbed";
 
 class FloatingModelsErrorBoundary extends Component<
   { children: ReactNode },
@@ -33,7 +32,6 @@ export function HomeFloatingModels() {
 
   return (
     <FloatingModelsErrorBoundary>
-      <HomeNewBalanceEmbed />
       <HomeFlowersEmbed />
     </FloatingModelsErrorBoundary>
   );
