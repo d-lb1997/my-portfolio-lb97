@@ -132,7 +132,7 @@ export function Navbar() {
         aria-label={menuOpen ? "Close menu" : "Open menu"}
         aria-expanded={menuOpen}
         aria-controls="mobile-site-menu"
-        className="fixed top-6 right-6 z-[70] flex h-11 w-11 items-center justify-center rounded-full border border-border-subtle bg-toggle-bg shadow-md transition-transform hover:scale-105 active:scale-95 cursor-pointer lg:hidden"
+        className="fixed top-6 right-6 z-[95] flex h-11 w-11 items-center justify-center rounded-full border border-border-subtle bg-toggle-bg shadow-md transition-transform hover:scale-105 active:scale-95 cursor-pointer lg:hidden"
         data-no-pan
       >
         <MenuIcon open={menuOpen} />
@@ -144,7 +144,7 @@ export function Navbar() {
             <motion.button
               type="button"
               aria-label="Close menu"
-              className="mobile-menu-backdrop fixed inset-0 z-[65] lg:hidden"
+              className="mobile-menu-backdrop fixed inset-0 z-[90] lg:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -154,7 +154,7 @@ export function Navbar() {
 
             <motion.nav
               id="mobile-site-menu"
-              className="fixed top-0 right-0 z-[70] flex h-full w-[min(100%,19rem)] flex-col border-l border-border-subtle bg-surface-white/90 px-8 pb-10 pt-24 shadow-2xl backdrop-blur-2xl lg:hidden"
+              className="fixed top-0 right-0 z-[95] flex h-full w-[min(100%,19rem)] flex-col border-l border-border-subtle bg-surface-white/90 px-8 pb-10 pt-24 shadow-2xl backdrop-blur-2xl lg:hidden"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
