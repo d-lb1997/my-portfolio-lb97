@@ -29,7 +29,7 @@ export function AboutCharacter() {
           height={1024}
           priority
           unoptimized
-          className="h-[clamp(320px,48vh,840px)] w-auto max-w-[min(98vw,960px)] select-none object-contain object-bottom xl:h-[clamp(400px,60vh,840px)]"
+          className="h-[clamp(220px,34vh,840px)] w-auto max-w-[min(98vw,960px)] select-none object-contain object-bottom xl:h-[clamp(400px,60vh,840px)]"
           draggable={false}
         />
       </motion.div>
