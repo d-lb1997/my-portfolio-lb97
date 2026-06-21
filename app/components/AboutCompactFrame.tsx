@@ -26,13 +26,12 @@ export function AboutCopy({
   return (
     <div className={className}>
       <p className="text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
-        Hey there, I am Lukas, an experience designer focused on human-centered
-        products. I work across research, visual design, and interaction to
-        make interfaces feel natural and useful.
+        Hey there, I am Lukas. I work across research, experience and interaction
+        design, to make interfaces feel natural and useful.
       </p>
       <p className="mt-4 text-[clamp(1rem,2.4vw,1.0625rem)] leading-relaxed text-text-secondary">
-        I think in systems, in space, in structure. And I care deeply about the
-        people on the other side of the screen.
+        I think in systems and I care deeply about the people on the other side
+        of the screen.
       </p>
 
       <button

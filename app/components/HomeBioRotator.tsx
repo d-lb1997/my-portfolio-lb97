@@ -42,7 +42,7 @@ export function HomeBioRotator({ visible }: HomeBioRotatorProps) {
         transition={ENTRANCE}
         className="px-2 text-center text-[clamp(0.9375rem,2.6vw,1.0625rem)] font-medium leading-relaxed tracking-[-0.01em] text-text-secondary sm:px-0"
       >
-        Hi there, I&apos;m Lukas — experience designer based in Munich.
+        Hey there, I am Lukas.
       </motion.p>
       <motion.p
         initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
