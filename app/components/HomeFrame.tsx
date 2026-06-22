@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import { HeroText } from "./HeroText";
 import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
+import { HomeWeatherWidget } from "./HomeWeatherWidget";
 
 const HomeFloatingModels = dynamic(
   () =>
@@ -42,6 +43,10 @@ export function HomeFrame() {
       aria-label="Home"
     >
       <HomeFloatingModels />
+
+      <div className="pointer-events-none absolute right-6 top-6 z-20 sm:right-10 sm:top-8">
+        <HomeWeatherWidget />
+      </div>
 
       <div
         className="relative z-10 flex w-full max-w-[min(92vw,36rem)] flex-col items-center justify-center overflow-visible px-4 sm:max-w-none sm:px-10"

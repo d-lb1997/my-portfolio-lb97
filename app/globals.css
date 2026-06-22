@@ -216,6 +216,59 @@ body {
   cursor: wait;
 }
 
+.home-weather-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle);
+  background: var(--toggle-bg);
+  padding: 0.625rem 0.875rem;
+  box-shadow: 0 6px 20px var(--surface-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.home-weather-emoji {
+  font-size: 1.375rem;
+  line-height: 1;
+}
+
+.home-weather-temp {
+  font-size: clamp(0.875rem, 2.5vw, 0.9375rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-weather-card--prompt {
+  max-width: 13rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.home-weather-card--prompt:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--border-subtle) 70%, var(--text-secondary));
+  box-shadow: 0 8px 24px var(--surface-shadow);
+}
+
+.home-weather-card--prompt:active {
+  transform: translateY(0);
+}
+
+.home-weather-prompt {
+  font-size: clamp(0.75rem, 2.2vw, 0.8125rem);
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
 .gemini-chat-inner {
   display: flex;
   align-items: center;
