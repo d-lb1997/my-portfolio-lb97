@@ -6,17 +6,10 @@ import {
   HOME_FRAME_HEIGHT,
   HOME_FRAME_WIDTH,
 } from "@/lib/pages";
-import dynamic from "next/dynamic";
 import { HeroText } from "./HeroText";
 import { HomeBioRotator } from "./HomeBioRotator";
 import { HomeCtas } from "./HomeCtas";
 import { HomeWeatherWidget } from "./HomeWeatherWidget";
-
-const HomeFloatingModels = dynamic(
-  () =>
-    import("./HomeFloatingModels").then((mod) => mod.HomeFloatingModels),
-  { ssr: false },
-);
 
 const BIO_SHOW_DELAY_MS = 6000;
 const BIO_ENTRANCE = { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const };
@@ -42,8 +35,6 @@ export function HomeFrame() {
       style={{ width: HOME_FRAME_WIDTH, minHeight: HOME_FRAME_HEIGHT }}
       aria-label="Home"
     >
-      <HomeFloatingModels />
-
       <div className="pointer-events-none absolute right-6 top-6 z-20 sm:right-10 sm:top-8">
         <HomeWeatherWidget />
       </div>
